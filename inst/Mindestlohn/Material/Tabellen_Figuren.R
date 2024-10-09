@@ -285,8 +285,8 @@ stargazer(reg1, reg2, type = "text", style = "aer") #treat1_NMW = Difference in 
 #Daten vorbereiten
 dat_main_ff = filter(dat_main, ff == 1) 
 
-#sic, year, gorwk als Dummyvariablen
-
+#sic2, year, gorwk als Dummyvariablen
+summary(dat_main_ff$sic2)
 
 
 #Regression 1
