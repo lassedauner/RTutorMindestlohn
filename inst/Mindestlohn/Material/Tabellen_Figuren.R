@@ -263,8 +263,7 @@ DiD_net_pcm = (dat_table1$mean_net_pcm[2]-dat_table1$mean_net_pcm[1]) - (dat_tab
 
 
 #Daten vorbereiten
-dat_main_pp = dat_main_pp %>% 
-  filter(dat_main, pp == 1) 
+dat_main_pp = filter(dat_main, pp == 1) 
 
 
 
@@ -283,8 +282,41 @@ stargazer(reg1, reg2, type = "text", style = "aer") #treat1_NMW = Difference in 
 
 #Table 2
 
+#Daten vorbereiten
+dat_main_ff = filter(dat_main, ff == 1) 
+
+#sic, year, gorwk als Dummyvariablen
+
+
+
+#Regression 1
+reg2_1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk |0|0|regno, data = dat_main_ff)
+reg2_2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk |0|0|regno, data = dat_main_ff)
+
+stargazer(reg2_1,reg2_2,type = "text")
+
+#Multivariate Regression 1
+reg2_3 = lm(cbind(ln_avwage,net_pcm) ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk, data = dat_main_ff)
+#Test?
+
+#Regression 2
+reg2_4 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk |0|0|regno, data = dat_main_ff)
+reg2_5 = felm(net_pcm ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk |0|0|regno, data = dat_main_ff)
+
+stargazer(reg2_4,reg2_5, type = "text")
+
+#Multivariate Regression 2
+reg2_6 = lm(cbind(ln_avwage, net_pcm) ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + sic2 + year + gorwk, data = dat_main_ff)
+#Test?
 
 
 
 
+#Table 3
+reg3_1 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + year + sic2 + gorwk |0|0|regno, data = dat_main_ff)
+reg3_2 = felm(net_pcm ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + year + sic2 + gorwk |0|0|regno, data = dat_main_ff)
+reg3_3 = felm(ln_avwage ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + year + sic2 + gorwk |0|0|regno, data = dat_main_ff)
+reg3_4 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + year + sic2 + gorwk |0|0|regno, data = dat_main_ff)
+
+stargazer(reg3_1, reg3_2, reg3_3, reg3_4, type = "text")
 
