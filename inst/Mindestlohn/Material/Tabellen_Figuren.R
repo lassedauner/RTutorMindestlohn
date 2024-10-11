@@ -73,10 +73,12 @@ dat_seq = mutate(dat_seq,
                  "lw2" = log(w2),
                  "lh" = log(hours))
 
-#Regression???
-intReg()
+#Regression??? Untergrenze lw1, Obergrenze lw2
+reg_f1 = intRe
 #intreg lw1 lw2 aa_* male union ee_* lh
-#predict z if e(sample), e(lw1,lw2)
+
+#z = predict(reg_f1, e(lw1,lw2))
+#ez = exp(z)
 #ge hourly = ez / hours
 #su hourly
 
