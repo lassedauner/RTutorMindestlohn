@@ -12,3 +12,39 @@
 ,
 {"type":["init_ps"],"time":["2024-10-08 18:33:56"],"user":["default_user"],"umph":[1728405236.1659],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-10-15 17:19:11"],"user":["default_user"],"umph":[1729005551.4169],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:19:32"],"user":["default_user"],"umph":[1729005572.7034],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:19:45"],"user":["default_user"],"umph":[1729005585.6954],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:24:37"],"user":["default_user"],"umph":[1729005877.9722],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:24:55"],"user":["default_user"],"umph":[1729005895.7854],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:26:31"],"user":["default_user"],"umph":[1729005991.0966],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:27:31"],"user":["default_user"],"umph":[1729006051.6463],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:28:27"],"user":["default_user"],"umph":[1729006107.4207],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:36:09"],"user":["default_user"],"umph":[1729006569.591],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:36:54"],"user":["default_user"],"umph":[1729006614.8581],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:40:10"],"user":["default_user"],"umph":[1729006810.6119],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:50:07"],"user":["default_user"],"umph":[1729007407.3848],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-15 17:50:15"],"user":["default_user"],"umph":[1729007415.4081],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-15 17:50:41"],"user":["default_user"],"umph":[1729007441.1285],"ok":[false],"chunk":[2],"ex":[1],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)%>%\n  filter(avwage >= i)"],"message":["evaluation error in \n  pcw95 = dat_main %>% filter(year == 1995) %>% filter(avwage >= i)\n  \u001b[1m\u001b[33mError\u001b[39m in `filter()`:\u001b[22m\n\u001b[38;5;232m\u001b[36mℹ\u001b[38;5;232m In argument: `avwage >= i`.\u001b[39m\n\u001b[1mCaused by error:\u001b[22m\n\u001b[33m!\u001b[39m Objekt 'i' nicht gefunden\n"]}
+,
+{"type":["init_ps"],"time":["2024-10-15 17:51:11"],"user":["default_user"],"umph":[1729007471.1568],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-15 17:51:22"],"user":["default_user"],"umph":[1729007482.8858],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-15 17:51:33"],"user":["default_user"],"umph":[1729007493.1368],"ok":[true],"chunk":[2],"ex":[1],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-15 18:07:00"],"user":["default_user"],"umph":[1729008420.7401],"ok":[true]}
+,

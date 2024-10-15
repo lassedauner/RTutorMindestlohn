@@ -1,4 +1,4 @@
-# Problemset Mindestlohn und Firmenprofitabilität
+## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
 
 Note: Always save your solution files with UTF-8 Encoding!
 
@@ -12,19 +12,27 @@ library(RTutor)
 setwd("C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn")
 ps.name = "Mindestlohn"; sol.file = paste0(ps.name,"_sol.Rmd")
 # character vector of all packages you load in the problem set
-libs = c("ggplot2") 
+libs = c("ggplot2","haven") 
 create.ps(sol.file=sol.file, ps.name=ps.name,libs=libs, rps.has.sol=TRUE, addons="quiz")
 # Show the problem set in the webbrowser
 show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 ```
 #>
 
-## Exercise 1 -- Datenübersicht
-
-a) We often want to compute some summary statistic of a vector. For example:
-
+## Einführung in den Mindestlohn
 
 #< quiz "1"
+question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
+sc:
+    - "3.60"*
+    - "5.70" 
+    - "7.80" 
+
+success: Korrekt. Der Artikel befasst sich mit der Einführung des Mindestlohns in Höhe von 3.60 Pfund.
+failure: Diese Schätzung ist zu hoch.
+#>
+
+#< quiz "2"
 question: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 sc:
     - Verkleinerung der Gewinnmarge*
@@ -35,8 +43,52 @@ success: Auf diese Vermutung beruht der wissenschaftliche Artikel.
 failure: Eine mögliche Antwort
 #>
 
+## Exercise 2 -- Schaubilder
+
+Es soll überprüft werden, wie sich die Einführung des Mindestlohns auf die unterschiedlichen Einkommen ausgewirkt hat. 
+Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächst für jedes einzelne Jahr aufgeteilt werden.
+
+Zu Beginn wird der Datensatz eingelesen.
+
+```{r}
+#< task
+dat_main = read_dta('main_fame.dta')
+#>
+```
+Nun wird für jedes Jahr ein eigener Datensatz erstellt. Dafür muss der Datensatz gefiltert werden.
+
+```{r}
+#< fill_in
+pcw95 = dat_main %>%
+  filter(___ == 1995)
+#>
+#
+pcw95 = dat_main %>%
+  filter(year == 1995)
+```
 
 
+
+## Exercise 3 -- Difference in Difference
+
+Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
+Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
+
+#< quiz "3"
+question: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
+sc:
+    - 1999
+    - 2000*
+
+success: Richtige Antwort. Die Einführung war zwar im Jahr 1999, die Daten jedes Jahres beziehen sich allerdings auf das vergangene Geschäftsjahr (April bis März).
+failure: Das ist nicht korrekt. 
+#>
+
+
+
+## Exercise 1 -- Datenübersicht
+
+a) We often want to compute some summary statistic of a vector. For example:
 
 ```{r}
 #< task

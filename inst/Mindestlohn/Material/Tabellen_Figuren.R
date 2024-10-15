@@ -32,10 +32,15 @@ dat_seq$male = replace(dat_seq$male, dat_seq$male == 2, 0)
 
 aa_ = dat_seq %>%
   group_by(age) %>%
-  summarise(nrow)
+  summary(age)
+dat_seq = mutate(dat_seq, "aa_" = case_when(
+  age > 0 ~ age))
 
-ee_ = filter(dat_seq, dat_seq$educ < 7)
+dat_seq = mutate(dat_seq, "ee_" = case_when(
+  educ < 7 ~ educ))
 
+
+#Intervalle erstellen
 dat_seq = mutate(dat_seq,
                  "w1" = case_when(
                    d11 == 1 ~ 0,
@@ -65,7 +70,7 @@ dat_seq = mutate(dat_seq,
                    d11 == 9 ~ 430,
                    d11 == 10 ~ 540,
                    d11 == 11 ~ 680,
-                   d11 == 12 ~ 0,
+                   d11 == 12 ~ 800,
                  ))
 
 dat_seq = mutate(dat_seq,
@@ -74,7 +79,14 @@ dat_seq = mutate(dat_seq,
                  "lh" = log(hours))
 
 #Regression??? Untergrenze lw1, Obergrenze lw2
-reg_f1 = intRe
+
+#Intervalle mit Survival
+library(survival)
+Intervall = with(dat_seq, Surv(lw1, lw2, event = rep(3, nrow(dat_seq)), type = "interval"))
+summary(Intervall)
+
+#Regression
+reg_f1 = survreg(Intervall ~ age*male + union + ee_*lh, data = dat_seq, dist = "gaussian")
 #intreg lw1 lw2 aa_* male union ee_* lh
 
 #z = predict(reg_f1, e(lw1,lw2))
