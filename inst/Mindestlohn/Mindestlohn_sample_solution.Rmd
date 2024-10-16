@@ -6,8 +6,6 @@ user.name = 'Jane Doe'
 
 ## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
 
-Note: Always save your solution files with UTF-8 Encoding!
-
 Example of an RTutor interactive Problemset
 
 Adapt the working directory below and run the setup chunk in RStudio. This creates the problem set files and the sample solution from this solution file. 
@@ -17,7 +15,7 @@ Adapt the working directory below and run the setup chunk in RStudio. This creat
 
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
 
-- "3.60" [x]
+- "3.60"0163 [x]
 
 - "5.70" [ ]
 
@@ -54,7 +52,7 @@ pcw95 = dat_main %>%
 
 
 
-## Exercise 3 -- Difference in Difference
+## Exercise 3 -- Difference in Differences
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
@@ -66,6 +64,35 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 
 - 2000 [x]
 
+
+Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
+Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
+
+Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
+ctreat bezieht sich auf die Kontrollkomponente, während "NMW" angibt, ob sich die Daten der Pre- oder Post-Treatment Periode angehören.
+
+```{r "2_1"}
+dat_table_DiD = dat_main %>%
+  group_by(ctreat1, NMW)%>%
+  filter(pp == 1) %>%
+  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))
+```
+
+Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle "dat_table_DiD" vorhanden sind, können die Differenzen nun händisch berechnet werden.
+
+Die Formel hierfür lautet 
+(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)
+
+```{r "2_2"}
+```
+
+Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
+
+- a [x]
+
+- b [ ]
+
+- c [ ]
 
 
 

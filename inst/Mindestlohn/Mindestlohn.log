@@ -48,3 +48,23 @@
 ,
 {"type":["init_ps"],"time":["2024-10-15 18:07:00"],"user":["default_user"],"umph":[1729008420.7401],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-10-15 20:59:14"],"user":["default_user"],"umph":[1729018754.0333],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-16 16:45:32"],"user":["default_user"],"umph":[1729089932.7045],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-16 16:46:00"],"user":["default_user"],"umph":[1729089960.8767],"ok":[false],"chunk":[3],"ex":[2],"e.ind":[0],"code":["dat_table1 = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table1 = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["check_chunk"],"time":["2024-10-16 16:46:39"],"user":["default_user"],"umph":[1729089999.0085],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-16 16:46:46"],"user":["default_user"],"umph":[1729090006.0484],"ok":[true],"chunk":[2],"ex":[1],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-16 16:46:58"],"user":["default_user"],"umph":[1729090018.8738],"ok":[false],"chunk":[3],"ex":[2],"e.ind":[0],"code":["dat_table1 = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table1 = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["hint"],"time":["2024-10-16 16:46:58"],"user":["default_user"],"umph":[1729090018.8985],"ok":[true],"chunk":[3],"ex":[2],"e.ind":[0]}
+,
+{"type":["check_chunk"],"time":["2024-10-16 16:47:04"],"user":["default_user"],"umph":[1729090024.4371],"ok":[false],"chunk":[3],"ex":[2],"e.ind":[0],"code":["dat_table1 = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table1 = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["init_ps"],"time":["2024-10-16 16:48:14"],"user":["default_user"],"umph":[1729090094.9942],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-16 17:19:00"],"user":["default_user"],"umph":[1729091940.0736],"ok":[true]}
+,
