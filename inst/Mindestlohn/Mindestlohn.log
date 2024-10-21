@@ -68,3 +68,31 @@
 ,
 {"type":["init_ps"],"time":["2024-10-16 17:19:00"],"user":["default_user"],"umph":[1729091940.0736],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-10-17 10:13:20"],"user":["default_user"],"umph":[1729152800.3815],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:14:52"],"user":["default_user"],"umph":[1729502092.6783],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:15:47"],"user":["default_user"],"umph":[1729502147.1571],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-21 11:16:17"],"user":["default_user"],"umph":[1729502177.6633],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-21 11:16:39"],"user":["default_user"],"umph":[1729502199.8533],"ok":[true],"chunk":[2],"ex":[1],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-21 11:17:17"],"user":["default_user"],"umph":[1729502237.0009],"ok":[false],"chunk":[3],"ex":[2],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table_DiD = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:23:30"],"user":["default_user"],"umph":[1729502610.2582],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:24:27"],"user":["default_user"],"umph":[1729502667.2632],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:25:42"],"user":["default_user"],"umph":[1729502742.7159],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:33:34"],"user":["default_user"],"umph":[1729503214.9112],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:42:45"],"user":["default_user"],"umph":[1729503765.0437],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:43:42"],"user":["default_user"],"umph":[1729503822.2354],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:45:13"],"user":["default_user"],"umph":[1729503913.8878],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-21 11:49:55"],"user":["default_user"],"umph":[1729504195.9924],"ok":[true]}
+,

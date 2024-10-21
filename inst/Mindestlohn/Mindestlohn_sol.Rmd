@@ -1,8 +1,8 @@
 ## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
 
-Example of an RTutor interactive Problemset
+- Einführung .
 
-Adapt the working directory below and run the setup chunk in RStudio. This creates the problem set files and the sample solution from this solution file. 
+
 #< ignore
 ```{r "setup"}
 library(RTutor)
@@ -17,18 +17,34 @@ show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 ```
 #>
 
-## Einführung in den Mindestlohn
+## Exercise Inhaltsübersicht
+
+1. Einführung in den Mindestlohn
+
+2. Datenüberblick
+
+3. Difference in Differences
+
+4. Einordnung des Artikels
+
+
+## Exercise 1 -- Einführung in den Mindestlohn
+
+- Hintergrund der Mindestlohneinführung
+- sic
+- Vergleich zu anderen Staaten
 
 #< quiz "1"
 question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
 sc:
-    - "3.60"0163*
-    - "5.70" 
-    - "7.80" 
+    - 3.6*
+    - 5.7 
+    - 7.8 
 
 success: Korrekt. Der Artikel befasst sich mit der Einführung des Mindestlohns in Höhe von 3.60 Pfund.
 failure: Diese Schätzung ist zu hoch.
 #>
+
 
 #< quiz "2"
 question: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
@@ -41,7 +57,16 @@ success: Auf diese Vermutung beruht der wissenschaftliche Artikel.
 failure: Eine mögliche Antwort
 #>
 
-## Exercise 2 -- Schaubilder
+## Exercise 2 -- Datenüberblick
+
+- Herkunft der Daten
+- Ausgewogenheit der Daten
+- Datensatz WERS
+- Datensatz main
+- 
+
+
+## Exercise ? -- Schaubilder
 
 Es soll überprüft werden, wie sich die Einführung des Mindestlohns auf die unterschiedlichen Einkommen ausgewirkt hat. 
 Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächst für jedes einzelne Jahr aufgeteilt werden.
@@ -128,7 +153,7 @@ Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Net
 Das geschieht analog zur obigen Schätzung.
 
 ```{r}
-#< task
+#< fill_in
 y2.post.treat = dat_table_DiD$mean_net_pcm[___]
 y2.post.control = dat_table_DiD$mean_net_pcm[___]
 y2.pre.treat = dat_table_DiD$mean_net_pcm[___]
@@ -139,7 +164,20 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[___]
 Dadurch erhalten wir folgende 
 
 
-## Exercise 1 -- Datenübersicht
+## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
+
+- EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
+- Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
+- weitere Artikel
+
+
+## Exercise Probleme beim Code
+
+- i. Dummyvariablen in Stata
+- Intervallregression
+
+
+## Exercise Aufgabentypen 
 
 a) We often want to compute some summary statistic of a vector. For example:
 

@@ -254,7 +254,7 @@ ggplot(diffperc)+
   geom_vline(xintercept = 50)
 
 
-
+#Woher kommt der Piek nach unten?
 
 #Table 1
 
@@ -291,7 +291,7 @@ reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW |0|0|regno, data = dat_main_pp)
 
 stargazer(reg1, reg2, type = "text", style = "aer") #treat1_NMW = Difference in Difference / NMW = Difference in Kontrollgruppe / 
 
-
+# 
 
 
 #Table 2

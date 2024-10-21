@@ -6,20 +6,36 @@ user.name = 'Jane Doe'
 
 ## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
 
-Example of an RTutor interactive Problemset
+- Einführung .
 
-Adapt the working directory below and run the setup chunk in RStudio. This creates the problem set files and the sample solution from this solution file. 
 
-## Einführung in den Mindestlohn
+
+## Exercise Inhaltsübersicht
+
+1. Einführung in den Mindestlohn
+
+2. Datenüberblick
+
+3. Difference in Differences
+
+4. Einordnung des Artikels
+
+
+## Exercise 1 -- Einführung in den Mindestlohn
+
+- Hintergrund der Mindestlohneinführung
+- sic
+- Vergleich zu anderen Staaten
 
 
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
 
-- "3.60"0163 [x]
+- 3.6 [x]
 
-- "5.70" [ ]
+- 5.7 [ ]
 
-- "7.80" [ ]
+- 7.8 [ ]
+
 
 
 
@@ -32,19 +48,21 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 - Effizienzsteigerung [ ]
 
 
-## Exercise 2 -- Schaubilder
+## Exercise 2 -- Datenüberblick
+
+## Exercise ? -- Schaubilder
 
 Es soll überprüft werden, wie sich die Einführung des Mindestlohns auf die unterschiedlichen Einkommen ausgewirkt hat. 
 Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächst für jedes einzelne Jahr aufgeteilt werden.
 
 Zu Beginn wird der Datensatz eingelesen.
 
-```{r "1_1"}
+```{r "4_1"}
 dat_main = read_dta('main_fame.dta')
 ```
 Nun wird für jedes Jahr ein eigener Datensatz erstellt. Dafür muss der Datensatz gefiltert werden.
 
-```{r "1_2"}
+```{r "4_2"}
 #
 pcw95 = dat_main %>%
   filter(year == 1995)
@@ -71,7 +89,7 @@ Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwische
 Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
 ctreat bezieht sich auf die Kontrollkomponente, während "NMW" angibt, ob sich die Daten der Pre- oder Post-Treatment Periode angehören.
 
-```{r "2_1"}
+```{r "5_1"}
 dat_table_DiD = dat_main %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
@@ -83,8 +101,9 @@ Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle "dat_table_D
 Die Formel hierfür lautet 
 (y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)
 
-```{r "2_2"}
+```{r "5_2"}
 ```
+
 
 Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 
@@ -95,19 +114,39 @@ Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 - c [ ]
 
 
+Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Nettorendite eines Unternehmens je Geschäftsjahr (net_pcm) berechnet.
+Das geschieht analog zur obigen Schätzung.
 
-## Exercise 1 -- Datenübersicht
+```{r "5_3"}
+```
+
+Dadurch erhalten wir folgende 
+
+
+## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
+
+- EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
+- weitere Artikel
+
+
+## Exercise Probleme beim Code
+
+- i. Dummyvariablen in Stata
+- Intervallregression
+
+
+## Exercise Aufgabentypen 
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "3_a"}
+```{r "8_a"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "3_a_2",optional=TRUE}
+```{r "8_a_2",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -121,7 +160,7 @@ info("useful functions for numeric vectors")
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "3_b"}
+```{r "8_b"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -130,7 +169,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "3_c",optional=TRUE, dev='svg', fig.width=4}
+```{r "8_c",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -155,7 +194,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "3_c_2"}
+```{r "8_c_2"}
 2
 ```
 
