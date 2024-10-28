@@ -54,21 +54,145 @@ answer.quiz("2")
 
 ## Exercise 2 -- Datenüberblick
 
-## Exercise ? -- Schaubilder
+- Herkunft der Daten
+- Ausgewogenheit der Daten
+- Datensatz WERS
+- Datensatz main
+- Relevante Variablen
+
+**Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
+```{r "3_1"}
+#Datensatz einlesen
+
+```
+
+
+## Exercise 2.1 -- Schaubild
 
 Es soll überprüft werden, wie sich die Einführung des Mindestlohns auf die unterschiedlichen Einkommen ausgewirkt hat. 
 Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächst für jedes einzelne Jahr aufgeteilt werden.
 
-Zu Beginn wird der Datensatz eingelesen.
+Zu Beginn wird erneut der Datensatz aus Aufgabe 2 eingelesen.
 
+**Aufgabe**: Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r "4_1"}
 dat_main = read_dta('main_fame.dta')
 ```
-Nun wird für jedes Jahr ein eigener Datensatz erstellt. Dafür muss der Datensatz gefiltert werden.
 
+Um die Veränderung der Löhne von Geschäftsjahr zu Geschäftsjahr herauszufinden, muss der Datensatz nach Jahren aufgeteilt werden. Das gelingt, indem für jedes Jahr ein eigener Datensatz erstellt wird. Dafür muss der bereits eingelesene Datensatz dat_main zunächst gefiltert werden.
+
+**Aufgabe**: Wählen Sie die passende Variable für das leere Feld und überprüfen Sie Ihre Eingabe durch "check".
 ```{r "4_2"}
 pcw95 = dat_main %>%
-  filter(___ == 1995)
+  filter(___ == 1995) %>%
+  filter(avwage >= 3)
+
+```
+
+-#Wieso werden nur Werte für avwage >= 3 gewählt? Verfälschung der Ergebnisse? Was für Unternehmen sind betroffen(sic überprüfen)?
+
+```{r "4_3"}
+# Enter your code here.
+```
+
+
+Nun befinden sich in pcw95 alle Daten aus dat_main, die aus dem Jahr 1995 stammen. 
+Neben der Unterscheidung in den Jahren sollen zudem die Unterschiede der Ausgangslöhne herauskristallisiert werden.
+Dazu werden die Löhne in Perzentile aufgeteilt.
+
+**Aufgabe**: Erstellen Sie einen Vektor "percent95", der die logarithmierten Durchschnittslöhne in 100 Perzentile aufteilt. Nutzen Sie dafür die Funktion `quantile(dat,seq())`. Setzen Sie den fehlenden Wert in "seq()" ein, um einen Vektor der Länge 100 zu erhalten.
+
+```{r "4_4"}
+percent95 = quantile(pcw95$ln_avwage, seq(0, 1, ___))
+```
+
+Diese Aufteilung muss nun für jedes Jahr des Datensatzes wiederholt werden.
+
+**Aufgabe**: Führen sie den Chunk durch *check* aus.
+
+```{r "4_5"}
+
+pcw96 = dat_main %>%
+  filter(year == 1996)%>%
+  filter(avwage >= 3)
+percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
+
+pcw97 = dat_main %>%
+  filter(year == 1997)%>%
+  filter(avwage >= 3)
+percent97 = quantile(pcw97$ln_avwage, seq(0, 1, 0.01))
+
+pcw98 = dat_main %>%
+  filter(year == 1998)%>%
+  filter(avwage >= 3)
+percent98 = quantile(pcw98$ln_avwage, seq(0, 1, 0.01))
+
+pcw99 = dat_main %>%
+  filter(year == 1999)%>%
+  filter(avwage >= 3)
+percent99 = quantile(pcw99$ln_avwage, seq(0, 1, 0.01))
+
+pcw00 = dat_main %>%
+  filter(year == 2000)%>%
+  filter(avwage >= 3)
+percent00 = quantile(pcw00$ln_avwage, seq(0, 1, 0.01))
+
+pcw01 = dat_main %>%
+  filter(year == 2001)%>%
+  filter(avwage >= 3)
+percent01 = quantile(pcw01$ln_avwage, seq(0, 1, 0.01))
+
+pcw02 = dat_main %>%
+  filter(year == 2002)%>%
+  filter(avwage >= 3)
+percent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))
+
+```
+
+
+Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datnsatz gespeichert werden. 
+
+Dafür wird zunächst ein Datensatz erstellt, der sich an den Werten der Perzentile aus dem ersten Beobachtungsjahr 1995 richtet.
+
+**Aufgabe**: Erstellen Sie einen Datensatz `diffperc` mittels der Funktion `data.frame`. Dieser soll zunächst die Werte aus `percent95` enthalten, welche durch `sort()` geordnet sind.
+
+```{r "4_6"}
+# Enter your code here.
+```
+
+
+Der Datensatz diffperc kann jetzt um die Differenzen innerhalb der Perzentile erweitert werden.
+
+**Aufgabe**: Führen Sie den Code mit "check" aus.
+
+```{r "4_7"}
+diffperc = diffperc %>%
+  mutate("percentile" = c(0:100),
+         "diff96" = percent96-percent95,
+         "diff97" = percent97-percent96,
+         "diff98" = percent98-percent97,
+         "diff99" = percent99-percent98,
+         "diff00" = percent00-percent99,
+         "diff01" = percent01-percent00,
+         "diff02" = percent02-percent01)
+
+```
+
+
+```{r "4_8"}
+
+#Graphik
+library(ggplot2)
+
+diffperc = filter(diffperc, percentile < 76 & percentile > 0)
+ggplot(diffperc)+
+  geom_line(aes(x = percentile, y = diff99), colour = "blue", linetype = 2, linewidth = 0.8)+
+  geom_line(aes(x = percentile, y = diff00), colour = "red", linewidth = 0.8)+
+  geom_vline(xintercept = 13)+
+  geom_vline(xintercept = 50)+
+  xlab("Perzentile der Ausgangsdurchschnittslöhne")+
+  ylab("Änderung des logarithmierten Durchschnittslohns")
+
 ```
 
 
@@ -144,6 +268,7 @@ Dadurch erhalten wir folgende
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
 
 - EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
+- Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
 - weitere Artikel
 
 

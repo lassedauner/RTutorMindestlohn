@@ -10,6 +10,7 @@ library(dplyr)
 library(ggplot2)
 dat_seq = read_dta('seq98.dta')
 
+
 #Wichtige Spalten herausfiltern
 dat_seq = select(dat_seq, serial, serno, a3, a4, a5, c1_, d1, d2, d5, d11)
   
@@ -251,7 +252,9 @@ ggplot(diffperc)+
   geom_line(aes(x = percentile, y = diff99), colour = "blue", linetype = 2, linewidth = 0.8)+
   geom_line(aes(x = percentile, y = diff00), colour = "red", linewidth = 0.8)+
   geom_vline(xintercept = 13)+
-  geom_vline(xintercept = 50)
+  geom_vline(xintercept = 50)+
+  xlab("Perzentile der Ausgangsdurchschnittslöhne")+
+  ylab("Änderung des logarithmierten Durchschnittslohns")
 
 
 #Woher kommt der Piek nach unten?

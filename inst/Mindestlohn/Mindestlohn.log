@@ -96,3 +96,79 @@
 ,
 {"type":["init_ps"],"time":["2024-10-21 11:49:55"],"user":["default_user"],"umph":[1729504195.9924],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-10-28 12:04:26"],"user":["default_user"],"umph":[1730113466.1727],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:05:18"],"user":["default_user"],"umph":[1730113518.0735],"ok":[true],"chunk":[1],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:05:31"],"user":["default_user"],"umph":[1730113531.3324],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:05:47"],"user":["default_user"],"umph":[1730113547.8861],"ok":[false],"chunk":[3],"ex":[5],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table_DiD = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:05:51"],"user":["default_user"],"umph":[1730113551.6784],"ok":[false],"chunk":[3],"ex":[5],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table_DiD = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["hint"],"time":["2024-10-28 12:05:51"],"user":["default_user"],"umph":[1730113551.7021],"ok":[true],"chunk":[3],"ex":[5],"e.ind":[0]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:05:57"],"user":["default_user"],"umph":[1730113557.0657],"ok":[false],"chunk":[3],"ex":[5],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":["evaluation error in \n  dat_table_DiD = dat_main %>% group_by(ctreat1, NMW) %>% filter(pp == 1) %>% summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))\n  Error:  Objekt 'dat_main' nicht gefunden\n"]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:22:55"],"user":["default_user"],"umph":[1730114575.4145],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:23:17"],"user":["default_user"],"umph":[1730114597.8721],"ok":[true],"chunk":[1],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:26:47"],"user":["default_user"],"umph":[1730114807.7826],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:28:39"],"user":["default_user"],"umph":[1730114919.8716],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:28:50"],"user":["default_user"],"umph":[1730114930.3891],"ok":[true],"chunk":[1],"ex":[4],"e.ind":[0],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:29:04"],"user":["default_user"],"umph":[1730114944.7149],"ok":[false],"chunk":[2],"ex":[4],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(yea == 1995)\n"],"message":["evaluation error in \n  pcw95 = dat_main %>% filter(yea == 1995)\n  \u001b[1m\u001b[33mError\u001b[39m in `filter()`:\u001b[22m\n\u001b[38;5;232m\u001b[36mℹ\u001b[38;5;232m In argument: `yea == 1995`.\u001b[39m\n\u001b[1mCaused by error:\u001b[22m\n\u001b[33m!\u001b[39m Objekt 'yea' nicht gefunden\n"]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:29:13"],"user":["default_user"],"umph":[1730114953.4419],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["pcw95 = dat_main %>%\n  filter(year == 1995)\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:33:53"],"user":["default_user"],"umph":[1730115233.1716],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:34:41"],"user":["default_user"],"umph":[1730115281.5333],"ok":[true],"chunk":[1],"ex":[4],"e.ind":[0],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:40:04"],"user":["default_user"],"umph":[1730115604.5131],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:40:59"],"user":["default_user"],"umph":[1730115659.7745],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:41:09"],"user":["default_user"],"umph":[1730115669.6855],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:57:56"],"user":["default_user"],"umph":[1730116676.7999],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:58:11"],"user":["default_user"],"umph":[1730116691.9245],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:58:12"],"user":["default_user"],"umph":[1730116692.2594],"ok":[true],"chunk":[3],"ex":[4],"e.ind":[0],"code":["#\npcw95 = dat_main %>%\n  filter(year == 1995)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:58:20"],"user":["default_user"],"umph":[1730116700.4676],"ok":[false],"chunk":[4],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":["evaluation error in \n  percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))\n  Error in quantile.default(pcw95$ln_avwage, seq(0, 1, 0.01)): fehlende Werte und NaNs sind nicht erlaubt, wenn 'na.rm' = FALSE\n"]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:58:34"],"user":["default_user"],"umph":[1730116714.4878],"ok":[false],"chunk":[4],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":["evaluation error in \n  percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))\n  Error in quantile.default(pcw95$ln_avwage, seq(0, 1, 0.01)): fehlende Werte und NaNs sind nicht erlaubt, wenn 'na.rm' = FALSE\n"]}
+,
+{"type":["hint"],"time":["2024-10-28 12:58:34"],"user":["default_user"],"umph":[1730116714.5088],"ok":[true],"chunk":[4],"ex":[4],"e.ind":[0]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:58:36"],"user":["default_user"],"umph":[1730116716.4824],"ok":[false],"chunk":[4],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":["evaluation error in \n  percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))\n  Error in quantile.default(pcw95$ln_avwage, seq(0, 1, 0.01)): fehlende Werte und NaNs sind nicht erlaubt, wenn 'na.rm' = FALSE\n"]}
+,
+{"type":["init_ps"],"time":["2024-10-28 12:59:39"],"user":["default_user"],"umph":[1730116779.6446],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:59:49"],"user":["default_user"],"umph":[1730116789.0498],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:59:49"],"user":["default_user"],"umph":[1730116789.4085],"ok":[true],"chunk":[3],"ex":[4],"e.ind":[0],"code":["#\npcw95 = dat_main %>%\n  filter(year == 1995)%>%\n  filter(avwage >= 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 12:59:58"],"user":["default_user"],"umph":[1730116798.1145],"ok":[true],"chunk":[4],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 13:00:27"],"user":["default_user"],"umph":[1730116827.6122],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-10-28 13:21:05"],"user":["default_user"],"umph":[1730118065.7174],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 13:21:24"],"user":["default_user"],"umph":[1730118084.9395],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 13:21:25"],"user":["default_user"],"umph":[1730118085.3358],"ok":[true],"chunk":[3],"ex":[4],"e.ind":[0],"code":["#\npcw95 = dat_main %>%\n  filter(year == 1995)%>%\n  filter(avwage >= 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 13:21:25"],"user":["default_user"],"umph":[1730118085.4641],"ok":[true],"chunk":[4],"ex":[4],"e.ind":[0],"code":["dat_probe = dat_main %>% \n  filter(avwage < 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 13:21:31"],"user":["default_user"],"umph":[1730118091.7179],"ok":[true],"chunk":[5],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-10-28 13:21:37"],"user":["default_user"],"umph":[1730118097.6697],"ok":[true],"chunk":[6],"ex":[4],"e.ind":[0],"code":["\npcw96 = dat_main %>%\n  filter(year == 1996)%>%\n  filter(avwage >= 3)\npercent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))\n\npcw97 = dat_main %>%\n  filter(year == 1997)%>%\n  filter(avwage >= 3)\npercent97 = quantile(pcw97$ln_avwage, seq(0, 1, 0.01))\n\npcw98 = dat_main %>%\n  filter(year == 1998)%>%\n  filter(avwage >= 3)\npercent98 = quantile(pcw98$ln_avwage, seq(0, 1, 0.01))\n\npcw99 = dat_main %>%\n  filter(year == 1999)%>%\n  filter(avwage >= 3)\npercent99 = quantile(pcw99$ln_avwage, seq(0, 1, 0.01))\n\npcw00 = dat_main %>%\n  filter(year == 2000)%>%\n  filter(avwage >= 3)\npercent00 = quantile(pcw00$ln_avwage, seq(0, 1, 0.01))\n\npcw01 = dat_main %>%\n  filter(year == 2001)%>%\n  filter(avwage >= 3)\npercent01 = quantile(pcw01$ln_avwage, seq(0, 1, 0.01))\n\npcw02 = dat_main %>%\n  filter(year == 2002)%>%\n  filter(avwage >= 3)\npercent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-10-28 13:34:11"],"user":["default_user"],"umph":[1730118851.0822],"ok":[true]}
+,
