@@ -254,7 +254,8 @@ ggplot(diffperc)+
   geom_vline(xintercept = 13)+
   geom_vline(xintercept = 50)+
   xlab("Perzentile der Ausgangsdurchschnittslöhne")+
-  ylab("Änderung des logarithmierten Durchschnittslohns")
+  ylab("Änderung des logarithmierten Durchschnittslohns")+
+  title("Änderung im logarithmierten Durchschnittslohn nach Perzentilen vor und nach der Einführung des Mindestlohns")
 
 
 #Woher kommt der Piek nach unten?

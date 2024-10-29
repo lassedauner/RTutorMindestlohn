@@ -215,6 +215,8 @@ diffperc = diffperc %>%
 ```
 
 
+Für die Betrachtungsweise der Auswirkungen durch die Einführung des Mindestlohns sind zwei Differenzen von besonderer Bedeutung. Daher sollen die Änderung des Lohns im Jahr vor der Einführung (diff99) mit der Änderung im Jahr nach der Einführung (diff00) in einem Liniendiagramm gegenübergestellt werden.
+
 ```{r "4_9"}
 
 #Graphik
@@ -227,13 +229,26 @@ ggplot(diffperc)+
   geom_vline(xintercept = 13)+
   geom_vline(xintercept = 50)+
   xlab("Perzentile der Ausgangsdurchschnittslöhne")+
-  ylab("Änderung des logarithmierten Durchschnittslohns")
+  ylab("Änderung des logarithmierten Durchschnittslohns")+
+  title("Änderung im logarithmierten Durchschnittslohn nach Perzentilen vor und nach der Einführung des Mindestlohns")
 
 ```
 
+#-Mögliche Fragen zum Schaubild
+
+-Wieso logarithmierte Werte?
+-Woher kommt der Piek nach unten?
 
 
-## Exercise 3 -- Difference in Differences
+
+
+## Exercise 3 DiD -- Difference in Differences
+
+**Möglicher Inhalt**
+- Wieso braucht man DiD
+- Was sagt er aus
+- Wie werden die jeweiligen Gruppen gewählt
+
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
@@ -249,10 +264,17 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
-Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
-ctreat bezieht sich auf die Kontrollkomponente, während "NMW" angibt, ob sich die Daten der Pre- oder Post-Treatment Periode angehören.
+## Exercise 3.1 -- händische DiD-Berechnung
 
-```{r "5_10"}
+Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
+
+**Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
+```{r "6_10"}
+dat_main = read_dta('main_fame.dta')
+
+```
+
+```{r "6_11"}
 dat_table_DiD = dat_main %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
@@ -262,15 +284,43 @@ dat_table_DiD = dat_main %>%
 Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle "dat_table_DiD" vorhanden sind, können die Differenzen nun händisch berechnet werden.
 
 Die Formel hierfür lautet 
-(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)
+***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
 
-```{r "5_11"}
+**Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
+```{r "6_12"}
+
+dat_table_DiD
+```
+
+
+Quiz: Welche Spalte beschreibt die Kontroll- bzw. Treatmentgruppe?
+
+- ctreat1 [x]
+
+- NMW [ ]
+
+
+
+Quiz: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
+
+- Pre-Treatment [ ]
+
+- Post-Treatment [x]
+
+
+**Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
+```{r "6_13"}
 # # Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
 # y1.post.treat = dat_table_DiD$mean_ln_avwage[___]
 # y1.post.control = dat_table_DiD$mean_ln_avwage[___]
 # y1.pre.treat = dat_table_DiD$mean_ln_avwage[___]
 # y1.pre.control = dat_table_DiD$mean_ln_avwage[___]
 # 
+
+y1.post.treat = dat_table_DiD$mean_ln_avwage[4]
+y1.post.control = dat_table_DiD$mean_ln_avwage[2]
+y1.pre.treat = dat_table_DiD$mean_ln_avwage[3]
+y1.pre.control = dat_table_DiD$mean_ln_avwage[1]
 
 ```
 
@@ -284,18 +334,53 @@ Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 - c [ ]
 
 
+
+Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000)?
+
+- a [ ]
+
+- b [x]
+
+- c [ ]
+
 Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Nettorendite eines Unternehmens je Geschäftsjahr (net_pcm) berechnet.
 Das geschieht analog zur obigen Schätzung.
 
-```{r "5_12"}
+**Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
+```{r "6_14"}
 # y2.post.treat = dat_table_DiD$mean_net_pcm[___]
 # y2.post.control = dat_table_DiD$mean_net_pcm[___]
 # y2.pre.treat = dat_table_DiD$mean_net_pcm[___]
 # y2.pre.control = dat_table_DiD$mean_net_pcm[___]
 
+y2.post.treat = dat_table_DiD$mean_net_pcm[4]
+y2.post.control = dat_table_DiD$mean_net_pcm[2]
+y2.pre.treat = dat_table_DiD$mean_net_pcm[3]
+y2.pre.control = dat_table_DiD$mean_net_pcm[1]
 ```
 
-Dadurch erhalten wir folgende 
+Die Werte sind nun gespeichert und die DiDs können berechnet werden.
+
+**Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
+```{r "6_15"}
+# DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
+# DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
+#   
+# #Ergebnisse anzeigen
+
+DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
+DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
+  
+#Ergebnisse anzeigen
+DiD_ln_avwage
+DiD_net_pcm
+```
+
+Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Profitabilität sinkt.
+
+
+## Exercise 3.2 -- DiD-Schätzung mittels Regression
+
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
@@ -315,14 +400,14 @@ Dadurch erhalten wir folgende
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "8_a_13"}
+```{r "10_a_16"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "8_a_14",optional=TRUE}
+```{r "10_a_17",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -336,7 +421,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "8_a_15"}
+```{r "10_a_18"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -359,7 +444,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "8_b_16"}
+```{r "10_b_19"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -368,7 +453,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "8_c_17",optional=TRUE, dev='svg', fig.width=4}
+```{r "10_c_20",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -393,7 +478,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "8_c_18"}
+```{r "10_c_21"}
 2
 ```
 
