@@ -292,7 +292,7 @@ Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 
 
 
-Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000)?
+Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000 = Median)?
 
 - a [ ]
 
@@ -328,6 +328,12 @@ Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, währ
 
 ## Exercise 3.2 -- DiD-Schätzung mittels Regression
 
+**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den COde mit "check" ausführen.
+```{r "7_1"}
+dat_main_pp = filter(dat_main, pp == 1) 
+```
+
+Es wurden einige Daten herausgefiltert. 
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)

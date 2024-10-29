@@ -335,7 +335,7 @@ Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 
 
 
-Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000)?
+Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000 = Median)?
 
 - a [ ]
 
@@ -381,6 +381,12 @@ Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, währ
 
 ## Exercise 3.2 -- DiD-Schätzung mittels Regression
 
+**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den COde mit "check" ausführen.
+```{r "7_16"}
+dat_main_pp = filter(dat_main, pp == 1) 
+```
+
+Es wurden einige Daten herausgefiltert. 
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
@@ -400,14 +406,14 @@ Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, währ
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "10_a_16"}
+```{r "10_a_17"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "10_a_17",optional=TRUE}
+```{r "10_a_18",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -421,7 +427,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "10_a_18"}
+```{r "10_a_19"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -444,7 +450,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "10_b_19"}
+```{r "10_b_20"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -453,7 +459,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "10_c_20",optional=TRUE, dev='svg', fig.width=4}
+```{r "10_c_21",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -478,7 +484,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "10_c_21"}
+```{r "10_c_22"}
 2
 ```
 

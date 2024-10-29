@@ -224,3 +224,5 @@
 ,
 {"type":["check_chunk"],"time":["2024-10-29 12:37:36"],"user":["default_user"],"umph":[1730201856.3869],"ok":[true],"chunk":[15],"ex":[6],"e.ind":[0],"code":["DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)\nDiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)\n  \n#Ergebnisse anzeigen\nDiD_ln_avwage\nDiD_net_pcm"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2024-10-29 13:20:08"],"user":["default_user"],"umph":[1730204408.2832],"ok":[true]}
+,

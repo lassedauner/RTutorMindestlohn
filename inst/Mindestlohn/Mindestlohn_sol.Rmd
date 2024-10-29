@@ -53,7 +53,7 @@ sc:
     - Weitergabe an Verbraucher
     - Effizienzsteigerung
 
-success: Auf diese Vermutung beruht der wissenschaftliche Artikel.
+success: Auf dieser Vermutung beruht der wissenschaftliche Artikel.
 failure: Eine mögliche Antwort
 #>
 
@@ -343,7 +343,7 @@ failure: Das ist nicht die richtige Lösung.
 #>
 
 #< quiz "7"
-question: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000)?
+question: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000 = Median)?
 sc:
     - a
     - b*
