@@ -27,15 +27,19 @@ show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 
 4. Einordnung des Artikels
 
+**Ideen**
+Diagramm Variablenbeeinflussung
+
 
 ## Exercise 1 -- Einführung in den Mindestlohn
 
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
+- Wie werden Unternhemensgewinne definiert?
 
 #< quiz "1"
-question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
+question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
 sc:
     - 3.6*
     - 5.7 
@@ -241,6 +245,13 @@ ggplot(diffperc)+
 - Wieso braucht man DiD
 - Was sagt er aus
 - Wie werden die jeweiligen Gruppen gewählt
+- Was gibt es für andere Schätzmethoden?
+- Diagramm Variablenbeeinflussung
+
+**Vorgehen**
+- Kernergebnisse erkennen
+- Ausgangspunkt: Mindestlohn + Unternehmensgewinne
+- Regression aufbauen
 
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
@@ -406,7 +417,13 @@ Es wurden einige Daten herausgefiltert.
 
 - EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
 - Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
+- unberücksichtigte Variablen
+- Auswirkung auf Beschäftigung
 - weitere Artikel
+
+## Exercise Anregungen
+
+- "Aber was sind die Produktionskosten - des Arbeiters, d.h. die Kosten, um den Arbeiter selbst zu produzieren?" / "Wert der Arbeit" (Kapital, 497)
 
 
 ## Exercise Probleme beim Code

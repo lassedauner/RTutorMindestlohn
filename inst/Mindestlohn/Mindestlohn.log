@@ -226,3 +226,29 @@
 ,
 {"type":["init_ps"],"time":["2024-10-29 13:20:08"],"user":["default_user"],"umph":[1730204408.2832],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-11-05 09:24:28"],"user":["default_user"],"umph":[1730795068.0494],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-05 10:03:20"],"user":["default_user"],"umph":[1730797400.3885],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.0123],"ok":[true],"chunk":[2],"ex":[4],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.1652],"ok":[true],"chunk":[3],"ex":[4],"e.ind":[0],"code":["#\npcw95 = dat_main %>%\n  filter(year == 1995)%>%\n  filter(avwage >= 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.2534],"ok":[true],"chunk":[4],"ex":[4],"e.ind":[0],"code":["dat_probe = dat_main %>% \n  filter(avwage < 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.3],"ok":[true],"chunk":[5],"ex":[4],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.5903],"ok":[true],"chunk":[6],"ex":[4],"e.ind":[0],"code":["\npcw96 = dat_main %>%\n  filter(year == 1996)%>%\n  filter(avwage >= 3)\npercent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))\n\npcw97 = dat_main %>%\n  filter(year == 1997)%>%\n  filter(avwage >= 3)\npercent97 = quantile(pcw97$ln_avwage, seq(0, 1, 0.01))\n\npcw98 = dat_main %>%\n  filter(year == 1998)%>%\n  filter(avwage >= 3)\npercent98 = quantile(pcw98$ln_avwage, seq(0, 1, 0.01))\n\npcw99 = dat_main %>%\n  filter(year == 1999)%>%\n  filter(avwage >= 3)\npercent99 = quantile(pcw99$ln_avwage, seq(0, 1, 0.01))\n\npcw00 = dat_main %>%\n  filter(year == 2000)%>%\n  filter(avwage >= 3)\npercent00 = quantile(pcw00$ln_avwage, seq(0, 1, 0.01))\n\npcw01 = dat_main %>%\n  filter(year == 2001)%>%\n  filter(avwage >= 3)\npercent01 = quantile(pcw01$ln_avwage, seq(0, 1, 0.01))\n\npcw02 = dat_main %>%\n  filter(year == 2002)%>%\n  filter(avwage >= 3)\npercent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))\n\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.6861],"ok":[true],"chunk":[7],"ex":[4],"e.ind":[0],"code":["\ndiffperc = data.frame(sort(percent95))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:38"],"user":["default_user"],"umph":[1730797538.7416],"ok":[true],"chunk":[8],"ex":[4],"e.ind":[0],"code":["diffperc = diffperc %>%\n  mutate(\"percentile\" = c(0:100),\n         \"diff96\" = percent96-percent95,\n         \"diff97\" = percent97-percent96,\n         \"diff98\" = percent98-percent97,\n         \"diff99\" = percent99-percent98,\n         \"diff00\" = percent00-percent99,\n         \"diff01\" = percent01-percent00,\n         \"diff02\" = percent02-percent01)\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:05:41"],"user":["default_user"],"umph":[1730797541.5532],"ok":[true],"chunk":[9],"ex":[4],"e.ind":[0],"code":["\n#Graphik\nlibrary(ggplot2)\n\ndiffperc = filter(diffperc, percentile < 76 & percentile > 0)\nggplot(diffperc)+\n  geom_line(aes(x = percentile, y = diff99), colour = \"blue\", linetype = 2, linewidth = 0.8)+\n  geom_line(aes(x = percentile, y = diff00), colour = \"red\", linewidth = 0.8)+\n  geom_vline(xintercept = 13)+\n  geom_vline(xintercept = 50)+\n  xlab(\"Perzentile der Ausgangsdurchschnittslöhne\")+\n  ylab(\"Änderung des logarithmierten Durchschnittslohns\")+\n  title(\"Änderung im logarithmierten Durchschnittslohn nach Perzentilen vor und nach der Einführung des Mindestlohns\")\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-05 10:07:38"],"user":["default_user"],"umph":[1730797658.7071],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:09:10"],"user":["default_user"],"umph":[1730797750.5902],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["dat_main = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-05 10:09:13"],"user":["default_user"],"umph":[1730797753.6972],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
