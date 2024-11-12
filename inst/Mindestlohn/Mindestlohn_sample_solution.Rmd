@@ -20,15 +20,21 @@ user.name = 'Jane Doe'
 
 4. Einordnung des Artikels
 
+**Ideen**
+Diagramm Variablenbeeinflussung
+
 
 ## Exercise 1 -- Einführung in den Mindestlohn
 
+- Relevanz der Forschungsfrage
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
+- Wie werden Unternhemensgewinne definiert?
+-Theoretisch mathematischer Hintergrund / Ausgangspunkt
 
 
-Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbrittanien zur Einführung 1999 (in Pfund)?
+Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
 
 - 3.6 [x]
 
@@ -53,7 +59,13 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 - Herkunft der Daten
 - Ausgewogenheit der Daten
 - Datensatz WERS
-- Datensatz main
+- Datensatz main (FAME (Financial Analysis Made Easy(135)))
+  - Gesetzliche Verpflichtung
+  - Auch Analyse kleinerer Unternehmen möglich (135)
+  - Betrachtung von Firmen mit Geschäftsjahr April-März (Filter-Sample) (135)
+- Labor Force Survey (136f.)
+  - Arbeitsumfeld
+  
 - Relevante Variablen
 
 **Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
@@ -63,7 +75,7 @@ dat_main = read_dta('main_fame.dta')
 ```
 
 
-## Exercise 2.1 -- Schaubild
+## Exercise 2.1 -- Schaubild / Wahl der Gruppen
 
 Es soll überprüft werden, wie sich die Einführung des Mindestlohns auf die unterschiedlichen Einkommen ausgewirkt hat. 
 Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächst für jedes einzelne Jahr aufgeteilt werden.
@@ -210,8 +222,41 @@ ggplot(diffperc)+
 
 **Möglicher Inhalt**
 - Wieso braucht man DiD
+- Voraussetzungen gegeben? (parallel-Trend)
 - Was sagt er aus
-- Wie werden die jeweiligen Gruppen gewählt
+- Vorteil ggü. anderer Methoden
+- Wie werden die jeweiligen Gruppen gewählt? (136f.)
+  - Treatment Group Indikatoren = FAME + LFS + WERS (136)
+  - T = 1 für avwage < 12.000 im Geschäftsjahr vor NMW Einführung 
+  - Durchschnitt in T = 1 = 8400 => 3,90 pro Stunde (nah bei NMW = 3,60)  
+  - Plausible Treatment-Wahl? (137D.), Fig. 1
+- Was gibt es für andere Schätzmethoden?
+- Diagramm Variablenbeeinflussung
+- Placebo-Effekt (142f.)
+  - Imaginäre Einführung NMW im April 1996
+
+**Vorgehen**
+- Kernergebnisse erkennen
+- Ausgangspunkt: Mindestlohn + Unternehmensgewinne
+- Regression aufbauen
+
+**Stichwörter**
+- Quasi-experimenteller Rahmen NMW (133)
+- Händische DiD-Schätzungsformel (133)
+- Parallel-Trend: Unterschiede wären gleich geblieben, wenn es kein Treatment gegeben hätte
+
+**Mögliche Aufgaben**
+- Treatmentgruppenwahl entwickeln: 3,60 pro Stunde -> Schnitt 8400 im Jahr bei Vollzeit (Arbeitszeiten GB aufdröseln)
+
+
+Die Auswirkungen des Mindestlohns auf die Unternehmensgewinne können mit Hilfe der Difference-in-Differences-Methode - kurz **DiD** - beobachtet werden.
+
+**DiD-Methode**
+Die DiD-Schätzung ist häufig geeignet, um politische Maßnahmen empirisch zu beurteilen. Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage.  (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
+
+**Sind die Voraussetzungen gegeben? (Quiz)**
+Um eine DiD-Schätzung durchführen zu können, müssen vier relevante Gruppen definiert werden.
+Sehen wir uns zunächst 
 
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
@@ -228,17 +273,52 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
-## Exercise 3.1 -- händische DiD-Berechnung
+
+## Exercise 3.1 -- Wahl der Gruppen
+Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3,60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
+
+```{r "6_1"}
+  dat = read_dta('main_fame.dta')
+
+```
+Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei "avwage". Hierüber wird sich auch im Artikel genähert. Dabei werden alle Unternehmen mit einem avwage =< 12000 in die Treatmentgruppe einsortiert. 
+Um zu verstehen, warum sich für diesen Wert als Obergrenze entschieden wird ist es hilfreich, den Wert in Zusammenhang mit dem Stundenlohn zu bringen.
+Dazu soll zunächst der durchschnittliche Lohn aller Unternehmen aus der Treatmentgruppe in der Pre-Policy Periode ermittelt werden.
+
+**Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. (Hinweis: Avwage wird im Datensatz in 1000 Pfund angegeben)
+```{r "6_2"}
+mean_treat = dat %>%
+  filter(avwage <= 12) %>%
+  filter(year == 1999) %>%
+  summarise(round(mean(avwage)*1000,2))
+mean_treat
+```
+```{r "6_3"}
+mean_treat / 2000
+```
+Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
+
+Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden.
+Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit dem Durchschnittslohn zusammmenhängt.
+
+**Figure 1**
+```{r "6_4"}
+dat_seq = read_dta('seq98.dta')
+```
+
+
+
+## Exercise 3.2 -- händische DiD-Berechnung
 
 Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
 
 **Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
-```{r "6_1"}
+```{r "7_1"}
 dat_main = read_dta('main_fame.dta')
 
 ```
 
-```{r "6_2"}
+```{r "7_2"}
 dat_table_DiD = dat_main %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
@@ -251,7 +331,7 @@ Die Formel hierfür lautet
 ***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
-```{r "6_3"}
+```{r "7_3"}
 
 dat_table_DiD
 ```
@@ -273,7 +353,7 @@ Quiz: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
 
 
 **Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
-```{r "6_4"}
+```{r "7_4"}
 y1.post.treat = dat_table_DiD$mean_ln_avwage[4]
 y1.post.control = dat_table_DiD$mean_ln_avwage[2]
 y1.pre.treat = dat_table_DiD$mean_ln_avwage[3]
@@ -304,7 +384,7 @@ Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Net
 Das geschieht analog zur obigen Schätzung.
 
 **Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
-```{r "6_5"}
+```{r "7_5"}
 y2.post.treat = dat_table_DiD$mean_net_pcm[4]
 y2.post.control = dat_table_DiD$mean_net_pcm[2]
 y2.pre.treat = dat_table_DiD$mean_net_pcm[3]
@@ -314,7 +394,7 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[1]
 Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 
 **Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
-```{r "6_6"}
+```{r "7_6"}
 DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
 DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
   
@@ -326,10 +406,10 @@ DiD_net_pcm
 Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Profitabilität sinkt.
 
 
-## Exercise 3.2 -- DiD-Schätzung mittels Regression
+## Exercise 3.3 -- DiD-Schätzung mittels Regression
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den COde mit "check" ausführen.
-```{r "7_1"}
+```{r "8_1"}
 dat_main_pp = filter(dat_main, pp == 1) 
 ```
 
@@ -340,7 +420,13 @@ Es wurden einige Daten herausgefiltert.
 
 - EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
 - Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
+- unberücksichtigte Variablen
+- Auswirkung auf Beschäftigung
 - weitere Artikel
+
+## Exercise Anregungen
+
+- "Aber was sind die Produktionskosten - des Arbeiters, d.h. die Kosten, um den Arbeiter selbst zu produzieren?" / "Wert der Arbeit" (Kapital, 497)
 
 
 ## Exercise Probleme beim Code
@@ -353,14 +439,14 @@ Es wurden einige Daten herausgefiltert.
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "10_a"}
+```{r "12_a"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "10_a_2",optional=TRUE}
+```{r "12_a_2",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -374,7 +460,7 @@ info("useful functions for numeric vectors")
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "10_b"}
+```{r "12_b"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -383,7 +469,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "10_c",optional=TRUE, dev='svg', fig.width=4}
+```{r "12_c",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -408,7 +494,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "10_c_2"}
+```{r "12_c_2"}
 2
 ```
 

@@ -44,7 +44,7 @@ dat_seq = mutate(dat_seq, "ee_" = case_when(
 #Intervalle erstellen
 dat_seq = mutate(dat_seq,
                  "w1" = case_when(
-                   d11 == 1 ~ 0,
+                   d11 == 1 ~ NA_real_,
                    d11 == 2 ~ 51,
                    d11 == 3 ~ 81,
                    d11 == 4 ~ 141,
@@ -55,7 +55,7 @@ dat_seq = mutate(dat_seq,
                    d11 == 9 ~ 361,
                    d11 == 10 ~ 431,
                    d11 == 11 ~ 541,
-                   d11 == 12 ~ 681,
+                   d11 == 12 ~ 681
                  ))
 
 dat_seq = mutate(dat_seq,
@@ -71,7 +71,7 @@ dat_seq = mutate(dat_seq,
                    d11 == 9 ~ 430,
                    d11 == 10 ~ 540,
                    d11 == 11 ~ 680,
-                   d11 == 12 ~ 800,
+                   d11 == 12 ~ NA_real_
                  ))
 
 dat_seq = mutate(dat_seq,
@@ -80,9 +80,14 @@ dat_seq = mutate(dat_seq,
                  "lh" = log(hours))
 
 #Regression??? Untergrenze lw1, Obergrenze lw2
+#Vorschlag GPT
+library(survival)
+#model_intreg = survreg(Surv(lw1, lw2, type = "interval") ~ aa_* + male + union + ee_* + lh, data = dat_seq)
+dat_seq$interval = with(dat_seq, Surv(lw1, lw2, type = "interval"))
+model_intreg = survreg(interval ~ aa_* + male + union + ee_* + lh, data = dat_seq)
 
 #Intervalle mit Survival
-library(survival)
+
 Intervall = with(dat_seq, Surv(lw1, lw2, event = rep(3, nrow(dat_seq)), type = "interval"))
 summary(Intervall)
 
@@ -254,7 +259,7 @@ ggplot(diffperc)+
   geom_vline(xintercept = 13)+
   geom_vline(xintercept = 50)+
   xlab("Perzentile der Ausgangsdurchschnittslöhne")+
-  ylab("Änderung des logarithmierten Durchschnittslohns")+
+  ylab("Änderung des logarithmierten Durchschnittslohns")
   title("Änderung im logarithmierten Durchschnittslohn nach Perzentilen vor und nach der Einführung des Mindestlohns")
 
 

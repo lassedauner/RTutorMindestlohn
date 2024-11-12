@@ -252,3 +252,73 @@
 ,
 {"type":["check_chunk"],"time":["2024-11-05 10:09:13"],"user":["default_user"],"umph":[1730797753.6972],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat_table_DiD = dat_main %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2024-11-12 14:50:13"],"user":["default_user"],"umph":[1731419413.2203],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:05:51"],"user":["default_user"],"umph":[1731423951.183],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:05:57"],"user":["default_user"],"umph":[1731423957.019],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n  head(dat)"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:29:18"],"user":["default_user"],"umph":[1731425358.425],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:29:23"],"user":["default_user"],"umph":[1731425363.4943],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:29:38"],"user":["default_user"],"umph":[1731425378.9211],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat %>%\n  filter(avwage <= 12000) %>%\n  filter(year == 1999) %>%\n  mean(avwage)\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:34:38"],"user":["default_user"],"umph":[1731425678.2439],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:34:43"],"user":["default_user"],"umph":[1731425683.5471],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:34:47"],"user":["default_user"],"umph":[1731425687.8503],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(mean(avwage))"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:35:27"],"user":["default_user"],"umph":[1731425727.1594],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:35:30"],"user":["default_user"],"umph":[1731425730.7925],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:36:03"],"user":["default_user"],"umph":[1731425763.6783],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:36:12"],"user":["default_user"],"umph":[1731425772.4435],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:36:19"],"user":["default_user"],"umph":[1731425779.0345],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  filter(pp==1) %>%\n  summarise(mean(avwage))"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:39:44"],"user":["default_user"],"umph":[1731425984.2307],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:39:51"],"user":["default_user"],"umph":[1731425991.0488],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:39:55"],"user":["default_user"],"umph":[1731425995.592],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(mean(avwage))"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:50:16"],"user":["default_user"],"umph":[1731426616.3839],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:50:19"],"user":["default_user"],"umph":[1731426619.9189],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:50:22"],"user":["default_user"],"umph":[1731426622.962],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:51:23"],"user":["default_user"],"umph":[1731426683.6286],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:51:27"],"user":["default_user"],"umph":[1731426687.1165],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:51:29"],"user":["default_user"],"umph":[1731426689.4297],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:56:18"],"user":["default_user"],"umph":[1731426978.2266],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:56:21"],"user":["default_user"],"umph":[1731426981.5353],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:56:24"],"user":["default_user"],"umph":[1731426984.4153],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  #filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 16:57:14"],"user":["default_user"],"umph":[1731427034.8955],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:57:17"],"user":["default_user"],"umph":[1731427037.6967],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 16:57:19"],"user":["default_user"],"umph":[1731427039.8637],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1998) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-12 17:00:49"],"user":["default_user"],"umph":[1731427249.3374],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 17:00:53"],"user":["default_user"],"umph":[1731427253.6675],"ok":[true],"chunk":[10],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 17:00:53"],"user":["default_user"],"umph":[1731427253.8177],"ok":[true],"chunk":[11],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 17:00:56"],"user":["default_user"],"umph":[1731427256.7471],"ok":[true],"chunk":[12],"ex":[6],"e.ind":[0],"code":["mean_treat / 2000"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-12 17:01:15"],"user":["default_user"],"umph":[1731427275.5252],"ok":[false],"chunk":[12],"ex":[6],"e.ind":[1],"code":["mean_treat / 2030"],"message":["\nYou have not yet entered all correct commands."]}
+,
+{"type":["init_ps"],"time":["2024-11-12 17:52:23"],"user":["default_user"],"umph":[1731430343.4286],"ok":[true]}
+,
