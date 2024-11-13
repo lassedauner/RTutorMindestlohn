@@ -322,3 +322,51 @@
 ,
 {"type":["init_ps"],"time":["2024-11-12 17:52:23"],"user":["default_user"],"umph":[1731430343.4286],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-11-13 16:30:56"],"user":["default_user"],"umph":[1731511856.1134],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:31:08"],"user":["default_user"],"umph":[1731511868.7518],"ok":[false],"chunk":[10],"ex":[5],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"Treatment\"=mean(ln_avwage, na.rm = TRUE))"],"message":["evaluation error in \n  dat_trend_treat = dat %>% filter(ctreat1 == 1) %>% group_by(year) %>% summarise(Treatment = mean(ln_avwage, na.rm = TRUE))\n  Error:  Objekt 'dat' nicht gefunden\n"]}
+,
+{"type":["init_ps"],"time":["2024-11-13 16:32:03"],"user":["default_user"],"umph":[1731511923.1153],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:08"],"user":["default_user"],"umph":[1731511928.4224],"ok":[false],"chunk":[10],"ex":[5],"e.ind":[1],"code":["# Enter your code here."],"message":["\nYou have not yet made an assignment to dat."]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:11"],"user":["default_user"],"umph":[1731511931.6173],"ok":[true],"chunk":[10],"ex":[5],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:14"],"user":["default_user"],"umph":[1731511934.0206],"ok":[true],"chunk":[11],"ex":[5],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"Treatment\"=mean(ln_avwage, na.rm = TRUE))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:14"],"user":["default_user"],"umph":[1731511934.2198],"ok":[true],"chunk":[12],"ex":[5],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"Control\"=mean(ln_avwage, na.rm = TRUE))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:14"],"user":["default_user"],"umph":[1731511934.6293],"ok":[true],"chunk":[13],"ex":[5],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 16:32:19"],"user":["default_user"],"umph":[1731511939.5014],"ok":[true],"chunk":[14],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = Treatment), colour= \"blue\", linetype = 2, linewidth = 0.8)+\n   geom_line(aes(x = year, y = Control), colour = \"red\", linetype = 2, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-13 17:14:51"],"user":["default_user"],"umph":[1731514491.6456],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 17:15:10"],"user":["default_user"],"umph":[1731514510.4836],"ok":[true],"chunk":[15],"ex":[6],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 17:15:18"],"user":["default_user"],"umph":[1731514518.5306],"ok":[true],"chunk":[16],"ex":[6],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-13 17:55:05"],"user":["default_user"],"umph":[1731516905.004],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 17:55:25"],"user":["default_user"],"umph":[1731516925.4495],"ok":[true],"chunk":[19],"ex":[7],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 17:55:25"],"user":["default_user"],"umph":[1731516925.9063],"ok":[true],"chunk":[20],"ex":[7],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 17:55:28"],"user":["default_user"],"umph":[1731516928.996],"ok":[true],"chunk":[21],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)%>%\n  summarise(\"mean_employment_0\"=mean(emp, na.rm = TRUE))\n\ndat_no_pp\n\ndat_pp = dat %>%\n  filter(pp == 1)%>%\n  summarise(\"mean_employment_1\"=mean(emp, na.rm = TRUE))\n\ndat_pp\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-13 18:01:32"],"user":["default_user"],"umph":[1731517292.6869],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:01:54"],"user":["default_user"],"umph":[1731517314.1701],"ok":[true],"chunk":[19],"ex":[7],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:01:54"],"user":["default_user"],"umph":[1731517314.3791],"ok":[true],"chunk":[20],"ex":[7],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:01:57"],"user":["default_user"],"umph":[1731517317.7422],"ok":[true],"chunk":[21],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)\n\nboxplot(log(dat_no_pp$emp))\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-13 18:02:30"],"user":["default_user"],"umph":[1731517350.7446],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:02:42"],"user":["default_user"],"umph":[1731517362.1599],"ok":[true],"chunk":[19],"ex":[7],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:02:42"],"user":["default_user"],"umph":[1731517362.3318],"ok":[true],"chunk":[20],"ex":[7],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-13 18:02:44"],"user":["default_user"],"umph":[1731517364.7626],"ok":[true],"chunk":[21],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\n"],"message":[""]}
+,

@@ -205,8 +205,7 @@ ggplot(diffperc)+
   geom_vline(xintercept = 13)+
   geom_vline(xintercept = 50)+
   xlab("Perzentile der Ausgangsdurchschnittslöhne")+
-  ylab("Änderung des logarithmierten Durchschnittslohns")+
-  title("Änderung im logarithmierten Durchschnittslohn nach Perzentilen vor und nach der Einführung des Mindestlohns")
+  ylab("Änderung des logarithmierten Durchschnittslohns")
 
 ```
 
@@ -252,11 +251,46 @@ ggplot(diffperc)+
 Die Auswirkungen des Mindestlohns auf die Unternehmensgewinne können mit Hilfe der Difference-in-Differences-Methode - kurz **DiD** - beobachtet werden.
 
 **DiD-Methode**
-Die DiD-Schätzung ist häufig geeignet, um politische Maßnahmen empirisch zu beurteilen. Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage.  (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
+Die DiD-Schätzung ist häufig geeignet, um politische Maßnahmen empirisch zu beurteilen. Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage. So können beispielsweise die Einflüsse von Schocks und fixer Effekte abgefedert werden und so die Auswirkungen einzelner Maßnahmen besser beurteilbar machen. (Quelle???) (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
 
 **Sind die Voraussetzungen gegeben? (Quiz)**
-Um eine DiD-Schätzung durchführen zu können, müssen vier relevante Gruppen definiert werden.
-Sehen wir uns zunächst 
+- Parallele Trends
+
+
+**Parallele Trends**
+Eine relevante Voraussetzung für das Anwenden der DiD-Methode ist die Parallel-Trends-Assumption (PTA). Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
+Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. (Quelle???)
+
+**Code**
+```{r "5_1"}
+# Enter your code here.
+```
+
+```{r "5_2"}
+# Enter your code here.
+```
+```{r "5_3"}
+# Enter your code here.
+```
+```{r "5_4"}
+# Enter your code here.
+```
+```{r "5_5"}
+# Enter your code here.
+```
+
+Quiz: Erkennen Sie einen parallelen Trend?
+
+(1) Ja
+(2) Nein
+
+```{r eval=FALSE}
+# Run line to answer the quiz above
+answer.quiz("3")
+```
+
+In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Aufgrund des kurzen Betrachtungszeitraums des Trends sollte diese Einschätzung aber auch mit Vorsicht genossen werden: Es wird sich auf Trends bezogen, die sich auf sechs Datenpunkte (1994-1999) stützen. Die Betrachtung eines größeren Zeitraums könnte hier eine genauere Betrachtung zulassen.
+Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
@@ -270,7 +304,7 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
-answer.quiz("3")
+answer.quiz("4")
 ```
 
 Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
@@ -301,7 +335,8 @@ mean_treat / 2000
 ```
 Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
 
-Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden.
+Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. 
+So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden. Die Autoren kommen zu dem Schluss, dass 87% aller vom Mindestlohn profitierenden Arbeiter in Unternehmen arbeiten, in denen der jährliche Durchschnittslohn bei 12000 Pfund oder niedriger liegt. 
 Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit dem Durchschnittslohn zusammmenhängt.
 
 **Figure 1**
@@ -309,23 +344,36 @@ Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit d
 dat_seq = read_dta('seq98.dta')
 ```
 
-
-
 ## Exercise 3.2 -- händische DiD-Berechnung
 
 Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
 
 **Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
 ```{r "7_1"}
-dat_main = read_dta('main_fame.dta')
+dat = read_dta('main_fame.dta')
 ```
 
 ```{r "7_2"}
-dat_table_DiD = dat_main %>%
+dat_table_DiD = dat %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
   summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))
 ```
+
+**Wieso wird der Dummy "pp" angewandt?**
+In diesem Code fällt auf, dass der Datensatz um mehrere Einträge mit Hilfe des Dummys pp verkleinert wird.
+Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 14)): Dabei wird sich auf Unternehmen bezogen, deren Geschäftsjahr im Zeitraum April bis März läuft. Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. Aufgrund diverser Regelungen in der britischen Berichterstattung sind kleinere Unternehmen von der Angabe bestimmter Daten befreit. Daher gibt es ein subsample. 
+
+Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der Beschäftigungszahlen, ob es Aufffälligkeiten gibt:
+
+```{r "7_3"}
+# Enter your code here.
+```
+Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
+In Großbrittanien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
+Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden. 
+
+
 
 Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle "dat_table_DiD" vorhanden sind, können die Differenzen nun händisch berechnet werden.
 
@@ -333,7 +381,7 @@ Die Formel hierfür lautet
 ***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
-```{r "7_3"}
+```{r "7_4"}
 
 
 ```
@@ -346,7 +394,7 @@ Quiz: Welche Spalte beschreibt die Kontroll- bzw. Treatmentgruppe?
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
-answer.quiz("4")
+answer.quiz("5")
 ```
 
 
@@ -357,11 +405,11 @@ Quiz: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
-answer.quiz("5")
+answer.quiz("6")
 ```
 
 **Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
-```{r "7_4"}
+```{r "7_5"}
 # Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
 y1.post.treat = dat_table_DiD$mean_ln_avwage[___]
 y1.post.control = dat_table_DiD$mean_ln_avwage[___]
@@ -380,7 +428,7 @@ Quiz: Wieso werden für den Durchschnittslohn logarithmierte Werte verwendet?
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
-answer.quiz("6")
+answer.quiz("7")
 ```
 
 
@@ -392,13 +440,13 @@ Quiz: Wieso gibt es in der Kontrollgruppe eine Obergrenze (20000 = Median)?
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
-answer.quiz("7")
+answer.quiz("8")
 ```
 Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Nettorendite eines Unternehmens je Geschäftsjahr (net_pcm) berechnet.
 Das geschieht analog zur obigen Schätzung.
 
 **Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
-```{r "7_5"}
+```{r "7_6"}
 y2.post.treat = dat_table_DiD$mean_net_pcm[___]
 y2.post.control = dat_table_DiD$mean_net_pcm[___]
 y2.pre.treat = dat_table_DiD$mean_net_pcm[___]
@@ -409,7 +457,7 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[___]
 Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 
 **Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
-```{r "7_6"}
+```{r "7_7"}
 DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
 DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
   
@@ -417,7 +465,7 @@ DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control
 
 ```
 
-Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Profitabilität sinkt.
+Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Unternehmensgewinne sinken.
 
 
 ## Exercise 3.3 -- DiD-Schätzung mittels Regression
@@ -437,6 +485,7 @@ Es wurden einige Daten herausgefiltert.
 - unberücksichtigte Variablen
 - Auswirkung auf Beschäftigung
 - weitere Artikel
+-Strukturen in Unternehmen
 
 ## Exercise Anregungen
 
