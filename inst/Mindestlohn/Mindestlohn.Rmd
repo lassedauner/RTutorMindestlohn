@@ -369,8 +369,9 @@ Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der B
 ```{r "7_3"}
 # Enter your code here.
 ```
+Im Gesamten ist zu erkennen, dass die Daten, die sich nicht in der Auswahl befinden, breiter gestreut sind.
 Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
-In Großbrittanien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
+In Großbritannien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
 Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden. 
 
 
@@ -465,17 +466,76 @@ DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control
 
 ```
 
-Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Unternehmensgewinne sinken.
+Durch die Einführung des Mindestlohns können wir sagen, dass dadurch in den beobachteten Unternehmen der Durchschnittslohn gestiegen ist. Zugleich ist zu erkennen, dass in jenen Unternehmen der Nettogewinn zurück gegangen ist.
+
+Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu ermöglichen, machen wir uns die Methode der Regression zu eigen.
 
 
 ## Exercise 3.3 -- DiD-Schätzung mittels Regression
 
-**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den COde mit "check" ausführen.
+**Theorie**
+- Cluster-Robuste Standardfehler
+  - Geclustert nach Regno (unternehmen)
+
+**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r "8_1"}
-dat_main_pp = filter(dat_main, pp == 1) 
+dat_raw = read_dta('main_fame.dta')
+dat = filter(dat_raw, pp == 1) 
 ```
 
-Es wurden einige Daten herausgefiltert. 
+```{r "8_2"}
+# Enter your code here.
+```
+
+Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
+- Wie wirken die unterschiedlichen Variablen?
+- Werte zuordnen
+
+Quiz: Wenn Sie an die Werte aus der händischen Berechnung zurückdenken, sollte Ihnen der Wert einer Variablen bekannt vorkommen. Von welcher Variablen ist die Rede?
+
+(1) ctreat1
+(2) treat1_NMW
+(3) NMW
+
+```{r eval=FALSE}
+# Run line to answer the quiz above
+answer.quiz("3.3.1")
+```
+
+Bei treat1_NMW handelt es sich um den Interaktionsterm der beiden Dummyvariablen. Dieser beschreibt die einfache DiD-Schätzung unter der Berücksichtigung Cluster-Robuster Standardfehler je Unternehmen. Der Wert ist hoch signifikant.
+
+
+Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
+
+(1) Pfund
+(2) Prozent
+(3) Prozentpunkte
+
+```{r eval=FALSE}
+# Run line to answer the quiz above
+answer.quiz("3.3.2")
+```
+
+
+Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
+
+```{r "8_3"}
+# Enter your code here.
+```
+-------------
+
+Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
+
+**Table 2, Panel A**
+```{r "8_4"}
+# Enter your code here.
+```
+
+```{r "8_5"}
+# Enter your code here.
+```
+
+**Table 2, Panel B**
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)

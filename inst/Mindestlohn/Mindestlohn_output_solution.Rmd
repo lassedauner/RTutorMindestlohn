@@ -12,6 +12,8 @@ output:
 # Load libraries and source extra code
 library(ggplot2)
 library(haven)
+library(stargazer)
+library(sandwich)
 library(RTutor)
 
 
@@ -420,10 +422,13 @@ dat_pp = dat %>%
   filter(pp == 1)
 
 boxplot(log(dat_no_pp$emp),log(dat_pp$emp))
+boxplot(log(dat_no_pp$net_pcm),log(dat_pp$net_pcm))
+boxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))
 
 ```
+Im Gesamten ist zu erkennen, dass die Daten, die sich nicht in der Auswahl befinden, breiter gestreut sind.
 Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
-In Großbrittanien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
+In Großbritannien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
 Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden. 
 
 
@@ -523,17 +528,91 @@ DiD_ln_avwage
 DiD_net_pcm
 ```
 
-Es ist erkennbar, dass der logarithmierte Durchschnittslohn gestiegen ist, während die Unternehmensgewinne sinken.
+Durch die Einführung des Mindestlohns können wir sagen, dass dadurch in den beobachteten Unternehmen der Durchschnittslohn gestiegen ist. Zugleich ist zu erkennen, dass in jenen Unternehmen der Nettogewinn zurück gegangen ist.
+
+Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu ermöglichen, machen wir uns die Methode der Regression zu eigen.
 
 
 ## Exercise 3.3 -- DiD-Schätzung mittels Regression
 
-**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den COde mit "check" ausführen.
+**Theorie**
+- Cluster-Robuste Standardfehler
+  - Geclustert nach Regno (unternehmen)
+
+**Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r "8_26"}
-dat_main_pp = filter(dat_main, pp == 1) 
+dat_raw = read_dta('main_fame.dta')
+dat = filter(dat_raw, pp == 1) 
 ```
 
-Es wurden einige Daten herausgefiltert. 
+```{r "8_27"}
+reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+cluster = vcovCL(reg1, cluster = ~regno)
+
+stargazer(reg1, type = "text",
+          se = list(sqrt(diag(cluster))))
+#Quelle?
+```
+
+Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
+- Wie wirken die unterschiedlichen Variablen?
+- Werte zuordnen
+
+Quiz: Wenn Sie an die Werte aus der händischen Berechnung zurückdenken, sollte Ihnen der Wert einer Variablen bekannt vorkommen. Von welcher Variablen ist die Rede?
+
+- ctreat1 [ ]
+
+- treat1_NMW [x]
+
+- NMW [ ]
+
+
+Bei treat1_NMW handelt es sich um den Interaktionsterm der beiden Dummyvariablen. Dieser beschreibt die einfache DiD-Schätzung unter der Berücksichtigung Cluster-Robuster Standardfehler je Unternehmen. Der Wert ist hoch signifikant.
+
+
+Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
+
+- Pfund [ ]
+
+- Prozent [ ]
+
+- Prozentpunkte [x]
+
+
+
+Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
+
+```{r "8_28"}
+reg2 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW, data = dat)
+cluster2 = vcovCL(reg2, cluster = ~regno)
+
+stargazer(reg2, type = "text",
+          se = list(sqrt(diag(cluster2))))
+```
+-------------
+
+Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
+
+**Table 2, Panel A**
+```{r "8_29"}
+reg3 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk), data = dat)
+cluster3 = vcovCL(reg3, cluster = ~regno)
+
+stargazer(reg3, type = "text",
+          se = list(sqrt(diag(cluster3))))
+```
+
+```{r "8_30"}
+reg4 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk), data = dat)
+cluster4 = vcovCL(reg4, cluster = ~regno)
+
+stargazer(reg4, type = "text",
+          se = list(sqrt(diag(cluster4))))
+```
+
+**Table 2, Panel B**
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
@@ -560,14 +639,14 @@ Es wurden einige Daten herausgefiltert.
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "12_a_27"}
+```{r "12_a_31"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "12_a_28",optional=TRUE}
+```{r "12_a_32",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -581,7 +660,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "12_a_29"}
+```{r "12_a_33"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -604,7 +683,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "12_b_30"}
+```{r "12_b_34"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -613,7 +692,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "12_c_31",optional=TRUE, dev='svg', fig.width=4}
+```{r "12_c_35",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -638,7 +717,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "12_c_32"}
+```{r "12_c_36"}
 2
 ```
 

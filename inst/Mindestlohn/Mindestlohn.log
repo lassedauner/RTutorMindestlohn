@@ -370,3 +370,27 @@
 ,
 {"type":["check_chunk"],"time":["2024-11-13 18:02:44"],"user":["default_user"],"umph":[1731517364.7626],"ok":[true],"chunk":[21],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\n"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2024-11-18 15:29:35"],"user":["default_user"],"umph":[1731940175.0792],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:46"],"user":["default_user"],"umph":[1731940186.5638],"ok":[true],"chunk":[19],"ex":[7],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:47"],"user":["default_user"],"umph":[1731940187.0673],"ok":[true],"chunk":[20],"ex":[7],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:48"],"user":["default_user"],"umph":[1731940188.0509],"ok":[true],"chunk":[21],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\nboxplot(log(dat_no_pp$net_pcm),log(dat_pp$net_pcm))\nboxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:48"],"user":["default_user"],"umph":[1731940188.7207],"ok":[true],"chunk":[22],"ex":[7],"e.ind":[0],"code":["\ndat_table_DiD"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:48"],"user":["default_user"],"umph":[1731940188.9356],"ok":[true],"chunk":[23],"ex":[7],"e.ind":[0],"code":["y1.post.treat = dat_table_DiD$mean_ln_avwage[4]\ny1.post.control = dat_table_DiD$mean_ln_avwage[2]\ny1.pre.treat = dat_table_DiD$mean_ln_avwage[3]\ny1.pre.control = dat_table_DiD$mean_ln_avwage[1]\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:49"],"user":["default_user"],"umph":[1731940189.11],"ok":[true],"chunk":[24],"ex":[7],"e.ind":[0],"code":["y2.post.treat = dat_table_DiD$mean_net_pcm[4]\ny2.post.control = dat_table_DiD$mean_net_pcm[2]\ny2.pre.treat = dat_table_DiD$mean_net_pcm[3]\ny2.pre.control = dat_table_DiD$mean_net_pcm[1]"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-18 15:29:54"],"user":["default_user"],"umph":[1731940194.2805],"ok":[true],"chunk":[25],"ex":[7],"e.ind":[0],"code":["DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)\nDiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)\n  \n#Ergebnisse anzeigen\nDiD_ln_avwage\nDiD_net_pcm"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2024-11-18 16:29:36"],"user":["default_user"],"umph":[1731943776.7289],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-18 16:31:25"],"user":["default_user"],"umph":[1731943885.7869],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-18 16:32:01"],"user":["default_user"],"umph":[1731943921.6297],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-18 17:31:05"],"user":["default_user"],"umph":[1731947465.7439],"ok":[true]}
+,
