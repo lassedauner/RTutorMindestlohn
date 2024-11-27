@@ -38,7 +38,9 @@ Diagramm Variablenbeeinflussung
 - sic
 - Vergleich zu anderen Staaten
 - Wie werden Unternhemensgewinne definiert?
--Theoretisch mathematischer Hintergrund / Ausgangspunkt
+- Theoretisch mathematischer Hintergrund / Ausgangspunkt
+  - Messung Unternehmensgewinne
+  - Messung Mindestlohn
 
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
@@ -55,6 +57,10 @@ success: Korrekt. Der Artikel befasst sich mit der Einführung des Mindestlohns 
 failure: Diese Schätzung ist zu hoch.
 #>
 
+
+Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
+Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe. Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkomission angepasst.
+
 #< quiz "1.2"
 question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien im Jahr 2024 (in Pfund)?
 sc:
@@ -67,11 +73,6 @@ success: Korrekt. Für Personen über 21 gilt dieser Mindestlohn von April 2024 
 failure: Diese Schätzung ist falsch.
 #>
 https://www.gov.uk/national-minimum-wage-rates
-
-Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Bis zum Jahr 1993 wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
-Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe.
-
-
 
 
 #< quiz "2"
@@ -578,6 +579,7 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 **Theorie**
 - Cluster-Robuste Standardfehler
   - Geclustert nach Regno (unternehmen)
+- Genestete Daten
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r}
@@ -588,6 +590,39 @@ dat = filter(dat_raw, pp == 1)
 ```
 
 ```{r}
+regi = lm(ln_avwage ~ ctreat1, data = dat)
+```
+
+```{r}
+regii = lm(ln_avwage ~ NMW, data = dat)
+```
+
+```{r}
+regiii = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+```
+
+```{r}
+stargazer(regi, regii, regiii, type = "text")
+```
+
+**Genestete Daten**
+(Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
+Die Werte der Variablen sind im obigen Fall als hoch signifikant gekennzeichnet. Allerdings sind die p-Werte fehlerhaft, da es sich bei den Daten teilweise um genestete Daten handelt. Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
+Um Fehler bezüglich genesteter Daten zu verhindern, fügen wir Clusterrobuste Standardfehler ein.
+
+#< quiz "3.3.1"
+question: Nach welcher Variable soll geclustert werden?
+sc:
+    - ln_avwage
+    - regno*
+
+success: Korrekt, hierbei handelt es sich um die übergeordnete Einheit.   
+failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeordneten Einheit geclustert werden.
+#>
+
+Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
+```{r}
 reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 cluster = vcovCL(reg1, cluster = ~regno)
 
@@ -596,10 +631,23 @@ stargazer(reg1, type = "text",
 #Quelle?
 ```
 
+**Clusterrobuste Standardfehler**
+
+An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
+Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
+
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
+(Angrist, 231ff)...
+Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
+
+---------------
+
+**Ergebnisanalyse**
+
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
 - Wie wirken die unterschiedlichen Variablen?
 - Werte zuordnen
-#< quiz "3.3.1"
+#< quiz "3.3.2"
 question: Wenn Sie an die Werte aus der händischen Berechnung zurückdenken, sollte Ihnen der Wert einer Variablen bekannt vorkommen. Von welcher Variablen ist die Rede?
 sc:
     - ctreat1
@@ -612,7 +660,7 @@ failure: Das ist leider falsch.
 
 Bei treat1_NMW handelt es sich um den Interaktionsterm der beiden Dummyvariablen. Dieser beschreibt die einfache DiD-Schätzung unter der Berücksichtigung Cluster-Robuster Standardfehler je Unternehmen. Der Wert ist hoch signifikant.
 
-#< quiz "3.3.2"
+#< quiz "3.3.3"
 question: In welcher Einheit wird der DiD-Wert beschrieben?
 sc:
     - Pfund
@@ -623,6 +671,9 @@ success: Richtige Antwort. Der Anstieg des Gehalts in der Treatmentgruppe ist um
 failure: Das ist leider falsch. Es werden zwei log-Variablen miteinander verglichen.
 #>
 
+----------------
+
+**NET_PCM**
 
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
@@ -714,7 +765,7 @@ max(dat_ff1$avwage)
 - Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
 - unberücksichtigte Variablen
 - Auswirkung auf Beschäftigung
-- weitere Artikel
+- weitere Artikel (andere Auswirkungen untersucht)
 - Strukturen in Unternehmen
 
 ## Exercise Anregungen

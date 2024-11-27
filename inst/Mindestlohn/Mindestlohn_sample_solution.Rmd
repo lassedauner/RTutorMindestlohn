@@ -31,8 +31,14 @@ Diagramm Variablenbeeinflussung
 - sic
 - Vergleich zu anderen Staaten
 - Wie werden Unternhemensgewinne definiert?
--Theoretisch mathematischer Hintergrund / Ausgangspunkt
+- Theoretisch mathematischer Hintergrund / Ausgangspunkt
+  - Messung Unternehmensgewinne
+  - Messung Mindestlohn
 
+**Hintergrund der Einführung**
+Quellen: FES 09/2007
+Wie in Deutschland, wurden und werden Löhne teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
+Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitspolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
 
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
 
@@ -41,6 +47,22 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 - 5.7 [ ]
 
 - 7.8 [ ]
+
+
+
+Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien im Jahr 2024 (in Pfund)?
+
+- 9.11 [ ]
+
+- 11.22 [x]
+
+- 14.44 [ ]
+
+https://www.gov.uk/national-minimum-wage-rates
+
+Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Bis zum Jahr 1993 wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
+Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe.
+
 
 
 
@@ -554,6 +576,55 @@ stargazer(reg4, type = "text",
 **Table 2, Panel B**
 
 
+## Exercise 3.4 -- Imaginäre Mindestlohneinführung
+
+- Sind die Veränderungen auf das Treatment zurückzuführen?
+  - Vergleich zu Parallel-Trend
+- Imaginäre Einführung am 1. April 1996
+- Vergleich Datensätze: ff=0 vs. ff=1
+- Table 3
+- Figure 3
+
+
+```{r "9_1"}
+dat = read_dta('main_fame.dta')
+dat_ff1 = filter(dat, ff == 1)
+dat_ff0 = filter(dat, ff == 0)
+```
+
+```{r "9_2"}
+dat_ff1 %>%
+  group_by(year)%>%
+  summarise(length(year))
+
+dat_ff0 %>%
+  group_by(year)%>%
+  summarise(length(year))
+```
+-> Nur Einträge bis 99 in ff1
+ABER: 1994-1999 auch in ff0 vorhanden
+
+```{r "9_3"}
+dat_ff0 %>%
+  group_by(pp)%>%
+  summarise(length(pp))
+
+dat_ff1 %>%
+  group_by(pp)%>%
+  summarise(length(pp))
+```
+-> Anteil an pp==0 in ff0 deutlich höher als in ff1
+
+```{r "9_4"}
+dat_ff0 = filter(dat_ff0, year==1996)
+dat_ff1 = filter(dat_ff1, year==1996)
+boxplot(dat_ff0$ln_avwage,dat_ff1$ln_avwage)
+mean(dat_ff0$avwage, na.rm = TRUE)
+mean(dat_ff1$avwage)
+max(dat_ff1$avwage)
+```
+
+
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
 
 - EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
@@ -561,7 +632,7 @@ stargazer(reg4, type = "text",
 - unberücksichtigte Variablen
 - Auswirkung auf Beschäftigung
 - weitere Artikel
--Strukturen in Unternehmen
+- Strukturen in Unternehmen
 
 ## Exercise Anregungen
 
@@ -578,14 +649,14 @@ stargazer(reg4, type = "text",
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "12_a"}
+```{r "13_a"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "12_a_2",optional=TRUE}
+```{r "13_a_2",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -599,7 +670,7 @@ info("useful functions for numeric vectors")
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "12_b"}
+```{r "13_b"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -608,7 +679,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "12_c",optional=TRUE, dev='svg', fig.width=4}
+```{r "13_c",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -633,7 +704,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "12_c_2"}
+```{r "13_c_2"}
 2
 ```
 
