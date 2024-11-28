@@ -398,3 +398,23 @@
 ,
 {"type":["init_ps"],"time":["2024-11-26 15:42:19"],"user":["default_user"],"umph":[1732632139.3397],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2024-11-27 17:46:52"],"user":["default_user"],"umph":[1732726012.7212],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-28 13:50:29"],"user":["default_user"],"umph":[1732798229.3148],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2024-11-28 14:38:20"],"user":["default_user"],"umph":[1732801100.9422],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:38:39"],"user":["default_user"],"umph":[1732801119.3608],"ok":[true],"chunk":[26],"ex":[8],"e.ind":[0],"code":["\ndag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 18, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:09"],"user":["default_user"],"umph":[1732801149.6185],"ok":[true],"chunk":[27],"ex":[8],"e.ind":[0],"code":["dat_raw = read_dta('main_fame.dta')\ndat = filter(dat_raw, pp == 1) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:10"],"user":["default_user"],"umph":[1732801150.0386],"ok":[true],"chunk":[28],"ex":[8],"e.ind":[0],"code":["regi = lm(ln_avwage ~ ctreat1, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:10"],"user":["default_user"],"umph":[1732801150.1954],"ok":[true],"chunk":[29],"ex":[8],"e.ind":[0],"code":["regii = lm(ln_avwage ~ NMW, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:10"],"user":["default_user"],"umph":[1732801150.3523],"ok":[true],"chunk":[30],"ex":[8],"e.ind":[0],"code":["regiii = lm(ln_avwage ~ treat1_NMW, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:10"],"user":["default_user"],"umph":[1732801150.5366],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2024-11-28 14:39:22"],"user":["default_user"],"umph":[1732801162.9795],"ok":[true],"chunk":[32],"ex":[8],"e.ind":[0],"code":["stargazer(regi, regii, regiii, regiv, type = \"text\")"],"message":[""]}
+,

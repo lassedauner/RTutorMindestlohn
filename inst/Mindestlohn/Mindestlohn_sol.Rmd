@@ -10,7 +10,7 @@ library(RTutor)
 setwd("C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn")
 ps.name = "Mindestlohn"; sol.file = paste0(ps.name,"_sol.Rmd")
 # character vector of all packages you load in the problem set
-libs = c("ggplot2","haven","stargazer","sandwich") 
+libs = c("ggplot2","haven","stargazer","sandwich", "ggdag") 
 create.ps(sol.file=sol.file, ps.name=ps.name,libs=libs, rps.has.sol=TRUE, addons="quiz")
 # Show the problem set in the webbrowser
 show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
@@ -581,6 +581,26 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
   - Geclustert nach Regno (unternehmen)
 - Genestete Daten
 
+**DAG**
+
+Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
+Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
+(https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
+(https://r-causal.github.io/ggdag/)
+
+```{r}
+
+dag <- dagify(
+  ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
+  treat1_NMW ~ ctreat1 + NMW,
+  labels = c(ctreat1 = "ctreat1", treat1_NMW = "treat1_NMW", NMW = "NMW", ln_avwage = "ln_avwage")
+)
+
+ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label")+
+  theme_dag_blank()
+```
+Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
+
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r}
 #< task
@@ -598,12 +618,19 @@ regii = lm(ln_avwage ~ NMW, data = dat)
 ```
 
 ```{r}
-regiii = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
 ```
 
 ```{r}
-stargazer(regi, regii, regiii, type = "text")
+regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 ```
+
+```{r}
+stargazer(regi, regii, regiii, regiv, type = "text")
+```
+
+
+
 
 **Genestete Daten**
 (Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
@@ -617,21 +644,29 @@ sc:
     - ln_avwage
     - regno*
 
-success: Korrekt, hierbei handelt es sich um die übergeordnete Einheit.   
+success: Korrekt, hierbei handelt es sich um die übergeordnete Einheit, nach der geclustert werden muss.   
 failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeordneten Einheit geclustert werden.
 #>
 
 Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
-```{r}
-reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
-cluster = vcovCL(reg1, cluster = ~regno)
 
-stargazer(reg1, type = "text",
-          se = list(sqrt(diag(cluster))))
+```{r}
+reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+stargazer(reg1, type ="text")
+```
+
+```{r}
+#reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+#cluster = vcovCL(reg1, cluster = ~regno)
+
+#stargazer(reg1, type = "text",
+#          se = list(sqrt(diag(cluster))))
 #Quelle?
 ```
 
+
 **Clusterrobuste Standardfehler**
+
 
 An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
@@ -671,18 +706,19 @@ success: Richtige Antwort. Der Anstieg des Gehalts in der Treatmentgruppe ist um
 failure: Das ist leider falsch. Es werden zwei log-Variablen miteinander verglichen.
 #>
 
+
 ----------------
+
+
 
 **NET_PCM**
 
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
 ```{r}
-reg2 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW, data = dat)
-cluster2 = vcovCL(reg2, cluster = ~regno)
+reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 
-stargazer(reg2, type = "text",
-          se = list(sqrt(diag(cluster2))))
+stargazer(reg2, type = "text")
 ```
 -------------
 
@@ -690,21 +726,17 @@ Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Ef
 
 **Table 2, Panel A**
 ```{r}
-reg3 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk), data = dat)
-cluster3 = vcovCL(reg3, cluster = ~regno)
+reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
-stargazer(reg3, type = "text",
-          se = list(sqrt(diag(cluster3))))
+stargazer(reg3, type = "text")
 ```
 
 ```{r}
-reg4 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk), data = dat)
-cluster4 = vcovCL(reg4, cluster = ~regno)
+reg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
-stargazer(reg4, type = "text",
-          se = list(sqrt(diag(cluster4))))
+stargazer(reg4, type = "text")
 ```
 
 **Table 2, Panel B**

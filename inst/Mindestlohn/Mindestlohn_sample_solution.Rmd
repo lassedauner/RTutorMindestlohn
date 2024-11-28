@@ -50,6 +50,10 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 
 
 
+Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
+Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe. Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkomission angepasst.
+
+
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien im Jahr 2024 (in Pfund)?
 
 - 9.11 [ ]
@@ -59,11 +63,6 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 - 14.44 [ ]
 
 https://www.gov.uk/national-minimum-wage-rates
-
-Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Bis zum Jahr 1993 wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
-Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe.
-
-
 
 
 
@@ -499,14 +498,76 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 **Theorie**
 - Cluster-Robuste Standardfehler
   - Geclustert nach Regno (unternehmen)
+- Genestete Daten
+
+**DAG**
+
+Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
+Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
+(https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
+(https://r-causal.github.io/ggdag/)
+
+```{r "8_1"}
+
+dag <- dagify(
+  ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
+  treat1_NMW ~ ctreat1 + NMW,
+  labels = c(ctreat1 = "ctreat1", treat1_NMW = "treat1_NMW", NMW = "NMW", ln_avwage = "ln_avwage")
+)
+
+ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label")+
+  theme_dag_blank()
+```
+Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
-```{r "8_1"}
+```{r "8_2"}
 dat_raw = read_dta('main_fame.dta')
 dat = filter(dat_raw, pp == 1) 
 ```
 
-```{r "8_2"}
+```{r "8_3"}
+regi = lm(ln_avwage ~ ctreat1, data = dat)
+```
+
+```{r "8_4"}
+regii = lm(ln_avwage ~ NMW, data = dat)
+```
+
+```{r "8_5"}
+regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
+```
+
+```{r "8_6"}
+regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+```
+
+```{r "8_7"}
+stargazer(regi, regii, regiii, regiv, type = "text")
+```
+
+
+
+
+
+
+**Genestete Daten**
+(Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
+Die Werte der Variablen sind im obigen Fall als hoch signifikant gekennzeichnet. Allerdings sind die p-Werte fehlerhaft, da es sich bei den Daten teilweise um genestete Daten handelt. Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
+Um Fehler bezüglich genesteter Daten zu verhindern, fügen wir Clusterrobuste Standardfehler ein.
+
+
+Quiz: Nach welcher Variable soll geclustert werden?
+
+- ln_avwage [ ]
+
+- regno [x]
+
+
+Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
+
+```{r "8_8"}
 reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 cluster = vcovCL(reg1, cluster = ~regno)
 
@@ -514,6 +575,19 @@ stargazer(reg1, type = "text",
           se = list(sqrt(diag(cluster))))
 #Quelle?
 ```
+
+**Clusterrobuste Standardfehler**
+
+An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
+Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
+
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
+(Angrist, 231ff)...
+Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
+
+---------------
+
+**Ergebnisanalyse**
 
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
 - Wie wirken die unterschiedlichen Variablen?
@@ -541,9 +615,15 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 
 
 
+----------------
+
+
+
+**NET_PCM**
+
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
-```{r "8_3"}
+```{r "8_9"}
 reg2 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW, data = dat)
 cluster2 = vcovCL(reg2, cluster = ~regno)
 
@@ -555,7 +635,7 @@ stargazer(reg2, type = "text",
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
 
 **Table 2, Panel A**
-```{r "8_4"}
+```{r "8_10"}
 reg3 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk), data = dat)
 cluster3 = vcovCL(reg3, cluster = ~regno)
@@ -564,7 +644,7 @@ stargazer(reg3, type = "text",
           se = list(sqrt(diag(cluster3))))
 ```
 
-```{r "8_5"}
+```{r "8_11"}
 reg4 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk), data = dat)
 cluster4 = vcovCL(reg4, cluster = ~regno)
@@ -631,7 +711,7 @@ max(dat_ff1$avwage)
 - Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
 - unberücksichtigte Variablen
 - Auswirkung auf Beschäftigung
-- weitere Artikel
+- weitere Artikel (andere Auswirkungen untersucht)
 - Strukturen in Unternehmen
 
 ## Exercise Anregungen

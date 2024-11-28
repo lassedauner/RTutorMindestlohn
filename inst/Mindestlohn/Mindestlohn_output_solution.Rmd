@@ -14,6 +14,7 @@ library(ggplot2)
 library(haven)
 library(stargazer)
 library(sandwich)
+library(ggdag)
 library(RTutor)
 
 
@@ -82,6 +83,10 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 
 
 
+Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
+Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe. Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkomission angepasst.
+
+
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien im Jahr 2024 (in Pfund)?
 
 - 9.11 [ ]
@@ -91,11 +96,6 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 - 14.44 [ ]
 
 https://www.gov.uk/national-minimum-wage-rates
-
-Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Bis zum Jahr 1993 wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
-Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe.
-
-
 
 
 
@@ -560,14 +560,76 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 **Theorie**
 - Cluster-Robuste Standardfehler
   - Geclustert nach Regno (unternehmen)
+- Genestete Daten
+
+**DAG**
+
+Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
+Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
+(https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
+(https://r-causal.github.io/ggdag/)
+
+```{r "8_26"}
+
+dag <- dagify(
+  ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
+  treat1_NMW ~ ctreat1 + NMW,
+  labels = c(ctreat1 = "ctreat1", treat1_NMW = "treat1_NMW", NMW = "NMW", ln_avwage = "ln_avwage")
+)
+
+ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label")+
+  theme_dag_blank()
+```
+Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
-```{r "8_26"}
+```{r "8_27"}
 dat_raw = read_dta('main_fame.dta')
 dat = filter(dat_raw, pp == 1) 
 ```
 
-```{r "8_27"}
+```{r "8_28"}
+regi = lm(ln_avwage ~ ctreat1, data = dat)
+```
+
+```{r "8_29"}
+regii = lm(ln_avwage ~ NMW, data = dat)
+```
+
+```{r "8_30"}
+regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
+```
+
+```{r "8_31"}
+regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+```
+
+```{r "8_32"}
+stargazer(regi, regii, regiii, regiv, type = "text")
+```
+
+
+
+
+
+
+**Genestete Daten**
+(Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
+Die Werte der Variablen sind im obigen Fall als hoch signifikant gekennzeichnet. Allerdings sind die p-Werte fehlerhaft, da es sich bei den Daten teilweise um genestete Daten handelt. Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
+Um Fehler bezüglich genesteter Daten zu verhindern, fügen wir Clusterrobuste Standardfehler ein.
+
+
+Quiz: Nach welcher Variable soll geclustert werden?
+
+- ln_avwage [ ]
+
+- regno [x]
+
+
+Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
+
+```{r "8_33"}
 reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 cluster = vcovCL(reg1, cluster = ~regno)
 
@@ -575,6 +637,19 @@ stargazer(reg1, type = "text",
           se = list(sqrt(diag(cluster))))
 #Quelle?
 ```
+
+**Clusterrobuste Standardfehler**
+
+An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
+Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
+
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
+(Angrist, 231ff)...
+Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
+
+---------------
+
+**Ergebnisanalyse**
 
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
 - Wie wirken die unterschiedlichen Variablen?
@@ -602,9 +677,15 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 
 
 
+----------------
+
+
+
+**NET_PCM**
+
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
-```{r "8_28"}
+```{r "8_34"}
 reg2 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW, data = dat)
 cluster2 = vcovCL(reg2, cluster = ~regno)
 
@@ -616,7 +697,7 @@ stargazer(reg2, type = "text",
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
 
 **Table 2, Panel A**
-```{r "8_29"}
+```{r "8_35"}
 reg3 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk), data = dat)
 cluster3 = vcovCL(reg3, cluster = ~regno)
@@ -625,7 +706,7 @@ stargazer(reg3, type = "text",
           se = list(sqrt(diag(cluster3))))
 ```
 
-```{r "8_30"}
+```{r "8_36"}
 reg4 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk), data = dat)
 cluster4 = vcovCL(reg4, cluster = ~regno)
@@ -647,13 +728,13 @@ stargazer(reg4, type = "text",
 - Figure 3
 
 
-```{r "9_31"}
+```{r "9_37"}
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
 ```
 
-```{r "9_32"}
+```{r "9_38"}
 dat_ff1 %>%
   group_by(year)%>%
   summarise(length(year))
@@ -665,7 +746,7 @@ dat_ff0 %>%
 -> Nur Einträge bis 99 in ff1
 ABER: 1994-1999 auch in ff0 vorhanden
 
-```{r "9_33"}
+```{r "9_39"}
 dat_ff0 %>%
   group_by(pp)%>%
   summarise(length(pp))
@@ -676,7 +757,7 @@ dat_ff1 %>%
 ```
 -> Anteil an pp==0 in ff0 deutlich höher als in ff1
 
-```{r "9_34"}
+```{r "9_40"}
 dat_ff0 = filter(dat_ff0, year==1996)
 dat_ff1 = filter(dat_ff1, year==1996)
 boxplot(dat_ff0$ln_avwage,dat_ff1$ln_avwage)
@@ -692,7 +773,7 @@ max(dat_ff1$avwage)
 - Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
 - unberücksichtigte Variablen
 - Auswirkung auf Beschäftigung
-- weitere Artikel
+- weitere Artikel (andere Auswirkungen untersucht)
 - Strukturen in Unternehmen
 
 ## Exercise Anregungen
@@ -710,14 +791,14 @@ max(dat_ff1$avwage)
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "13_a_35"}
+```{r "13_a_41"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "13_a_36",optional=TRUE}
+```{r "13_a_42",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -731,7 +812,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "13_a_37"}
+```{r "13_a_43"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -754,7 +835,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "13_b_38"}
+```{r "13_b_44"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -763,7 +844,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "13_c_39",optional=TRUE, dev='svg', fig.width=4}
+```{r "13_c_45",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -788,7 +869,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "13_c_40"}
+```{r "13_c_46"}
 2
 ```
 
