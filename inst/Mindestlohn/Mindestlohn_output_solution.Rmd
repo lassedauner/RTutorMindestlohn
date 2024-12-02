@@ -63,7 +63,7 @@ Diagramm Variablenbeeinflussung
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
-- Wie werden Unternhemensgewinne definiert?
+- Wie werden Unternehemensgewinne definiert?
 - Theoretisch mathematischer Hintergrund / Ausgangspunkt
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
@@ -108,9 +108,13 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 - Effizienzsteigerung [ ]
 
 
+**Unternehmensgewinne**
+
+
 ## Exercise 2 -- Datenüberblick
 
 - Herkunft der Daten
+- Wieso Großbritannien?
 - Ausgewogenheit der Daten
 - Datensatz WERS
 - Datensatz main (FAME (Financial Analysis Made Easy(135)))
@@ -125,8 +129,35 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 **Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r "3_1"}
 #Datensatz einlesen
-dat_main = read_dta('main_fame.dta')
+dat = read_dta('main_fame.dta')
 ```
+Um einen ersten Überblick über den Datensatz zu bekommen, geben sie die ersten Zeilen des Datensatzes mittels der Funktion head aus.
+```{r "3_2"}
+head(dat)
+```
+Wir erhalten eine Vielzahl an Variablen, die mehr oder minder relevant für unsere Analysen sind.
+
+Widmen wir uns den wesentlichsten Variablen für unsere Analyse:
+
+**regno**: Hier handelt es sich um eine bestimmte Nummer, mit der die Daten jedem bestimmten Unternehmen zugeordnet werden können.
+
+**year**: Gibt das Jahr an, aus dem die Daten stammen. Dabei wird das zurückliegende Geschäftsjahr betrachtet.
+
+**ln_avwage**: Benennt den logarithmierten Durchschnittslohn im Unternehmen.
+
+**net_pcm**: Die Gewinnmarge eines Unternehmens wir durch die Division vom Nettogewinn durch den Gesamtumsatz im Geschäftsjahr angegeben.
+
+**sic2**: Die Unternehmen werden in Großbritannien nach Branchen in unterschiedliche Branchen unterteilt. Der bis zu vierstellige UKsic (UK Standard Industrial Classification of Economic Activities) beschreibt dabei die Branchen.
+Das oben ausgegebene Unternehmen besitzt den UKsic 7020. Die sic2-Zahl ist somit 70 und beschreibt Immobilienaktivitäten.   
+(https://webarchive.nationalarchives.gov.uk/ukgwa/20160105160709/http://www.ons.gov.uk/ons/guide-method/classifications/archived-standard-classifications/uk-standard-industrial-classification-1992--sic92-/uk-sic-2003.pdf)
+
+**unionmem**: Beschreibt den Anteil an Gewerkschaftsmitgliedern innerhalb des Unternehmens.
+
+**ptwk**: Anteil an Teilzeitarbeitern innerhalb der vierstelligen UKsic-Branche (sic4).
+
+**female**: Frauenanteil bei Arbeitnehmern innerhalb des sic4.
+
+**gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an.
 
 
 ## Exercise 2.1 -- Schaubild / Wahl der Gruppen
@@ -137,7 +168,7 @@ Um die Veränderung des Lohns zum Vorjahr zu messen, muss der Datensatz zunächs
 Zu Beginn wird erneut der Datensatz aus Aufgabe 2 eingelesen.
 
 **Aufgabe**: Führen Sie den Code aus, indem Sie "check" drücken.
-```{r "4_2"}
+```{r "4_3"}
 dat_main = read_dta('main_fame.dta')
 
 ```
@@ -145,7 +176,7 @@ dat_main = read_dta('main_fame.dta')
 Um die Veränderung der Löhne von Geschäftsjahr zu Geschäftsjahr herauszufinden, muss der Datensatz nach Jahren aufgeteilt werden. Das gelingt, indem für jedes Jahr ein eigener Datensatz erstellt wird. Dafür muss der bereits eingelesene Datensatz dat_main zunächst gefiltert werden.
 
 **Aufgabe**: Wählen Sie die passende Variable für das leere Feld und überprüfen Sie Ihre Eingabe durch "check".
-```{r "4_3"}
+```{r "4_4"}
 # pcw95 = dat_main %>%
 #   filter(___ == 1995) %>%
 #   filter(avwage >= 3)
@@ -158,7 +189,7 @@ pcw95 = dat_main %>%
 
 -#Wieso werden nur Werte für avwage >= 3 gewählt? Verfälschung der Ergebnisse? Was für Unternehmen sind betroffen(sic überprüfen)?
 
-```{r "4_4"}
+```{r "4_5"}
 dat_probe = dat_main %>% 
   filter(avwage < 3)
 ```
@@ -170,7 +201,7 @@ Dazu werden die Löhne in Perzentile aufgeteilt.
 
 **Aufgabe**: Erstellen Sie einen Vektor "percent95", der die logarithmierten Durchschnittslöhne in 100 Perzentile aufteilt. Nutzen Sie dafür die Funktion `quantile(dat,seq())`. Setzen Sie den fehlenden Wert in "seq()" ein, um einen Vektor der Länge 100 zu erhalten.
 
-```{r "4_5"}
+```{r "4_6"}
 # percent95 = quantile(pcw95$ln_avwage, seq(0, 1, ___))
 
 percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))
@@ -180,7 +211,7 @@ Diese Aufteilung muss nun für jedes Jahr des Datensatzes wiederholt werden.
 
 **Aufgabe**: Führen sie den Chunk durch *check* aus.
 
-```{r "4_6"}
+```{r "4_7"}
 
 pcw96 = dat_main %>%
   filter(year == 1996)%>%
@@ -227,7 +258,7 @@ Dafür wird zunächst ein Datensatz erstellt, der sich an den Werten der Perzent
 
 **Aufgabe**: Erstellen Sie einen Datensatz `diffperc` mittels der Funktion `data.frame`. Dieser soll zunächst die Werte aus `percent95` enthalten, welche durch `sort()` geordnet sind.
 
-```{r "4_7"}
+```{r "4_8"}
 
 diffperc = data.frame(sort(percent95))
 ```
@@ -237,7 +268,7 @@ Der Datensatz diffperc kann jetzt um die Differenzen innerhalb der Perzentile er
 
 **Aufgabe**: Führen Sie den Code mit "check" aus.
 
-```{r "4_8"}
+```{r "4_9"}
 diffperc = diffperc %>%
   mutate("percentile" = c(0:100),
          "diff96" = percent96-percent95,
@@ -253,7 +284,7 @@ diffperc = diffperc %>%
 
 Für die Betrachtungsweise der Auswirkungen durch die Einführung des Mindestlohns sind zwei Differenzen von besonderer Bedeutung. Daher sollen die Änderung des Lohns im Jahr vor der Einführung (diff99) mit der Änderung im Jahr nach der Einführung (diff00) in einem Liniendiagramm gegenübergestellt werden.
 
-```{r "4_9"}
+```{r "4_10"}
 
 #Graphik
 library(ggplot2)
@@ -322,26 +353,26 @@ Eine relevante Voraussetzung für das Anwenden der DiD-Methode ist die Parallel-
 Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. (Quelle???)
 
 **Code**
-```{r "5_10"}
+```{r "5_11"}
   dat = read_dta('main_fame.dta')
 ```
 
-```{r "5_11"}
+```{r "5_12"}
 dat_trend_treat = dat %>% 
   filter(ctreat1 == 1) %>%
   group_by(year)%>%
   summarise("Treatment"=mean(ln_avwage, na.rm = TRUE))
 ```
-```{r "5_12"}
+```{r "5_13"}
 dat_trend_control = dat %>%
   filter(ctreat1 == 0) %>%
   group_by(year) %>%
   summarise("Control"=mean(ln_avwage, na.rm = TRUE))
 ```
-```{r "5_13"}
+```{r "5_14"}
 dat_trend = left_join(dat_trend_treat, dat_trend_control)
 ```
-```{r "5_14"}
+```{r "5_15"}
 ggplot(dat_trend)+
    geom_line(aes(x = year, y = Treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
    geom_line(aes(x = year, y = Control), colour = "red", linetype = 1, linewidth = 0.8)+
@@ -359,6 +390,9 @@ In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Au
 Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
 
+
+
+## Exercise 3.1 -- Wahl der Gruppen
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
 
@@ -370,14 +404,12 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 - 2000 [x]
 
 
-Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
+Für eine DiD-Schätzung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
-
-## Exercise 3.1 -- Wahl der Gruppen
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3,60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
 
-```{r "6_15"}
+```{r "6_16"}
   dat = read_dta('main_fame.dta')
 
 ```
@@ -386,7 +418,7 @@ Um zu verstehen, warum sich für diesen Wert als Obergrenze entschieden wird ist
 Dazu soll zunächst der durchschnittliche Lohn aller Unternehmen aus der Treatmentgruppe in der Pre-Policy Periode ermittelt werden.
 
 **Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. (Hinweis: Avwage wird im Datensatz in 1000 Pfund angegeben)
-```{r "6_16"}
+```{r "6_17"}
 # mean_treat = dat %>%
 #   filter(avwage <= ___) %>%
 #   filter(year == ___) %>%
@@ -399,7 +431,7 @@ mean_treat = dat %>%
   summarise(round(mean(avwage)*1000,2))
 mean_treat
 ```
-```{r "6_17"}
+```{r "6_18"}
 mean_treat / 2000
 ```
 Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
@@ -409,7 +441,7 @@ So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittsloh
 Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit dem Durchschnittslohn zusammmenhängt.
 
 **Figure 1**
-```{r "6_18"}
+```{r "6_19"}
 dat_seq = read_dta('seq98.dta')
 ```
 
@@ -418,12 +450,12 @@ dat_seq = read_dta('seq98.dta')
 Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
 
 **Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
-```{r "7_19"}
+```{r "7_20"}
 dat = read_dta('main_fame.dta')
 
 ```
 
-```{r "7_20"}
+```{r "7_21"}
 dat_table_DiD = dat %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
@@ -436,7 +468,7 @@ Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 14)): Dab
 
 Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der Beschäftigungszahlen, ob es Aufffälligkeiten gibt:
 
-```{r "7_21"}
+```{r "7_22"}
 dat_no_pp = dat %>%
   filter(pp == 0)
 
@@ -461,7 +493,7 @@ Die Formel hierfür lautet
 ***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
-```{r "7_22"}
+```{r "7_23"}
 
 dat_table_DiD
 ```
@@ -483,7 +515,7 @@ Quiz: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
 
 
 **Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
-```{r "7_23"}
+```{r "7_24"}
 # # Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
 # y1.post.treat = dat_table_DiD$mean_ln_avwage[___]
 # y1.post.control = dat_table_DiD$mean_ln_avwage[___]
@@ -521,7 +553,7 @@ Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Net
 Das geschieht analog zur obigen Schätzung.
 
 **Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
-```{r "7_24"}
+```{r "7_25"}
 # y2.post.treat = dat_table_DiD$mean_net_pcm[___]
 # y2.post.control = dat_table_DiD$mean_net_pcm[___]
 # y2.pre.treat = dat_table_DiD$mean_net_pcm[___]
@@ -536,7 +568,7 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[1]
 Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 
 **Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
-```{r "7_25"}
+```{r "7_26"}
 # DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
 # DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
 #   
@@ -569,7 +601,7 @@ Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen a
 (https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
 (https://r-causal.github.io/ggdag/)
 
-```{r "8_26"}
+```{r "8_27"}
 
 dag <- dagify(
   ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
@@ -583,32 +615,30 @@ ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label
 Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
-```{r "8_27"}
+```{r "8_28"}
 dat_raw = read_dta('main_fame.dta')
 dat = filter(dat_raw, pp == 1) 
 ```
 
-```{r "8_28"}
+```{r "8_29"}
 regi = lm(ln_avwage ~ ctreat1, data = dat)
 ```
 
-```{r "8_29"}
+```{r "8_30"}
 regii = lm(ln_avwage ~ NMW, data = dat)
 ```
 
-```{r "8_30"}
+```{r "8_31"}
 regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
 ```
 
-```{r "8_31"}
+```{r "8_32"}
 regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 ```
 
-```{r "8_32"}
+```{r "8_33"}
 stargazer(regi, regii, regiii, regiv, type = "text")
 ```
-
-
 
 
 
@@ -629,16 +659,15 @@ Quiz: Nach welcher Variable soll geclustert werden?
 
 Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
 
-```{r "8_33"}
-reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
-cluster = vcovCL(reg1, cluster = ~regno)
-
-stargazer(reg1, type = "text",
-          se = list(sqrt(diag(cluster))))
-#Quelle?
+```{r "8_34"}
+reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+stargazer(reg1, type ="text")
 ```
 
+
+
 **Clusterrobuste Standardfehler**
+
 
 An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
@@ -685,34 +714,29 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
-```{r "8_34"}
-reg2 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW, data = dat)
-cluster2 = vcovCL(reg2, cluster = ~regno)
+```{r "8_35"}
+reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 
-stargazer(reg2, type = "text",
-          se = list(sqrt(diag(cluster2))))
+stargazer(reg2, type = "text")
 ```
 -------------
 
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
 
-**Table 2, Panel A**
-```{r "8_35"}
-reg3 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk), data = dat)
-cluster3 = vcovCL(reg3, cluster = ~regno)
 
-stargazer(reg3, type = "text",
-          se = list(sqrt(diag(cluster3))))
+**Table 2, Panel A**
+```{r "8_36"}
+reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg3, type = "text")
 ```
 
-```{r "8_36"}
-reg4 = lm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk), data = dat)
-cluster4 = vcovCL(reg4, cluster = ~regno)
+```{r "8_37"}
+reg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
-stargazer(reg4, type = "text",
-          se = list(sqrt(diag(cluster4))))
+stargazer(reg4, type = "text")
 ```
 
 **Table 2, Panel B**
@@ -728,13 +752,13 @@ stargazer(reg4, type = "text",
 - Figure 3
 
 
-```{r "9_37"}
+```{r "9_38"}
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
 ```
 
-```{r "9_38"}
+```{r "9_39"}
 dat_ff1 %>%
   group_by(year)%>%
   summarise(length(year))
@@ -746,7 +770,7 @@ dat_ff0 %>%
 -> Nur Einträge bis 99 in ff1
 ABER: 1994-1999 auch in ff0 vorhanden
 
-```{r "9_39"}
+```{r "9_40"}
 dat_ff0 %>%
   group_by(pp)%>%
   summarise(length(pp))
@@ -757,7 +781,7 @@ dat_ff1 %>%
 ```
 -> Anteil an pp==0 in ff0 deutlich höher als in ff1
 
-```{r "9_40"}
+```{r "9_41"}
 dat_ff0 = filter(dat_ff0, year==1996)
 dat_ff1 = filter(dat_ff1, year==1996)
 boxplot(dat_ff0$ln_avwage,dat_ff1$ln_avwage)
@@ -791,14 +815,14 @@ max(dat_ff1$avwage)
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "13_a_41"}
+```{r "13_a_42"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "13_a_42",optional=TRUE}
+```{r "13_a_43",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -812,7 +836,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "13_a_43"}
+```{r "13_a_44"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -835,7 +859,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "13_b_44"}
+```{r "13_b_45"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -844,7 +868,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "13_c_45",optional=TRUE, dev='svg', fig.width=4}
+```{r "13_c_46",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -869,7 +893,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "13_c_46"}
+```{r "13_c_47"}
 2
 ```
 

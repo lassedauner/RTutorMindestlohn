@@ -37,7 +37,7 @@ Diagramm Variablenbeeinflussung
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
-- Wie werden Unternhemensgewinne definiert?
+- Wie werden Unternehmensgewinne definiert?
 - Theoretisch mathematischer Hintergrund / Ausgangspunkt
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
@@ -86,9 +86,13 @@ success: Auf dieser Vermutung beruht der wissenschaftliche Artikel.
 failure: Eine mögliche Antwort
 #>
 
+**Unternehmensgewinne**
+
+
 ## Exercise 2 -- Datenüberblick
 
 - Herkunft der Daten
+- Wieso Großbritannien?
 - Ausgewogenheit der Daten
 - Datensatz WERS
 - Datensatz main (FAME (Financial Analysis Made Easy(135)))
@@ -105,8 +109,35 @@ failure: Eine mögliche Antwort
 #< task
 #Datensatz einlesen
 #>
-dat_main = read_dta('main_fame.dta')
+dat = read_dta('main_fame.dta')
 ```
+Um einen ersten Überblick über den Datensatz zu bekommen, geben sie die ersten Zeilen des Datensatzes mittels der Funktion head aus.
+```{r}
+head(dat)
+```
+Wir erhalten eine Vielzahl an Variablen, die mehr oder minder relevant für unsere Analysen sind.
+
+Widmen wir uns den wesentlichsten Variablen für unsere Analyse:
+
+**regno**: Hier handelt es sich um eine bestimmte Nummer, mit der die Daten jedem bestimmten Unternehmen zugeordnet werden können.
+
+**year**: Gibt das Jahr an, aus dem die Daten stammen. Dabei wird das zurückliegende Geschäftsjahr betrachtet.
+
+**ln_avwage**: Benennt den logarithmierten Durchschnittslohn im Unternehmen.
+
+**net_pcm**: Die Gewinnmarge eines Unternehmens wir durch die Division vom Nettogewinn durch den Gesamtumsatz im Geschäftsjahr angegeben.
+
+**sic2**: Die Unternehmen werden in Großbritannien nach Branchen in unterschiedliche Branchen unterteilt. Der bis zu vierstellige UKsic (UK Standard Industrial Classification of Economic Activities) beschreibt dabei die Branchen.
+Das oben ausgegebene Unternehmen besitzt den UKsic 7020. Die sic2-Zahl ist somit 70 und beschreibt Immobilienaktivitäten.   
+(https://webarchive.nationalarchives.gov.uk/ukgwa/20160105160709/http://www.ons.gov.uk/ons/guide-method/classifications/archived-standard-classifications/uk-standard-industrial-classification-1992--sic92-/uk-sic-2003.pdf)
+
+**unionmem**: Beschreibt den Anteil an Gewerkschaftsmitgliedern innerhalb des Unternehmens.
+
+**ptwk**: Anteil an Teilzeitarbeitern innerhalb der vierstelligen UKsic-Branche (sic4).
+
+**female**: Frauenanteil bei Arbeitnehmern innerhalb des sic4.
+
+**gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an.
 
 
 ## Exercise 2.1 -- Schaubild / Wahl der Gruppen
@@ -207,7 +238,7 @@ percent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))
 ```
 
 
-Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datnsatz gespeichert werden. 
+Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datensatz gespeichert werden. 
 
 Dafür wird zunächst ein Datensatz erstellt, der sich an den Werten der Perzentile aus dem ersten Beobachtungsjahr 1995 richtet.
 
@@ -353,6 +384,9 @@ In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Au
 Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
 
+
+
+## Exercise 3.1 -- Wahl der Gruppen
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
 
@@ -366,11 +400,9 @@ success: Richtige Antwort. Die Einführung war zwar im Jahr 1999, die Daten jede
 failure: Das ist nicht korrekt. 
 #>
 
-Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
+Für eine DiD-Schätzung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
-
-## Exercise 3.1 -- Wahl der Gruppen
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3,60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
 
 ```{r}
@@ -403,7 +435,12 @@ mean_treat
 mean_treat / 2000
 #>
 ```
-Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
+Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeit im betrachteten Beispiel bei über 16% lag: (Quelle???)
+
+```{r}
+mean(dat$ptwk, na.rm = TRUE)
+```
+
 
 Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. 
 So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden. Die Autoren kommen zu dem Schluss, dass 87% aller vom Mindestlohn profitierenden Arbeiter in Unternehmen arbeiten, in denen der jährliche Durchschnittslohn bei 12000 Pfund oder niedriger liegt. 
@@ -723,6 +760,7 @@ stargazer(reg2, type = "text")
 -------------
 
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
+
 
 **Table 2, Panel A**
 ```{r}

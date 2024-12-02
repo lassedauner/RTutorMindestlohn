@@ -30,7 +30,7 @@ Diagramm Variablenbeeinflussung
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
-- Wie werden Unternhemensgewinne definiert?
+- Wie werden Unternehemensgewinne definiert?
 - Theoretisch mathematischer Hintergrund / Ausgangspunkt
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
@@ -81,9 +81,13 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 answer.quiz("2")
 ```
 
+**Unternehmensgewinne**
+
+
 ## Exercise 2 -- Datenüberblick
 
 - Herkunft der Daten
+- Wieso Großbritannien?
 - Ausgewogenheit der Daten
 - Datensatz WERS
 - Datensatz main (FAME (Financial Analysis Made Easy(135)))
@@ -100,6 +104,33 @@ answer.quiz("2")
 #Datensatz einlesen
 
 ```
+Um einen ersten Überblick über den Datensatz zu bekommen, geben sie die ersten Zeilen des Datensatzes mittels der Funktion head aus.
+```{r "3_2"}
+# Enter your code here.
+```
+Wir erhalten eine Vielzahl an Variablen, die mehr oder minder relevant für unsere Analysen sind.
+
+Widmen wir uns den wesentlichsten Variablen für unsere Analyse:
+
+**regno**: Hier handelt es sich um eine bestimmte Nummer, mit der die Daten jedem bestimmten Unternehmen zugeordnet werden können.
+
+**year**: Gibt das Jahr an, aus dem die Daten stammen. Dabei wird das zurückliegende Geschäftsjahr betrachtet.
+
+**ln_avwage**: Benennt den logarithmierten Durchschnittslohn im Unternehmen.
+
+**net_pcm**: Die Gewinnmarge eines Unternehmens wir durch die Division vom Nettogewinn durch den Gesamtumsatz im Geschäftsjahr angegeben.
+
+**sic2**: Die Unternehmen werden in Großbritannien nach Branchen in unterschiedliche Branchen unterteilt. Der bis zu vierstellige UKsic (UK Standard Industrial Classification of Economic Activities) beschreibt dabei die Branchen.
+Das oben ausgegebene Unternehmen besitzt den UKsic 7020. Die sic2-Zahl ist somit 70 und beschreibt Immobilienaktivitäten.   
+(https://webarchive.nationalarchives.gov.uk/ukgwa/20160105160709/http://www.ons.gov.uk/ons/guide-method/classifications/archived-standard-classifications/uk-standard-industrial-classification-1992--sic92-/uk-sic-2003.pdf)
+
+**unionmem**: Beschreibt den Anteil an Gewerkschaftsmitgliedern innerhalb des Unternehmens.
+
+**ptwk**: Anteil an Teilzeitarbeitern innerhalb der vierstelligen UKsic-Branche (sic4).
+
+**female**: Frauenanteil bei Arbeitnehmern innerhalb des sic4.
+
+**gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an.
 
 
 ## Exercise 2.1 -- Schaubild / Wahl der Gruppen
@@ -316,6 +347,9 @@ In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Au
 Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
 
+
+
+## Exercise 3.1 -- Wahl der Gruppen
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
 
@@ -330,11 +364,9 @@ Quiz: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
 answer.quiz("4")
 ```
 
-Für eine DiD-Schätuung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
+Für eine DiD-Schätzung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
-
-## Exercise 3.1 -- Wahl der Gruppen
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3,60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
 
 ```{r "6_1"}
@@ -542,8 +574,6 @@ dat = filter(dat_raw, pp == 1)
 
 
 
-
-
 **Genestete Daten**
 (Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
 Die Werte der Variablen sind im obigen Fall als hoch signifikant gekennzeichnet. Allerdings sind die p-Werte fehlerhaft, da es sich bei den Daten teilweise um genestete Daten handelt. Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
@@ -567,7 +597,10 @@ Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadu
 # Enter your code here.
 ```
 
+
+
 **Clusterrobuste Standardfehler**
+
 
 An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
@@ -618,19 +651,20 @@ answer.quiz("3.3.3")
 
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
-```{r "8_9"}
+```{r "8_10"}
 # Enter your code here.
 ```
 -------------
 
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
 
+
 **Table 2, Panel A**
-```{r "8_10"}
+```{r "8_11"}
 # Enter your code here.
 ```
 
-```{r "8_11"}
+```{r "8_12"}
 # Enter your code here.
 ```
 
