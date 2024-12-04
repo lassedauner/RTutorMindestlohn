@@ -63,7 +63,7 @@ Diagramm Variablenbeeinflussung
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
-- Wie werden Unternehemensgewinne definiert?
+- Wie werden Unternehmensgewinne definiert?
 - Theoretisch mathematischer Hintergrund / Ausgangspunkt
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
@@ -252,7 +252,7 @@ percent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))
 ```
 
 
-Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datnsatz gespeichert werden. 
+Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datensatz gespeichert werden. 
 
 Dafür wird zunächst ein Datensatz erstellt, der sich an den Werten der Perzentile aus dem ersten Beobachtungsjahr 1995 richtet.
 
@@ -434,14 +434,19 @@ mean_treat
 ```{r "6_18"}
 mean_treat / 2000
 ```
-Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
+Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeit im betrachteten Beispiel bei über 16% lag: (Quelle???)
+
+```{r "6_19"}
+mean(dat$ptwk, na.rm = TRUE)
+```
+
 
 Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. 
 So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden. Die Autoren kommen zu dem Schluss, dass 87% aller vom Mindestlohn profitierenden Arbeiter in Unternehmen arbeiten, in denen der jährliche Durchschnittslohn bei 12000 Pfund oder niedriger liegt. 
 Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit dem Durchschnittslohn zusammmenhängt.
 
 **Figure 1**
-```{r "6_19"}
+```{r "6_20"}
 dat_seq = read_dta('seq98.dta')
 ```
 
@@ -450,12 +455,12 @@ dat_seq = read_dta('seq98.dta')
 Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
 
 **Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
-```{r "7_20"}
+```{r "7_21"}
 dat = read_dta('main_fame.dta')
 
 ```
 
-```{r "7_21"}
+```{r "7_22"}
 dat_table_DiD = dat %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
@@ -468,7 +473,7 @@ Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 14)): Dab
 
 Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der Beschäftigungszahlen, ob es Aufffälligkeiten gibt:
 
-```{r "7_22"}
+```{r "7_23"}
 dat_no_pp = dat %>%
   filter(pp == 0)
 
@@ -483,7 +488,8 @@ boxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))
 Im Gesamten ist zu erkennen, dass die Daten, die sich nicht in der Auswahl befinden, breiter gestreut sind.
 Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
 In Großbritannien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
-Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden. 
+Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden.
+Wie die Autoren die Auswahl des Unterbeispiels treffen wird nicht vollumfänglich bekannt.
 
 
 
@@ -493,7 +499,7 @@ Die Formel hierfür lautet
 ***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
-```{r "7_23"}
+```{r "7_24"}
 
 dat_table_DiD
 ```
@@ -515,7 +521,7 @@ Quiz: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
 
 
 **Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
-```{r "7_24"}
+```{r "7_25"}
 # # Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus "dat_table_DiD" zu.
 # y1.post.treat = dat_table_DiD$mean_ln_avwage[___]
 # y1.post.control = dat_table_DiD$mean_ln_avwage[___]
@@ -553,7 +559,7 @@ Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Net
 Das geschieht analog zur obigen Schätzung.
 
 **Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
-```{r "7_25"}
+```{r "7_26"}
 # y2.post.treat = dat_table_DiD$mean_net_pcm[___]
 # y2.post.control = dat_table_DiD$mean_net_pcm[___]
 # y2.pre.treat = dat_table_DiD$mean_net_pcm[___]
@@ -568,7 +574,7 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[1]
 Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 
 **Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
-```{r "7_26"}
+```{r "7_27"}
 # DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
 # DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
 #   
@@ -601,7 +607,7 @@ Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen a
 (https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
 (https://r-causal.github.io/ggdag/)
 
-```{r "8_27"}
+```{r "8_28"}
 
 dag <- dagify(
   ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
@@ -615,28 +621,28 @@ ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label
 Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
-```{r "8_28"}
+```{r "8_29"}
 dat_raw = read_dta('main_fame.dta')
 dat = filter(dat_raw, pp == 1) 
 ```
 
-```{r "8_29"}
+```{r "8_30"}
 regi = lm(ln_avwage ~ ctreat1, data = dat)
 ```
 
-```{r "8_30"}
+```{r "8_31"}
 regii = lm(ln_avwage ~ NMW, data = dat)
 ```
 
-```{r "8_31"}
+```{r "8_32"}
 regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
 ```
 
-```{r "8_32"}
+```{r "8_33"}
 regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
 ```
 
-```{r "8_33"}
+```{r "8_34"}
 stargazer(regi, regii, regiii, regiv, type = "text")
 ```
 
@@ -659,7 +665,7 @@ Quiz: Nach welcher Variable soll geclustert werden?
 
 Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
 
-```{r "8_34"}
+```{r "8_35"}
 reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
 stargazer(reg1, type ="text")
 ```
@@ -714,7 +720,7 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 
 Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
 
-```{r "8_35"}
+```{r "8_36"}
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 
 stargazer(reg2, type = "text")
@@ -722,17 +728,21 @@ stargazer(reg2, type = "text")
 -------------
 
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
+Dafür können wir uns die Funktion der Faktorvariablen zunutze machen.
+
+**Faktorvariablen**
+
 
 
 **Table 2, Panel A**
-```{r "8_36"}
+```{r "8_37"}
 reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
 stargazer(reg3, type = "text")
 ```
 
-```{r "8_37"}
+```{r "8_38"}
 reg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
@@ -740,6 +750,33 @@ stargazer(reg4, type = "text")
 ```
 
 **Table 2, Panel B**
+
+**Kontinuierliche Messung**
+
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definiton der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+
+Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
+
+
+Um diese kontinuierliche Analyse zu ermöglichen, wird anstatt der Treatmentvariablen *ctreat1* eine andere Variable gewählt.
+In unserem Fall ist das *c_avwage99* beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
+
+
+
+```{r "8_39"}
+reg5 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg6 = felm(net_pcm ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg5, reg6, type = "text")
+```
+WAS HAT SICH GEÄNDERT?
+WIE KANN DAS ERGEBNIS INTERPRETIERT WERDEN?
+WIESO BRAUCHT MAN DAS?
+  - Vergleich zur imaginären Einführung
+
 
 
 ## Exercise 3.4 -- Imaginäre Mindestlohneinführung
@@ -751,37 +788,45 @@ stargazer(reg4, type = "text")
 - Table 3
 - Figure 3
 
+Um zu überprüfen, ob die Mindestlohneinführung der Grund für die Ergebnisse der DiD-Schätzung ist, kann ein **Placebo Experiment** eingeführt werden.(142ff.)
+Hierfür wird die Mindestlohneinführung imaginär um drei Jahre vorverlegt, auf den 01. April 1996.
+Dabei können wir auf Vorarbeit im Datensatz zurückgreifen. Ähnlich wie bei der vorangegangenen Schätzung zur realen Mindestlohneinführung wird der Datensatz anhand eines Dummys gefiltert.
 
-```{r "9_38"}
+Lesen Sie den Datensatz ein und teilen ihn nach den Dummywerten von ff auf.
+```{r "9_40"}
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
 ```
+Um zu verstehen, warum manche Einträge von Firmen ausgelassen werden, hilft ein Vergleich der oben erstellten Variablen.
 
-```{r "9_39"}
-dat_ff1 %>%
-  group_by(year)%>%
-  summarise(length(year))
-
-dat_ff0 %>%
-  group_by(year)%>%
-  summarise(length(year))
-```
--> Nur Einträge bis 99 in ff1
-ABER: 1994-1999 auch in ff0 vorhanden
-
-```{r "9_40"}
-dat_ff0 %>%
-  group_by(pp)%>%
-  summarise(length(pp))
-
-dat_ff1 %>%
-  group_by(pp)%>%
-  summarise(length(pp))
-```
--> Anteil an pp==0 in ff0 deutlich höher als in ff1
-
+Gruppieren Sie dazu die Datensätze nach den Jahren und geben sie die Anzahl der Einträge pro Jahr aus. Hinweis: Die Funktion length(*Variable*) gibt die Anzahl der Einträge wieder.
 ```{r "9_41"}
+dat_ff1 %>%
+  group_by(year)%>%
+  summarise(length(year))
+
+dat_ff0 %>%
+  group_by(year)%>%
+  summarise(length(year))
+```
+Es fällt auf, dass sich im untersuchten Datensatz nur Einträge befinden, die sich auf den Zeitraum **vor** der reellen Mindestlohneinführung beziehen.
+
+Allerdings werden auch Daten aus den Jahren 1994 - 1999 herausgefiltert. Sehen wir uns an, wie das mit dem von den Autoren gefundene Unterbeispiel (pp) zusammenhängt.
+
+```{r "9_42"}
+dat_ff0 %>%
+  group_by(pp)%>%
+  summarise(length(pp))
+
+dat_ff1 %>%
+  group_by(pp)%>%
+  summarise(length(pp))
+```
+Der Anteil an pp==0 ist im unberücksichtigten Datensatz deutlich höher als im am Ende betrachteten Datensatz dat_ff1. Allerdings werden nun auch Unternehmen berücksichtigt, die bei den Analysen zur reellen Mindestlohneinführung nicht berücksichtigt wurden.
+Der Grund dafür könnte sein, dass sich die Zahlen in den Unternehmen verändert haben.???
+
+```{r "9_43"}
 dat_ff0 = filter(dat_ff0, year==1996)
 dat_ff1 = filter(dat_ff1, year==1996)
 boxplot(dat_ff0$ln_avwage,dat_ff1$ln_avwage)
@@ -789,6 +834,62 @@ mean(dat_ff0$avwage, na.rm = TRUE)
 mean(dat_ff1$avwage)
 max(dat_ff1$avwage)
 ```
+
+Wie in den vorherigen Analysen sind nicht alle Ursachen für die Aussortierung einiger Daten erkennbar. 
+Weiter werden wir die Analysen mit dem von den Autoren gegebenen Unterbeispiel durchführen.
+
+Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unterschied, dass der Datensatz nun nach ff gefiltert wird.
+```{r "9_44"}
+dat = filter(dat, ff == 1)
+```
+
+```{r "9_45"}
+reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg8 = felm(net_pcm ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg7, reg8, type = "text")
+```
+
+
+**Kontinuierlich**
+```{r "9_46"}
+reg9 = felm(ln_avwage ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg10 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg9, reg10, type = "text")
+```
+
+**Vergleich Fig 3**
+- Treatmenteffekt net_pcm
+
+Intervalle erstellen
+```{r "9_47"}
+pcw96 = dat_main %>%
+  filter(year == 1996)%>%
+  filter(avwage >= 3)
+percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
+```
+```{r "9_48"}
+dat_fig3 = dat %>%
+  mutate("Threshold" = avwage*1000)
+```
+
+
+
+```{r "9_49"}
+library(ggplot2)
+ggplot(dat)+
+  geom_line(aes(x=avwage, y = treat1_NMW))
+
+```
+
+
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
@@ -815,14 +916,14 @@ max(dat_ff1$avwage)
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "13_a_42"}
+```{r "13_a_50"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "13_a_43",optional=TRUE}
+```{r "13_a_51",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -836,7 +937,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "13_a_44"}
+```{r "13_a_52"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -859,7 +960,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "13_b_45"}
+```{r "13_b_53"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -868,7 +969,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "13_c_46",optional=TRUE, dev='svg', fig.width=4}
+```{r "13_c_54",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -893,7 +994,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "13_c_47"}
+```{r "13_c_55"}
 2
 ```
 

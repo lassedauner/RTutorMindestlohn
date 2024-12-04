@@ -875,7 +875,7 @@ Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unte
 ```{r}
 dat = filter(dat, ff == 1)
 ```
-
+**Diskret**
 ```{r}
 reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
@@ -897,6 +897,7 @@ reg10 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionme
 
 stargazer(reg9, reg10, type = "text")
 ```
+----------------
 
 **Vergleich Fig 3**
 - Treatmenteffekt net_pcm
@@ -908,13 +909,55 @@ pcw96 = dat_main %>%
   filter(avwage >= 3)
 percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
 ```
+```{r}
+dat_fig3 = dat %>%
+  mutate("threshold" = round(exp(c_avwage99)*1000,-2)) %>%
+  filter(threshold <= 16000) %>%
+  filter(threshold >= 10000) %>%
+  
+  group_by(threshold) %>%
+  summarise(length(threshold), mean(avwage99_NMW))
+```
+
+Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
+Ergebnisse je 100 in Liste speichern
+
+```{r}
+#Neuen Datensatz erstellen
+dati = read_dta('main_fame.dta')
+dati = filter(dati, pp==1)
+
+```
+
+```{r}
+
+# Schleife initiieren
+i = 10000
+while(i<=16000){
+dati = mutate(dati, "treat1" = NULL)
+dati$ctreat1 = NULL
+dati$avwage = dati$avwage * 1000
+
+dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
+dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
+dati = mutate(dati, treat)
+
+dati$paste("treat", i, "_NMW") = dati*NMW
+  
+# Regression innerhalb der Schleife
+reg = felm(net_pcm ~ ctreat1 + treat'i'_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
+
+i + 100
+}
+```
 
 
 
 ```{r}
 library(ggplot2)
-ggplot(dat)+
-  geom_line(aes(x=avwage, y = treat1_NMW))
+ggplot(dat_fig3, aes(x = threshold))+
+  geom_line(aes(y = avwage99_NMW))
 
 ```
 

@@ -30,7 +30,7 @@ Diagramm Variablenbeeinflussung
 - Hintergrund der Mindestlohneinführung
 - sic
 - Vergleich zu anderen Staaten
-- Wie werden Unternehemensgewinne definiert?
+- Wie werden Unternehmensgewinne definiert?
 - Theoretisch mathematischer Hintergrund / Ausgangspunkt
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
@@ -213,7 +213,7 @@ percent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))
 ```
 
 
-Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datnsatz gespeichert werden. 
+Nun können die Unterschiede in jedem einzelnen Perzentil von Jahr zu Jahr ermittelt werden. Die Differenzen sollen in einem Datensatz gespeichert werden. 
 
 Dafür wird zunächst ein Datensatz erstellt, der sich an den Werten der Perzentile aus dem ersten Beobachtungsjahr 1995 richtet.
 
@@ -389,14 +389,19 @@ mean_treat
 ```{r "6_3"}
 mean_treat / 2000
 ```
-Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeitarbeit bei knapp einem Viertel lag. (Quelle???)
+Mit dieser Näherung kommt man in die Nähe des Mindestlohns. Dennoch ist dies auch mit Vorsicht zu genießen. Da die Wahl der Treatmentgruppe auf Durchschnittslöhne eines gesamten Unternehmens beruht, können große Ausreißer das Ergebnis beeinflussen. Es wird eine Vollzeitbeschäftigung vorausgesetzt, wobei der Anteil an Teilzeitarbeit im betrachteten Beispiel bei über 16% lag: (Quelle???)
+
+```{r "6_4"}
+mean(dat$ptwk, na.rm = TRUE)
+```
+
 
 Die Wahl der Treatmentgruppe kann allerdings weiter durch die Verwendung des WERS-Datensatzes untermauert werden. 
 So kann die Lohnverteilung innerhalb eines Unternehmens mit dem Durchschnittslohn in Zusammenhang gebracht werden. Die Autoren kommen zu dem Schluss, dass 87% aller vom Mindestlohn profitierenden Arbeiter in Unternehmen arbeiten, in denen der jährliche Durchschnittslohn bei 12000 Pfund oder niedriger liegt. 
 Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit dem Durchschnittslohn zusammmenhängt.
 
 **Figure 1**
-```{r "6_4"}
+```{r "6_5"}
 dat_seq = read_dta('seq98.dta')
 ```
 
@@ -438,7 +443,8 @@ boxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))
 Im Gesamten ist zu erkennen, dass die Daten, die sich nicht in der Auswahl befinden, breiter gestreut sind.
 Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
 In Großbritannien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
-Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden. 
+Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden.
+Wie die Autoren die Auswahl des Unterbeispiels treffen wird nicht vollumfänglich bekannt.
 
 
 
@@ -660,6 +666,10 @@ stargazer(reg2, type = "text")
 -------------
 
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
+Dafür können wir uns die Funktion der Faktorvariablen zunutze machen.
+
+**Faktorvariablen**
+
 
 
 **Table 2, Panel A**
@@ -679,6 +689,33 @@ stargazer(reg4, type = "text")
 
 **Table 2, Panel B**
 
+**Kontinuierliche Messung**
+
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definiton der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+
+Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
+
+
+Um diese kontinuierliche Analyse zu ermöglichen, wird anstatt der Treatmentvariablen *ctreat1* eine andere Variable gewählt.
+In unserem Fall ist das *c_avwage99* beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
+
+
+
+```{r "8_13"}
+reg5 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg6 = felm(net_pcm ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg5, reg6, type = "text")
+```
+WAS HAT SICH GEÄNDERT?
+WIE KANN DAS ERGEBNIS INTERPRETIERT WERDEN?
+WIESO BRAUCHT MAN DAS?
+  - Vergleich zur imaginären Einführung
+
+
 
 ## Exercise 3.4 -- Imaginäre Mindestlohneinführung
 
@@ -689,13 +726,19 @@ stargazer(reg4, type = "text")
 - Table 3
 - Figure 3
 
+Um zu überprüfen, ob die Mindestlohneinführung der Grund für die Ergebnisse der DiD-Schätzung ist, kann ein **Placebo Experiment** eingeführt werden.(142ff.)
+Hierfür wird die Mindestlohneinführung imaginär um drei Jahre vorverlegt, auf den 01. April 1996.
+Dabei können wir auf Vorarbeit im Datensatz zurückgreifen. Ähnlich wie bei der vorangegangenen Schätzung zur realen Mindestlohneinführung wird der Datensatz anhand eines Dummys gefiltert.
 
+Lesen Sie den Datensatz ein und teilen ihn nach den Dummywerten von ff auf.
 ```{r "9_1"}
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
 ```
+Um zu verstehen, warum manche Einträge von Firmen ausgelassen werden, hilft ein Vergleich der oben erstellten Variablen.
 
+Gruppieren Sie dazu die Datensätze nach den Jahren und geben sie die Anzahl der Einträge pro Jahr aus. Hinweis: Die Funktion length(*Variable*) gibt die Anzahl der Einträge wieder.
 ```{r "9_2"}
 dat_ff1 %>%
   group_by(year)%>%
@@ -705,8 +748,9 @@ dat_ff0 %>%
   group_by(year)%>%
   summarise(length(year))
 ```
--> Nur Einträge bis 99 in ff1
-ABER: 1994-1999 auch in ff0 vorhanden
+Es fällt auf, dass sich im untersuchten Datensatz nur Einträge befinden, die sich auf den Zeitraum **vor** der reellen Mindestlohneinführung beziehen.
+
+Allerdings werden auch Daten aus den Jahren 1994 - 1999 herausgefiltert. Sehen wir uns an, wie das mit dem von den Autoren gefundene Unterbeispiel (pp) zusammenhängt.
 
 ```{r "9_3"}
 dat_ff0 %>%
@@ -717,7 +761,8 @@ dat_ff1 %>%
   group_by(pp)%>%
   summarise(length(pp))
 ```
--> Anteil an pp==0 in ff0 deutlich höher als in ff1
+Der Anteil an pp==0 ist im unberücksichtigten Datensatz deutlich höher als im am Ende betrachteten Datensatz dat_ff1. Allerdings werden nun auch Unternehmen berücksichtigt, die bei den Analysen zur reellen Mindestlohneinführung nicht berücksichtigt wurden.
+Der Grund dafür könnte sein, dass sich die Zahlen in den Unternehmen verändert haben.???
 
 ```{r "9_4"}
 dat_ff0 = filter(dat_ff0, year==1996)
@@ -727,6 +772,62 @@ mean(dat_ff0$avwage, na.rm = TRUE)
 mean(dat_ff1$avwage)
 max(dat_ff1$avwage)
 ```
+
+Wie in den vorherigen Analysen sind nicht alle Ursachen für die Aussortierung einiger Daten erkennbar. 
+Weiter werden wir die Analysen mit dem von den Autoren gegebenen Unterbeispiel durchführen.
+
+Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unterschied, dass der Datensatz nun nach ff gefiltert wird.
+```{r "9_5"}
+dat = filter(dat, ff == 1)
+```
+
+```{r "9_6"}
+reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg8 = felm(net_pcm ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg7, reg8, type = "text")
+```
+
+
+**Kontinuierlich**
+```{r "9_7"}
+reg9 = felm(ln_avwage ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+reg10 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+stargazer(reg9, reg10, type = "text")
+```
+
+**Vergleich Fig 3**
+- Treatmenteffekt net_pcm
+
+Intervalle erstellen
+```{r "9_8"}
+pcw96 = dat_main %>%
+  filter(year == 1996)%>%
+  filter(avwage >= 3)
+percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
+```
+```{r "9_9"}
+dat_fig3 = dat %>%
+  mutate("Threshold" = avwage*1000)
+```
+
+
+
+```{r "9_10"}
+library(ggplot2)
+ggplot(dat)+
+  geom_line(aes(x=avwage, y = treat1_NMW))
+
+```
+
+
 
 
 ## Exercise 4 -- Einordnung des Artikels (weiterführende Überlegungen)
