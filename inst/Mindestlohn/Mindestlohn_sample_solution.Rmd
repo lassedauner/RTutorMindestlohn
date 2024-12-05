@@ -35,6 +35,25 @@ Diagramm Variablenbeeinflussung
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
 
+**"Jetzt 12€ Mindestlohn wählen."**
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um die Gunst der Wähler zu gewinnen.
+Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
+Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
+
+Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken sehen wir uns an, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. 
+
+
+
+Quiz: Wie können Unternehmen die Lohnsteigerung kompensieren?
+
+- Verkleinerung der Gewinnmarge [x]
+
+- Weitergabe der Kostensteigerung an Verbraucher [ ]
+
+- Effizienzsteigerung [ ]
+
+
+
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
 Wie in Deutschland, wurden und werden Löhne teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
@@ -64,15 +83,6 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritan
 
 https://www.gov.uk/national-minimum-wage-rates
 
-
-
-Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
-
-- Verkleinerung der Gewinnmarge [x]
-
-- Weitergabe an Verbraucher [ ]
-
-- Effizienzsteigerung [ ]
 
 
 **Unternehmensgewinne**
@@ -780,7 +790,7 @@ Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unte
 ```{r "9_5"}
 dat = filter(dat, ff == 1)
 ```
-
+**Diskret**
 ```{r "9_6"}
 reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
@@ -802,6 +812,7 @@ reg10 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionme
 
 stargazer(reg9, reg10, type = "text")
 ```
+----------------
 
 **Vergleich Fig 3**
 - Treatmenteffekt net_pcm
@@ -815,15 +826,54 @@ percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
 ```
 ```{r "9_9"}
 dat_fig3 = dat %>%
-  mutate("Threshold" = avwage*1000)
+  mutate("threshold" = round(exp(c_avwage99)*1000,-2)) %>%
+  filter(threshold <= 16000) %>%
+  filter(threshold >= 10000) %>%
+  
+  group_by(threshold) %>%
+  summarise(length(threshold), mean(avwage99_NMW))
+```
+
+Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
+Ergebnisse je 100 in Liste speichern
+
+```{r "9_10"}
+#Neuen Datensatz erstellen
+dati = read_dta('main_fame.dta')
+dati = filter(dati, pp==1)
+
+```
+
+```{r "9_11"}
+
+# Schleife initiieren
+i = 10000
+while(i<=16000){
+dati = mutate(dati, "treat1" = NULL)
+dati$ctreat1 = NULL
+dati$avwage = dati$avwage * 1000
+
+dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
+dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
+dati = mutate(dati, treat1)
+
+
+dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
+  
+# Regression innerhalb der Schleife
+reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
+
+i + 100
+}
 ```
 
 
 
-```{r "9_10"}
+```{r "9_12"}
 library(ggplot2)
-ggplot(dat)+
-  geom_line(aes(x=avwage, y = treat1_NMW))
+ggplot(dat_fig3, aes(x = threshold))+
+  geom_line(aes(y = avwage99_NMW))
 
 ```
 

@@ -35,6 +35,27 @@ Diagramm Variablenbeeinflussung
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
 
+**"Jetzt 12€ Mindestlohn wählen."**
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um die Gunst der Wähler zu gewinnen.
+Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
+Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
+
+Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken sehen wir uns an, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. 
+
+
+
+Quiz: Wie können Unternehmen die Lohnsteigerung kompensieren?
+
+(1) Verkleinerung der Gewinnmarge
+(2) Weitergabe der Kostensteigerung an Verbraucher
+(3) Effizienzsteigerung
+
+```{r eval=FALSE}
+# Run line to answer the quiz above
+answer.quiz("1")
+```
+
+
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
 Wie in Deutschland, wurden und werden Löhne teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
@@ -69,17 +90,6 @@ answer.quiz("1.2")
 https://www.gov.uk/national-minimum-wage-rates
 
 
-
-Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
-
-(1) Verkleinerung der Gewinnmarge
-(2) Weitergabe an Verbraucher
-(3) Effizienzsteigerung
-
-```{r eval=FALSE}
-# Run line to answer the quiz above
-answer.quiz("2")
-```
 
 **Unternehmensgewinne**
 
@@ -746,7 +756,7 @@ Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unte
 ```{r "9_5"}
 # Enter your code here.
 ```
-
+**Diskret**
 ```{r "9_6"}
 # Enter your code here.
 ```
@@ -756,6 +766,7 @@ Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unte
 ```{r "9_7"}
 # Enter your code here.
 ```
+----------------
 
 **Vergleich Fig 3**
 - Treatmenteffekt net_pcm
@@ -768,9 +779,20 @@ Intervalle erstellen
 # Enter your code here.
 ```
 
-
+Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
+Ergebnisse je 100 in Liste speichern
 
 ```{r "9_10"}
+# Enter your code here.
+```
+
+```{r "9_11"}
+# Enter your code here.
+```
+
+
+
+```{r "9_12"}
 # Enter your code here.
 ```
 

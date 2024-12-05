@@ -42,10 +42,33 @@ Diagramm Variablenbeeinflussung
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
 
+**"Jetzt 12€ Mindestlohn wählen."**
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
+Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
+Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
+
+Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
+Diese Analyse führen wir für Unternehmensdaten aus dem Vereinigten Königreich (UK) durch, da hier die gesetzlichen Rahmenbedingungen eine große Breite an bereitgestellten Daten ermöglichen.
+Zudem wurde in der Analyse kein großer Einfluss auf die Beschäftigung wahrgenommen.
+
+
+#< quiz "1"
+question: Wie können Unternehmen die Lohnsteigerung kompensieren?
+sc:
+    - Verkleinerung der Gewinnmarge*
+    - Weitergabe der Kostensteigerung an Verbraucher
+    - Effizienzsteigerung
+
+success: Auf dieser Vermutung beruht unsere Untersuchung.
+failure: Eine plausible Antwort, allerdings werden hierfür keine Belege gefunden (Draca et al, S.130)
+#>
+
+
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
-Wie in Deutschland, wurden und werden Löhne teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
+Wie in Deutschland, wurden und werden Löhne in Großritannien teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
 Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitspolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
+
 #< quiz "1.1"
 question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
 sc:
@@ -75,16 +98,6 @@ failure: Diese Schätzung ist falsch.
 https://www.gov.uk/national-minimum-wage-rates
 
 
-#< quiz "2"
-question: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
-sc:
-    - Verkleinerung der Gewinnmarge*
-    - Weitergabe an Verbraucher
-    - Effizienzsteigerung
-
-success: Auf dieser Vermutung beruht der wissenschaftliche Artikel.
-failure: Eine mögliche Antwort
-#>
 
 **Unternehmensgewinne**
 
@@ -940,12 +953,13 @@ dati$avwage = dati$avwage * 1000
 
 dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
 dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
-dati = mutate(dati, treat)
+dati = mutate(dati, treat1)
 
-dati$paste("treat", i, "_NMW") = dati*NMW
+
+dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
   
 # Regression innerhalb der Schleife
-reg = felm(net_pcm ~ ctreat1 + treat'i'_NMW + NMW + grad2 + unionmem + ptwk + female + 
+reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
 
 i + 100
