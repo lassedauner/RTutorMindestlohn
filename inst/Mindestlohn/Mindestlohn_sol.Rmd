@@ -43,7 +43,7 @@ Diagramm Variablenbeeinflussung
   - Messung Mindestlohn
 
 **"Jetzt 12€ Mindestlohn wählen."**
-Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
 Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
 Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
 
@@ -115,7 +115,7 @@ https://www.gov.uk/national-minimum-wage-rates
 - Labor Force Survey (136f.)
   - Arbeitsumfeld
   
-- Relevante Variablen
+**Relevante Variablen**
 
 **Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r}
@@ -701,9 +701,14 @@ failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeord
 
 Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
 
+Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (regiv) mit der Regression mit Clustering.
 ```{r}
+#< fill_in
 reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
-stargazer(reg1, type ="text")
+stargazer(___, ___, type ="text")
+#>
+reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+stargazer(regiv, reg1, type ="text")
 ```
 
 ```{r}
@@ -718,12 +723,12 @@ stargazer(reg1, type ="text")
 
 **Clusterrobuste Standardfehler**
 
-
-An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
-Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
+An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
+Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
 
 Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
-(Angrist, 231ff)...
+(Angrist, 231ff) / 
+(Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
 Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
 
 ---------------
