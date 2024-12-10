@@ -10,7 +10,7 @@ library(RTutor)
 setwd("C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn")
 ps.name = "Mindestlohn"; sol.file = paste0(ps.name,"_sol.Rmd")
 # character vector of all packages you load in the problem set
-libs = c("ggplot2","haven","stargazer","sandwich", "ggdag") 
+libs = c("ggplot2","haven","stargazer","sandwich", "ggdag", "lfe") 
 create.ps(sol.file=sol.file, ps.name=ps.name,libs=libs, rps.has.sol=TRUE, addons="quiz")
 # Show the problem set in the webbrowser
 show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
@@ -634,13 +634,13 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 
 **DAG**
 
+Zu Beginn widmen wir uns der Veränderung im Durchschnittslohn durch die Einführung des Mindestlohns.
 Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
 Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
 (https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
 (https://r-causal.github.io/ggdag/)
 
 ```{r}
-
 dag <- dagify(
   ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
   treat1_NMW ~ ctreat1 + NMW,
@@ -650,7 +650,7 @@ dag <- dagify(
 ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label")+
   theme_dag_blank()
 ```
-Hier sieht man warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
+Hier sieht man, warum der Effekt von treat1_NMW in Regression III so stark von dem in Regression IV abweicht. , nicht nur eine Regression mit der Interaktionsvariablen durchzuführen, sondern auch mit den beiden einzelnen Dummy-Variablen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r}
@@ -659,33 +659,78 @@ dat_raw = read_dta('main_fame.dta')
 dat = filter(dat_raw, pp == 1) 
 #>
 ```
+Zu Beginn unserer Analyse wollen wir mehrere Regressionen mit den oben dargestellten Variablen laufen lassen. 
+Dazu sollen die einzelnen Variablen die "ln_avwage" beeinflussen beobachtet werden.
+
+Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
+```{r}
+#< fill_in
+regi = lm(ln_avwage ~ treat1_NMW, data = dat)
+
+stargazer(___, type = "text")
+#>
+regi = lm(ln_avwage ~ treat1_NMW, data = dat)
+
+stargazer(regi, type = "text")
+```
+#< quiz "3.3.1"
+question: Wieso ist der Einfluss der Treatmentvariablen im Gegensatz zur händischen Berechnung negativ?
+sc:
+    - Die Regression ist genauer als die händische Berechnung.
+    - Die Regression ist fehlerhaft.*
+
+success: Korrekt. Mit Blick auf den DAG können Sie erkennen, dass der Effekt von treat1_NMW in der Regression verschätzt wird.
+failure: Das ist in diesem Fall nicht der Grund für die Unterschiede. Sehen Sie sich den DAG an.
+#>
+
+
+Wir müssen in unserer Regression also auch die sowohl die Interaktionsvariable als auch die abhängige Variable beeinflussenden Dummys berücksichtigen.
+
+
+$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$
+
+Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. Stellen Sie das Ergebnis wieder in "stargazer" dar.
 
 ```{r}
-regi = lm(ln_avwage ~ ctreat1, data = dat)
+#< fill_in
+reg1 = lm(ln_avwage ~ ___ + ___ + ___, data = dat)
+stargazer(reg1, type = "text")
+#>
+
+reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
+stargazer(reg1, type = "text")
 ```
+Der Wert der Interaktionsvariablen hat sich im Vergleich zur unvollständigen Regression stark verändert und erinnert an die händische Berechnung.
+
+Um diese starke Veränderung besser zu verstehen können wir die gemeinsame Betrachtung der erklärenden Variablen mit der einzelnen Betrachtung vergleichen.
+
 
 ```{r}
-regii = lm(ln_avwage ~ NMW, data = dat)
+regii = lm(ln_avwage ~ ctreat1, data = dat)
+
+regiii = lm(ln_avwage ~ NMW, data = dat)
+
+stargazer(regi, regii, regiii, reg1, type = "text")
+
 ```
+Im Gegensatz zur händischen Berechnung bekommen wir durch die Regression die Signifikanz unserer Schätzung beurteilen.
 
-```{r}
-regiii = lm(ln_avwage ~ treat1_NMW, data = dat)
-```
+#< quiz "3.3.1"
+question: Wie beurteilen Sie die Signifikanz unseres DiD-Schätzers in der dargestellten Regression?
+sc:
+    - hoch*
+    - niedrig
 
-```{r}
-regiv = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
-```
-
-```{r}
-stargazer(regi, regii, regiii, regiv, type = "text")
-```
-
-
+success: Korrekt, *** bestätigt ein hohes Signifikanzniveau. 
+failure: Das ist nicht richtig. Achten Sie auf die p-Werte und die dazugehörige Veranschaulichung durch Sterne.
+#>
 
 
 **Genestete Daten**
 (Bryk, Raudenbush: Hierarchical Linear Models: Applications and Data Analysis Methods)
-Die Werte der Variablen sind im obigen Fall als hoch signifikant gekennzeichnet. Allerdings sind die p-Werte fehlerhaft, da es sich bei den Daten teilweise um genestete Daten handelt. Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
+Die Werte der Variablen sind im obigen Fall also hoch signifikant gekennzeichnet. 
+Allerdings können die p-Werte fehlerhaft sein, da es sich bei den Daten teilweise um genestete Daten handelt. 
+Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
 In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
 Um Fehler bezüglich genesteter Daten zu verhindern, fügen wir Clusterrobuste Standardfehler ein.
 
@@ -704,11 +749,11 @@ Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadu
 Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (regiv) mit der Regression mit Clustering.
 ```{r}
 #< fill_in
-reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
 stargazer(___, ___, type ="text")
 #>
-reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
-stargazer(regiv, reg1, type ="text")
+reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+stargazer(reg1, reg2, type ="text")
 ```
 
 ```{r}
@@ -720,8 +765,6 @@ stargazer(regiv, reg1, type ="text")
 #Quelle?
 ```
 
-
-**Clusterrobuste Standardfehler**
 
 An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
@@ -765,7 +808,7 @@ failure: Das ist leider falsch. Es werden zwei log-Variablen miteinander verglic
 
 ----------------
 
-
+     | 
 
 **NET_PCM**
 
@@ -804,14 +847,23 @@ stargazer(reg4, type = "text")
 
 **Kontinuierliche Messung**
 
-Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definiton der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
 
 Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
 
 
 Um diese kontinuierliche Analyse zu ermöglichen, wird anstatt der Treatmentvariablen *ctreat1* eine andere Variable gewählt.
-In unserem Fall ist das *c_avwage99* beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
+In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
 
+**Diskrete Daten vs. Kontinuierliche Daten**
+
+| Merkmal             |     Diskrete Daten      |     Kontinuierliche Daten     |
+|---------------------|-----------------------  |-------------------------------|
+| Generell            |                         |                               |
+| Vorteil             |                         |                               |   
+| DiD-Schätzung       | Verwendung von Dummys   | Verwendung konkreter Werte    |
+| Treatmentvariable   | ctreat                  | c_avwage99                    |
+| Werte               | 0 oder 1                | logarithmierter Durchschnittslohn im Jahr 1999 |
 
 
 ```{r}
@@ -950,25 +1002,25 @@ dati = filter(dati, pp==1)
 ```{r}
 
 # Schleife initiieren
-i = 10000
-while(i<=16000){
-dati = mutate(dati, "treat1" = NULL)
-dati$ctreat1 = NULL
-dati$avwage = dati$avwage * 1000
+#i = 10000
+#while(i<=16000){
+#dati = mutate(dati, "treat1" = NULL)
+#dati$ctreat1 = NULL
+#dati$avwage = dati$avwage * 1000
 
-dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
-dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
-dati = mutate(dati, treat1)
+#dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
+#dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
+#dati = mutate(dati, treat1)
 
 
-dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
+#dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
   
 # Regression innerhalb der Schleife
-reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
+#reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
+#                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
 
-i + 100
-}
+#i + 100
+#}
 ```
 
 

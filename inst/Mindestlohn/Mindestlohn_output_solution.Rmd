@@ -15,6 +15,7 @@ library(haven)
 library(stargazer)
 library(sandwich)
 library(ggdag)
+library(lfe)
 library(RTutor)
 
 
@@ -68,10 +69,32 @@ Diagramm Variablenbeeinflussung
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
 
+**"Jetzt 12€ Mindestlohn wählen."**
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
+Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
+Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
+
+Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
+Diese Analyse führen wir für Unternehmensdaten aus dem Vereinigten Königreich (UK) durch, da hier die gesetzlichen Rahmenbedingungen eine große Breite an bereitgestellten Daten ermöglichen.
+Zudem wurde in der Analyse kein großer Einfluss auf die Beschäftigung wahrgenommen.
+
+
+
+Quiz: Wie können Unternehmen die Lohnsteigerung kompensieren?
+
+- Verkleinerung der Gewinnmarge [x]
+
+- Weitergabe der Kostensteigerung an Verbraucher [ ]
+
+- Effizienzsteigerung [ ]
+
+
+
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
-Wie in Deutschland, wurden und werden Löhne teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
+Wie in Deutschland, wurden und werden Löhne in Großritannien teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
 Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitspolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
+
 
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
 
@@ -99,15 +122,6 @@ https://www.gov.uk/national-minimum-wage-rates
 
 
 
-Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
-
-- Verkleinerung der Gewinnmarge [x]
-
-- Weitergabe an Verbraucher [ ]
-
-- Effizienzsteigerung [ ]
-
-
 **Unternehmensgewinne**
 
 
@@ -124,7 +138,7 @@ Quiz: Wie werden Lohnerhöhungen hauptsächlich gedeckt?
 - Labor Force Survey (136f.)
   - Arbeitsumfeld
   
-- Relevante Variablen
+**Relevante Variablen**
 
 **Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r "3_1"}
@@ -665,21 +679,25 @@ Quiz: Nach welcher Variable soll geclustert werden?
 
 Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
 
+Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (regiv) mit der Regression mit Clustering.
 ```{r "8_35"}
+# reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+# stargazer(___, ___, type ="text")
+
 reg1 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
-stargazer(reg1, type ="text")
+stargazer(regiv, reg1, type ="text")
 ```
 
 
 
 **Clusterrobuste Standardfehler**
 
-
-An den Werten der ist Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
-Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des P-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
+An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
+Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
 
 Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
-(Angrist, 231ff)...
+(Angrist, 231ff) / 
+(Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
 Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
 
 ---------------
@@ -714,7 +732,7 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 
 ----------------
 
-
+     | 
 
 **NET_PCM**
 
@@ -753,14 +771,23 @@ stargazer(reg4, type = "text")
 
 **Kontinuierliche Messung**
 
-Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definiton der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
 
 Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
 
 
 Um diese kontinuierliche Analyse zu ermöglichen, wird anstatt der Treatmentvariablen *ctreat1* eine andere Variable gewählt.
-In unserem Fall ist das *c_avwage99* beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
+In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
 
+**Diskrete Daten vs. Kontinuierliche Daten**
+
+| Merkmal             |     Diskrete Daten    |     Kontinuierliche Daten     |
+|---------------------|-----------------------|-------------------------------|
+| Generell            |                       |                               |
+| Vorteil             |                       |                               |   
+| DiD-Schätzung       | Verwendung von Dummys | Verwendung konkreter Werte    |
+| Treatmentvariable   | ctreat                | c_avwage99                    |
+| Werte               | 0 oder 1              | logarithmierter Durchschnittslohn im Jahr 1999 |
 
 
 ```{r "8_39"}
@@ -842,7 +869,7 @@ Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unte
 ```{r "9_44"}
 dat = filter(dat, ff == 1)
 ```
-
+**Diskret**
 ```{r "9_45"}
 reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
@@ -864,6 +891,7 @@ reg10 = felm(net_pcm ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionme
 
 stargazer(reg9, reg10, type = "text")
 ```
+----------------
 
 **Vergleich Fig 3**
 - Treatmenteffekt net_pcm
@@ -877,15 +905,31 @@ percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
 ```
 ```{r "9_48"}
 dat_fig3 = dat %>%
-  mutate("Threshold" = avwage*1000)
+  mutate("threshold" = round(exp(c_avwage99)*1000,-2)) %>%
+  filter(threshold <= 16000) %>%
+  filter(threshold >= 10000) %>%
+  
+  group_by(threshold) %>%
+  summarise(length(threshold), mean(avwage99_NMW))
+```
+
+Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
+Ergebnisse je 100 in Liste speichern
+
+```{r "9_49"}
+#Neuen Datensatz erstellen
+dati = read_dta('main_fame.dta')
+dati = filter(dati, pp==1)
+
 ```
 
 
 
-```{r "9_49"}
+
+```{r "9_50"}
 library(ggplot2)
-ggplot(dat)+
-  geom_line(aes(x=avwage, y = treat1_NMW))
+ggplot(dat_fig3, aes(x = threshold))+
+  geom_line(aes(y = avwage99_NMW))
 
 ```
 
@@ -916,14 +960,14 @@ ggplot(dat)+
 
 a) We often want to compute some summary statistic of a vector. For example:
 
-```{r "13_a_50"}
+```{r "13_a_51"}
 x = 10:23
 # Computing the sum of x
 sum(x)
 ```
 
 Now compute the mean of x.
-```{r "13_a_51",optional=TRUE}
+```{r "13_a_52",optional=TRUE}
 # Note the chunk option optional = TRUE means
 # the user can continue with the next exercise
 # without having solved this one
@@ -937,7 +981,7 @@ mean(x)
 
 ### Info: useful functions for numeric vectors
 Here are examples for useful R functions
-```{r "13_a_52"}
+```{r "13_a_53"}
 max(c(1,5,2)) # returns maximum
 min(c(1,5,2)) # returns minimum
 
@@ -960,7 +1004,7 @@ Well, in some occasions one can just guess the name of an R function. The functi
 
 
 b) Let `y` be a vector that contains the squared elements of `x`, i.e. for each element $i$ we want $$y_i = x_i^2.$$ Then show `y`.
-```{r "13_b_53"}
+```{r "13_b_54"}
 # We should not set this chunk optional
 # since we need y in the next chunk
 y = x^2
@@ -969,7 +1013,7 @@ y
 
 c) Now use the function `qplot` from the package `ggplot2` to create a scatter plot of `x` against `y`. You can google `r qplot` to get the help for the function `qplot`.
 
-```{r "13_c_54",optional=TRUE, dev='svg', fig.width=4}
+```{r "13_c_55",optional=TRUE, dev='svg', fig.width=4}
 library(ggplot2) # load ggplot2 package
 
 # Enter your call to qplot here...
@@ -994,7 +1038,7 @@ Note: A quiz as specified below only works in the shiny environment. If you want
 
 Which of the following numbers is the oddest prime? 2,3,5 or 7? Enter you solution in the code below and press "check".
 
-```{r "13_c_55"}
+```{r "13_c_56"}
 2
 ```
 
