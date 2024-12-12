@@ -45,9 +45,10 @@ Diagramm Variablenbeeinflussung
 **"Jetzt 12€ Mindestlohn wählen."**
 Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
 Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
-Besonders die Frage der Auswirkungen auf die Beschäftigung wirft in der Forschung Kontroversen auf.
 
-Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
+Häufig wird die Frage der Auswirkungen auf die Beschäftigung in der Forschung betrachtet. Dabei treten Kontroversen auf und es herrscht keine Einigkeit in den Schlussfolgerungen.
+
+Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
 Diese Analyse führen wir für Unternehmensdaten aus dem Vereinigten Königreich (UK) durch, da hier die gesetzlichen Rahmenbedingungen eine große Breite an bereitgestellten Daten ermöglichen.
 Zudem wurde in der Analyse kein großer Einfluss auf die Beschäftigung wahrgenommen.
 
@@ -354,7 +355,7 @@ Die DiD-Schätzung ist häufig geeignet, um politische Maßnahmen empirisch zu b
 
 
 **Parallele Trends**
-Eine relevante Voraussetzung für das Anwenden der DiD-Methode ist die Parallel-Trends-Assumption (PTA). Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
+Eine relevante Voraussetzung für das Anwenden der DiD-Methode wird die Parallel-Trends-Assumption (PTA) gehandelt. Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
 Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. (Quelle???)
 
 **Code**
@@ -393,18 +394,25 @@ success: Während die Löhne in der Kontrollgruppe konstant zu steigen scheinen,
 failure: Auch wenn es hier meist um eine subjektive Einschätzung geht, sollten Sie sich die unterschiedlichen Steigungen der Trends ansehen.
 #>
 
-In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Aufgrund des kurzen Betrachtungszeitraums des Trends sollte diese Einschätzung aber auch mit Vorsicht genossen werden: Es wird sich auf Trends bezogen, die sich auf sechs Datenpunkte (1994-1999) stützen. Die Betrachtung eines größeren Zeitraums könnte hier eine genauere Betrachtung zulassen.
+In unserer Betrachtungsweise ist kein eindeutig paralleler Trend zu erkennen. Ist deshalb die DiD-Schätzung eine falsche Methode, um die Effekte der Mindestlohneinführung zu betrachten?
+(Rambachan, A., & Roth, J. (2023). A more credible approach to parallel trends. Review of Economic Studies, 90(5), 2555-2591.)
+
+Aufgrund des kurzen Betrachtungszeitraums des Trends sollte diese Einschätzung aber auch mit Vorsicht genossen werden: Es wird sich auf Trends bezogen, die sich auf sechs Datenpunkte (1994-1999) stützen. Die Betrachtung eines größeren Zeitraums könnte hier eine genauere Betrachtung zulassen.
 Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
 
 
 
 ## Exercise 3.1 -- Wahl der Gruppen
+
+
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
 Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
 
+Zur Erinnerung: Der gesetzliche Mindestlohn wurde am 01. April 1999 eingeführt.
+
 #< quiz "4"
-question: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen?
+question: Ab welchem Zeitpunkt werden Daten der Post-Treatment Gruppe zugewiesen? 
 sc:
     - 1999
     - 2000*
@@ -413,10 +421,16 @@ success: Richtige Antwort. Die Einführung war zwar im Jahr 1999, die Daten jede
 failure: Das ist nicht korrekt. 
 #>
 
+------------
+
+**Treatment-Wahl**
+
 Für eine DiD-Schätzung muss weiter eine Kontroll- und eine Treatmentgruppe definiert werden. In der Treatmentgruppe werden jene Unternehmen zusammengefasst, bei denen der Durchschnittslohn (avwage) im Jahr unter 12000 Pfund lag.
 Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwischen 12000 und 20000 Pfund.
 
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3,60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
+
+
 
 ```{r}
 #< task
@@ -713,7 +727,7 @@ regiii = lm(ln_avwage ~ NMW, data = dat)
 stargazer(regi, regii, regiii, reg1, type = "text")
 
 ```
-Im Gegensatz zur händischen Berechnung bekommen wir durch die Regression die Signifikanz unserer Schätzung beurteilen.
+Im Gegensatz zur händischen Berechnung können wir durch die Regression die Signifikanz unserer Schätzung beurteilen.
 
 #< quiz "3.3.1"
 question: Wie beurteilen Sie die Signifikanz unseres DiD-Schätzers in der dargestellten Regression?
@@ -732,7 +746,7 @@ Die Werte der Variablen sind im obigen Fall also hoch signifikant gekennzeichnet
 Allerdings können die p-Werte fehlerhaft sein, da es sich bei den Daten teilweise um genestete Daten handelt. 
 Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
 In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
-Um Fehler bezüglich genesteter Daten zu verhindern, fügen wir Clusterrobuste Standardfehler ein.
+Um Fehler bezüglich genesteter Daten zu verhindern, führen wir Clusterrobuste Standardfehler ein.
 
 #< quiz "3.3.1"
 question: Nach welcher Variable soll geclustert werden?
@@ -781,18 +795,6 @@ Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfe
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit Constant beschrieben wird.
 - Wie wirken die unterschiedlichen Variablen?
 - Werte zuordnen
-#< quiz "3.3.2"
-question: Wenn Sie an die Werte aus der händischen Berechnung zurückdenken, sollte Ihnen der Wert einer Variablen bekannt vorkommen. Von welcher Variablen ist die Rede?
-sc:
-    - ctreat1
-    - treat1_NMW*
-    - NMW
-
-success: Richtige Antwort, auf dieser Variablen liegt das Hauptaugenmerk.  
-failure: Das ist leider falsch. 
-#>
-
-Bei treat1_NMW handelt es sich um den Interaktionsterm der beiden Dummyvariablen. Dieser beschreibt die einfache DiD-Schätzung unter der Berücksichtigung Cluster-Robuster Standardfehler je Unternehmen. Der Wert ist hoch signifikant.
 
 #< quiz "3.3.3"
 question: In welcher Einheit wird der DiD-Wert beschrieben?
@@ -807,12 +809,11 @@ failure: Das ist leider falsch. Es werden zwei log-Variablen miteinander verglic
 
 
 ----------------
-
-     | 
-
 **NET_PCM**
 
-Zur Betrachtung der Veränderung der Unternehmensgewinne gehen wir nach demselben Schema vor.
+Wir haben in Erfahrung gebracht, dass es einen Effekt durch die Einführung des gesetzlichen Mindestlohns gibt. 
+Um herauszufinden, wie die Unternehmen auf diese Veränderung reagieren, sehen wir uns spiegelbildlich zur obigen Schätzung die Veränderung auf die Gewinnmarge *net_pcm* an.
+
 
 ```{r}
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
@@ -1043,6 +1044,8 @@ ggplot(dat_fig3, aes(x = threshold))+
 - Auswirkung auf Beschäftigung
 - weitere Artikel (andere Auswirkungen untersucht)
 - Strukturen in Unternehmen
+
+
 
 ## Exercise Anregungen
 
