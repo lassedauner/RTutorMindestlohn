@@ -118,6 +118,18 @@ https://www.gov.uk/national-minimum-wage-rates
   
 **Relevante Variablen**
 
+#< quiz "2.1"
+question: Um in den Datensatz einzutauchen eine kleine Frage zum Einstieg.Was glauben Sie, wieso wir Unternehmensdaten aus dem Vereinigten Königreich beziehen?
+sc:
+    - Keine Kosten der Datenbeschaffung im Vereinigten Königreich
+    - Strengere Transparenzregeln in der Bilanzierung und eine zentrale Datenspeicherung*
+    - Die Daten sind anonymisiert und lassen eine unternehmensunabhängige Analyse zu
+
+success: Das ist ein wichtiger Grund, warum wir uns mit Daten aus dem UK beschäftigen. Dabei werden die Daten in unserem Fall kommerziell vom "Bureau Van Dijk" bezogen. Eine unternehmensunabhängige Analyse wäre mit Hinblick auf branchenspezifische Einflüsse nicht zielführend.
+failure: Die Antwort ist leider falsch.
+#>
+
+
 **Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r}
 #< task
@@ -153,6 +165,30 @@ Das oben ausgegebene Unternehmen besitzt den UKsic 7020. Die sic2-Zahl ist somit
 
 **gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an.
 
+
+Werfen wir einen Blick auf die Variable *month*. Wir wollen sehen, wan die Unternehmen ihren Jahresbericht abgeben und damit ihr Geschäftsjahr beenden.
+Gruppieren Sie hierfür den Datensatz *dat* nach dem Berichtsmonat *month*. Geben Sie anschließend die Anzahl der Einträge mittels der Funktion *length* an.
+```{r}
+#< fill_in
+dat %>% 
+  group_by(___) %>%
+  summarize(___(month))
+#>
+dat %>% 
+  group_by(month) %>%
+  summarize(length(month))
+```
+
+#< quiz "2.2"
+question: Alle unsere Daten weisen auf ein Ende des Geschäftsjahres im März hin. Können Sie sich erklären, warum?
+sc:
+    - Anders als in Deutschland, endet das Geschäftsjahr im UK bei allen Unternehmen im März.
+    - Im Frühjahr gibt es im UK wenig Bewegung auf dem Arbeitsmarkt. Dadurch vermeiden wir unbekannte externe Effekte.
+    - Die Mindestlohneinführung findet nicht mitten im Geschäftsjahr statt*
+
+success: Richtige Antwort. Dadurch können wir zwei klare Perioden vor und nach der Mindestlohneinführung definieren.
+failure: Die Antwort ist leider falsch.
+#>
 
 ## Exercise 2.1 -- Schaubild / Wahl der Gruppen
 
@@ -367,7 +403,7 @@ Annähernd kann das überprüft werden, indem man sich die Trendlinien der beide
 dat_trend_treat = dat %>% 
   filter(ctreat1 == 1) %>%
   group_by(year)%>%
-  summarise("Treatment"=mean(ln_avwage, na.rm = TRUE))
+  summarise("Treatment"=mean(ln_avwage, na.rm = TRUE)) 
 ```
 ```{r}
 dat_trend_control = dat %>%
