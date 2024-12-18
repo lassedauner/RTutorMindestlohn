@@ -384,7 +384,10 @@ ggplot(diffperc)+
 Die Auswirkungen des Mindestlohns auf die Unternehmensgewinne können mit Hilfe der Difference-in-Differences-Methode - kurz **DiD** - beobachtet werden.
 
 **DiD-Methode**
-Die DiD-Schätzung ist häufig geeignet, um politische Maßnahmen empirisch zu beurteilen. Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage. So können beispielsweise die Einflüsse von Schocks und fixer Effekte abgefedert werden und so die Auswirkungen einzelner Maßnahmen besser beurteilbar machen. (Quelle???) (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
+Die DiD-Schätzung ist häufig geeignet, um kausale Effekte politischer Maßnahmen empirisch zu beurteilen.
+Dabei werden die Daten in zwei zeitliche Perioden und zwei Gruppen eingeteilt. 
+(Callaway, B., & Sant’Anna, P. H. (2021). Difference-in-differences with multiple time periods. Journal of econometrics, 225(2), 200-230., SEITE 2)
+Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage. So können beispielsweise die Einflüsse von Schocks und fixer Effekte abgefedert werden und so die Auswirkungen einzelner Maßnahmen besser beurteilbar machen. (Quelle???) (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
 
 **Sind die Voraussetzungen gegeben? (Quiz)**
 - Parallele Trends
@@ -443,7 +446,7 @@ Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, 
 
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
-Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
+Zum einen wird entschieden widmen wir uns der Frage, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
 
 Zur Erinnerung: Der gesetzliche Mindestlohn wurde am 01. April 1999 eingeführt.
 
@@ -453,10 +456,9 @@ sc:
     - 1999
     - 2000*
 
-success: Richtige Antwort. Die Einführung war zwar im Jahr 1999, die Daten jedes Jahres beziehen sich allerdings auf das vergangene Geschäftsjahr (April bis März).
+success: Richtige Antwort. Die Einführung war zwar im Jahr 1999, die Daten jeden Jahres beziehen sich allerdings auf das vergangene Geschäftsjahr (April bis März).
 failure: Das ist nicht korrekt. 
 #>
-
 ------------
 
 **Treatment-Wahl**
@@ -515,33 +517,71 @@ Wir wollen überprüfen, inwiwefern der Anteil an Lohnzahlungen unter 3,60 mit d
 dat_seq = read_dta('seq98.dta')
 #>
 ```
+Nun haben wir im ersten Schritt die Gruppen und Perioden definiert. Als nächstes werden wir die Daten aktiv den jeweiligen Gruppen zuordnen und zusammenfassen.
 
 ## Exercise 3.2 -- händische DiD-Berechnung
 
-Mit einem Blick auf den Datensatz erkennt man, dass hierfür bereits Dummy-Variablen ertellt worden sind.
+Mit einem Blick auf den Datensatz erkennt man, dass für die unterschiedlichen Gruppen bereits Dummy-Variablen erstellt worden sind.
 
-**Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz, indem Sie lediglich "check" drücken.
+**Aufgabe**: Laden Sie erneut den bereits bekannten Datensatz und geben Sie die ersten Zeilen aus, indem Sie lediglich "check" drücken.
 ```{r}
 #< task
 dat = read_dta('main_fame.dta')
 #>
 
 ```
-
+Führen Sie nun den folgenden Code aus, indem Sie den Datensatz nach den für die DiD-Schätzung relevanten Variablen gruppieren. Dadurch erhalten Sie eine Tabelle, die alle relevanten Daten für eine händische Berechnung enthält.
 ```{r}
-#< task
+#< fill_in
+dat_table_DiD = dat %>%
+  ___(ctreat1, NMW)%>%
+  filter(pp == 1) %>%
+  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))
+#>
 dat_table_DiD = dat %>%
   group_by(ctreat1, NMW)%>%
   filter(pp == 1) %>%
   summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))
-#>
 ```
 
+#< quiz "3.2.1"
+question: Wieso wird der Mittelwert verwendet und nicht nur die beiden Jahre vor und nach der Mindestlohneinführung? 
+sc:
+    - Durch die Betrachtung können kurzfristige Schwankungen und zufällige Effekte abgefedert werden.*
+    - Um einen deutlicheren Unterschied zwischen den beiden Perioden zu erhalten.
+    - ???
+
+success: Richtige Antwort. Bei der Difference in Differences Schätzung ist es hilfreich einen größeren Zeitraum zu betrachten. 
+Die reine Veränderung des Ergebnisses, worauf Antwort B abzielt, sollte kein Grund bei statistischen Analysen sein.
+failure: Das ist nicht korrekt. 
+#>
+
 **Wieso wird der Dummy "pp" angewandt?**
-In diesem Code fällt auf, dass der Datensatz um mehrere Einträge mit Hilfe des Dummys pp verkleinert wird.
-Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 14)): Dabei wird sich auf Unternehmen bezogen, deren Geschäftsjahr im Zeitraum April bis März läuft. Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. Aufgrund diverser Regelungen in der britischen Berichterstattung sind kleinere Unternehmen von der Angabe bestimmter Daten befreit. Daher gibt es ein subsample. 
+
+Im obigen Code wird der Datensatz anhand der Variablen "pp" gefiltert.
+
+#< quiz "3.2.2"
+question: Wieso und nach welchem Kriterium könnte hier gefiltert werden? 
+sc:
+    - Es gibt starke Unterschiede in der Berichterstattung zwischen den Ländern im UK. Daher fokussieren wir uns auf England.
+    - Aufgrund einer höheren Teilzeitquote bei Frauen, filtern wir hier nach Geschlecht und legen den Fokus auf die Männer.
+    - Da kleinere Firmen von manchen Teilen der Berichterstattung befreit sind, sind ihre Daten unvollständig. Daher werden sie nicht weiter berücksichtigt.* 
+
+success: Richtige Antwort. Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 13)): Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. 
+failure: Diese Antwort ist leider falsch. 
+#>
 
 Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der Beschäftigungszahlen, ob es Aufffälligkeiten gibt:
+
+#< quiz "3.2.3"
+question: Anhand welcher kennzahlen können wir die oben erwähnten kleinen Unternehmen erkennen? 
+sc:
+    - 
+    - 
+    -  
+
+success: Richtige Antwort. Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 13)): Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. 
+failure: Diese Antwort ist leider falsch.
 
 ```{r}
 dat_no_pp = dat %>%
@@ -553,20 +593,28 @@ dat_pp = dat %>%
 boxplot(log(dat_no_pp$emp),log(dat_pp$emp))
 boxplot(log(dat_no_pp$net_pcm),log(dat_pp$net_pcm))
 boxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))
+boxplot((dat_no_pp$manuf),(dat_pp$manuf))
+boxplot(log(dat_no_pp$turnemp),log(dat_pp$turnemp))
 
 ```
+
+
+
 Im Gesamten ist zu erkennen, dass die Daten, die sich nicht in der Auswahl befinden, breiter gestreut sind.
 Wir erkennen einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
-In Großbritannien sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
+Im Vereinigten Königreich sind **kleinere Unternehmen** von der Veröffentlichung bestimmter Daten befreit. Um eine vollumfängliche Analyse zu gewährleisten entscheiden sich die Autoren daher ein Unterbeispiel zu erstellen, in denen Daten vollumfänglich erfasst werden (S. 135).
 Das schränkt allerdings auch die Bewertung ein, lenkt den Blick weg von kleineren Unternehmen und muss bei der Betrachtung der Ergebnisse bedacht werden.
-Wie die Autoren die Auswahl des Unterbeispiels treffen wird nicht vollumfänglich bekannt.
+Wie die Autoren die Auswahl des Unterbeispiels treffen wird nicht leider vollumfänglich bekannt und auch unsere Überlegungen lassen nur Mutmaßungen zu.
 
 
 
 Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle "dat_table_DiD" vorhanden sind, können die Differenzen nun händisch berechnet werden.
 
 Die Formel hierfür lautet 
-***(y.post.treat - y.post.control) - (y.pre.treat - y.pre.control)***
+***(y.post.treat - y.pre.treat) - (y.post.control - y.pre.control)***
+(S. 133)
+
+Der erste Teil beschreibt die Veränderung in der Treatmentgruppe durch das Treatment. Um andere Einflussfaktoren wie saisonale Effekte herauszurechnen, wird im zweiten Teil die Veränderung in der Kontrollgruppe berechnet, welche im Idealfall nicht vom Treatment betroffen ist.
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
 ```{r}
@@ -657,10 +705,11 @@ Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 **Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
 ```{r}
 #< fill_in
-DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
-DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
+DiD_ln_avwage = (y1.post.treat - y1.pre.treat) - (y1.post.control - y1.pre.control)
+DiD_net_pcm = (y2.post.treat - y2.pre.treat) - (y2.post.control - y2.pre.control)
   
 #Ergebnisse anzeigen
+
 #>
 DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)
 DiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)
