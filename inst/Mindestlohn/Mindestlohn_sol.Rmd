@@ -19,11 +19,21 @@ show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 
 ## Exercise Inhaltsübersicht
 
+
+
 1. Einführung in den Mindestlohn
 
 2. Datenüberblick
 
 3. Difference in Differences
+
+3.1 Wahl der Gruppen
+
+3.2 Händische DiD Berechnung
+
+3.3 DiD-Schätzung mittels Regression
+
+3.4 Imaginäre Mindestlohneinführung
 
 4. Einordnung des Artikels
 
@@ -46,11 +56,10 @@ Diagramm Variablenbeeinflussung
 Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
 Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
 
-Häufig wird die Frage der Auswirkungen auf die Beschäftigung in der Forschung betrachtet. Dabei treten Kontroversen auf und es herrscht keine Einigkeit in den Schlussfolgerungen.
+Häufig wird in der Forschung die Frage der Auswirkungen auf die Beschäftigung betrachtet. Dabei treten Kontroversen auf und es herrscht keine Einigkeit in den Schlussfolgerungen.
 
 Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
 Diese Analyse führen wir für Unternehmensdaten aus dem Vereinigten Königreich (UK) durch, da hier die gesetzlichen Rahmenbedingungen eine große Breite an bereitgestellten Daten ermöglichen.
-Zudem wurde in der Analyse kein großer Einfluss auf die Beschäftigung wahrgenommen.
 
 
 #< quiz "1"
@@ -67,7 +76,7 @@ failure: Eine plausible Antwort, allerdings werden hierfür keine Belege gefunde
 
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
-Wie in Deutschland, wurden und werden Löhne in Großritannien teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
+Wie in Deutschland, wurden und werden Löhne im Vereinigten Königreich teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
 Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitspolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
 
 #< quiz "1.1"
@@ -82,11 +91,11 @@ failure: Diese Schätzung ist zu hoch.
 #>
 
 
-Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns in Großbritannien war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
+Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns im Vereinigten Königreich war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
 Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe. Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkomission angepasst.
 
 #< quiz "1.2"
-question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien im Jahr 2024 (in Pfund)?
+question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn im UK im Jahr 2024 (in Pfund)?
 sc:
     - 9.11
     - 11.22*
@@ -119,7 +128,7 @@ https://www.gov.uk/national-minimum-wage-rates
 **Relevante Variablen**
 
 #< quiz "2.1"
-question: Um in den Datensatz einzutauchen eine kleine Frage zum Einstieg.Was glauben Sie, wieso wir Unternehmensdaten aus dem Vereinigten Königreich beziehen?
+question: Um in den Datensatz einzutauchen eine kleine Frage zum Einstieg. Was glauben Sie, wieso wir Unternehmensdaten aus dem Vereinigten Königreich beziehen?
 sc:
     - Keine Kosten der Datenbeschaffung im Vereinigten Königreich
     - Strengere Transparenzregeln in der Bilanzierung und eine zentrale Datenspeicherung*
@@ -163,10 +172,20 @@ Das oben ausgegebene Unternehmen besitzt den UKsic 7020. Die sic2-Zahl ist somit
 
 **female**: Frauenanteil bei Arbeitnehmern innerhalb des sic4.
 
-**gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an.
+**gorwk**: Gibt den Regierungsbezirk des jeweiligen Unternehmens an. 
+((1) Tyne & Wear                    (12) East of England
+(2) Rest of North East              (13) Central London
+(3) Greater Manchester              (14) Inner London
+(4) Merseyside                      (15) Outer London
+(5) Rest of North West              (16) South East
+(6) South Yorkshire                 (17) South West
+(7) West Yorkshire                  (18) Wales
+(8) Rest of Yorkshire & Humberside  (19) Strathclyde
+(9) East Midlands                   (20) Rest of Scotland
+(10) West Midlands (met county))
 
 
-Werfen wir einen Blick auf die Variable *month*. Wir wollen sehen, wan die Unternehmen ihren Jahresbericht abgeben und damit ihr Geschäftsjahr beenden.
+Werfen wir einen Blick auf die Variable *month*. Wir wollen sehen, wann die Unternehmen ihren Jahresbericht abgeben und damit ihr Geschäftsjahr beenden.
 Gruppieren Sie hierfür den Datensatz *dat* nach dem Berichtsmonat *month*. Geben Sie anschließend die Anzahl der Einträge mittels der Funktion *length* an.
 ```{r}
 #< fill_in
@@ -759,7 +778,12 @@ dat = filter(dat_raw, pp == 1)
 #>
 ```
 Zu Beginn unserer Analyse wollen wir mehrere Regressionen mit den oben dargestellten Variablen laufen lassen. 
-Dazu sollen die einzelnen Variablen die "ln_avwage" beeinflussen beobachtet werden.
+Dazu sollen die einzelnen Variablen, die "ln_avwage" beeinflussen, beobachtet werden.
+
+#< info "stargazer"
+Die Stargazer Funktion ermöglicht uns einen schön formatierten Output mit der Möglichkeit, mehrere Regressionen parallel darzustellen.
+(https://www.rdocumentation.org/packages/stargazer/versions/5.2.3/topics/stargazer)
+#>
 
 Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
 ```{r}
@@ -772,6 +796,7 @@ regi = lm(ln_avwage ~ treat1_NMW, data = dat)
 
 stargazer(regi, type = "text")
 ```
+
 #< quiz "3.3.1"
 question: Wieso ist der Einfluss der Treatmentvariablen im Gegensatz zur händischen Berechnung negativ?
 sc:
@@ -783,7 +808,7 @@ failure: Das ist in diesem Fall nicht der Grund für die Unterschiede. Sehen Sie
 #>
 
 
-Wir müssen in unserer Regression also auch die sowohl die Interaktionsvariable als auch die abhängige Variable beeinflussenden Dummys berücksichtigen.
+Wir müssen in unserer Regression also sowohl die Interaktionsvariable als auch die die abhängige Variable beeinflussenden Dummys berücksichtigen.
 
 
 $ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$
@@ -801,9 +826,9 @@ stargazer(reg1, type = "text")
 ```
 Der Wert der Interaktionsvariablen hat sich im Vergleich zur unvollständigen Regression stark verändert und erinnert an die händische Berechnung.
 
-Um diese starke Veränderung besser zu verstehen können wir die gemeinsame Betrachtung der erklärenden Variablen mit der einzelnen Betrachtung vergleichen.
+Um diese starke Veränderung besser zu verstehen, können wir die gemeinsame Betrachtung der erklärenden Variablen mit der einzelnen Betrachtung vergleichen.
 
-
+Führen Sie dazu den Code aus und sehen sich die Ausgabe an.
 ```{r}
 regii = lm(ln_avwage ~ ctreat1, data = dat)
 
@@ -834,7 +859,7 @@ In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage
 Um Fehler bezüglich genesteter Daten zu verhindern, führen wir Clusterrobuste Standardfehler ein.
 
 #< quiz "3.3.1"
-question: Nach welcher Variable soll geclustert werden?
+question: Nach welcher Variablen soll geclustert werden?
 sc:
     - ln_avwage
     - regno*
@@ -843,9 +868,9 @@ success: Korrekt, hierbei handelt es sich um die übergeordnete Einheit, nach de
 failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeordneten Einheit geclustert werden.
 #>
 
-Nun fügen wir die Clusterrobusten Standardfehler ein und schauen, was sich dadurch verändert.
+Nun fügen wir die **Clusterrobusten Standardfehler** ein und schauen, was sich dadurch verändert.
 
-Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (regiv) mit der Regression mit Clustering.
+Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (reg1) mit der Regression mit Clustering.
 ```{r}
 #< fill_in
 reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
@@ -868,10 +893,11 @@ stargazer(reg1, reg2, type ="text")
 An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
 
-Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit **clusterrobusten Standardfehlern** auf sich hat:
 (Angrist, 231ff) / 
 (Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
 Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
+
 
 ---------------
 
