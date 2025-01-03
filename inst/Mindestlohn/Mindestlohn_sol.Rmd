@@ -839,7 +839,7 @@ stargazer(regi, regii, regiii, reg1, type = "text")
 ```
 Im Gegensatz zur händischen Berechnung können wir durch die Regression die Signifikanz unserer Schätzung beurteilen.
 
-#< quiz "3.3.1"
+#< quiz "3.3.2"
 question: Wie beurteilen Sie die Signifikanz unseres DiD-Schätzers in der dargestellten Regression?
 sc:
     - hoch*
@@ -858,7 +858,7 @@ Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit 
 In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
 Um Fehler bezüglich genesteter Daten zu verhindern, führen wir Clusterrobuste Standardfehler ein.
 
-#< quiz "3.3.1"
+#< quiz "3.3.3"
 question: Nach welcher Variablen soll geclustert werden?
 sc:
     - ln_avwage
@@ -880,15 +880,6 @@ reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
 stargazer(reg1, reg2, type ="text")
 ```
 
-```{r}
-#reg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)
-#cluster = vcovCL(reg1, cluster = ~regno)
-
-#stargazer(reg1, type = "text",
-#          se = list(sqrt(diag(cluster))))
-#Quelle?
-```
-
 
 An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für ctreat1 und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
@@ -907,7 +898,7 @@ Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, w
 - Wie wirken die unterschiedlichen Variablen?
 - Werte zuordnen
 
-#< quiz "3.3.3"
+#< quiz "3.3.4"
 question: In welcher Einheit wird der DiD-Wert beschrieben?
 sc:
     - Pfund
@@ -936,9 +927,72 @@ stargazer(reg2, type = "text")
 Sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren.
 Dafür können wir uns die Funktion der Faktorvariablen zunutze machen.
 
-**Faktorvariablen**
+## **Faktorvariablen**
+Da wir bei nominalskalierten Daten keine Möglichkeit zur messbaren Unterscheidung finden, müssen wir Faktorvariablen nutzen, um diskrete Daten in die Regression miteinzubeziehen. 
+Technisch umsetzbar wird diese Faktorisierung, indem eine Gruppe die Referenz bildet. Statistisch gesehen geht diese Wahl willkürlich vonstatten, inhaltlich gibt es nach Hardy (1993) drei Grundüberlegungen zur Wahl der Referenzgruppe:
+
+So soll die Referenzgruppe 
+
+1. Einen sinnvollen Vergleich bieten
+
+2. Klar definiert sein
+
+3. Eine ausreichend große Stichprobengröße im Vergleich zu anderen Gruppen besitzen
 
 
+(https://learning.oreilly.com/library/view/applied-multiple-regression-correlation/9780805822236/xhtml/15_Chapter_08.xhtml#h8_2 
+=> Cohen, J., Cohen, P., West, S. G., & Aiken, L. S. (2003). "Applied Multiple Regression/Correlation Analysis for the Behavioral Sciences.", Kapitel 8.2)
+
+
+#< info "factor"
+In R können wir entweder die Variablen innerhalb der Regression faktorisieren, oder bereits im Datensatz.
+#>
+
+Die Variable *year* möchten wir in unserem Datensatz faktorisieren und erstellen hierfür eine neue Variable *factor_year*. Vergleichen Sie weiter die Werte der neuen mit der bereits existierenden Variablen, indem Sie sich mittels *head()* die ersten Einträge anzeigen lassen.
+```{r}
+dat = dat %>%
+  mutate("factor_year" = factor(year))
+
+head(dat$year)
+head(dat$factor_year)
+```
+Die Einträge scheinen zunächst identisch, dennoch ist bei unserer faktorisierten Variablen der Eintrag *Levels* zu finden.
+
+Levels gibt die unterschiedlichen Kategorien innerhalb der Variablen an. Dabei stellt die erste Kategorie die Referenzkategorie dar.
+
+#< quiz "3.3.5"
+question: Wie bewerten Sie die gewählte Referenzkategorie? (Denken Sie dabei an die oben beschriebenen Grundüberlegungen)
+sc:
+    - Das Jahr 1997 ist sinnvoll gewählt, da es den Startpunkt unserer Analyse markiert. 
+    - Es gibt andere Jahre, die auf Basis unserer Analyse einen wichtigeren Punkt markieren*
+    - Alle Jahre sind gleich relevant und die Grundüberlegungen treffen auf jedes Jahr zu. Daher kann das Jahr beliebig gewählt werden.
+
+success: Richtige Antwort. R wählt automatisch den kleinsten Wert bei der Faktorisierung, ohne Berücksichtigung der Relevanz.
+failure: Das ist so nicht korrekt, überlegen Sie nochmal auf welche Jahre wir bei unserer DiD-Schätzung einen besonderen Fokus gelegt haben.
+#>
+
+Eine besser geeignete Referenzkategorie können wir selbst festlegen:
+```{r}
+dat$factor_year = relevel(dat$factor_year, ref = "2000")
+```
+
+
+
+
+Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit *year* und einmal mit *factor_year* ergänzen.
+```{r}
+reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
+reg2.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)
+reg2.2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor_year| 0 | 0 | regno, data = dat)
+reg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno, data = dat)
+
+
+stargazer(reg2, reg2.1, reg2.2, reg2.3, type= "text")
+```
+Wir sehen, dass sich die Ergebnisse durch eine Faktorisierung verändern.
+Auch durch die Veränderung der Referenzkategorie entstehen Unterschiede, wenn auch im überschaubaren Rahmen. 
+
+Dabei gilt dennoch zu erwähnen, dass die Autoren des Artikels bei der Wahl der Referenzkategorie wohl einer anderen Idee der Wahl gefolgt sind und das Jahr 1997 als Referenz gewählt haben. 
 
 **Table 2, Panel A**
 ```{r}
@@ -1155,6 +1209,7 @@ ggplot(dat_fig3, aes(x = threshold))+
 - Auswirkung auf Beschäftigung
 - weitere Artikel (andere Auswirkungen untersucht)
 - Strukturen in Unternehmen
+- Ist der Mindestlohn zu befürworten? (sozial, ökonomisch)
 
 
 
