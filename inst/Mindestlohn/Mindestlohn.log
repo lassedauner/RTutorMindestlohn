@@ -444,3 +444,77 @@
 ,
 {"type":["init_ps"],"time":["2024-12-10 11:44:40"],"user":["default_user"],"umph":[1733827480.6103],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2025-01-05 14:10:52"],"user":["default_user"],"umph":[1736082652.296],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:01"],"user":["default_user"],"umph":[1736082721.2987],"ok":[true],"chunk":[29],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 18, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:01"],"user":["default_user"],"umph":[1736082721.923],"ok":[true],"chunk":[30],"ex":[8],"e.ind":[0],"code":["dat_raw = read_dta('main_fame.dta')\ndat = filter(dat_raw, pp == 1) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:02"],"user":["default_user"],"umph":[1736082722.591],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["regi = lm(ln_avwage ~ treat1_NMW, data = dat)\n\nstargazer(regi, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:03"],"user":["default_user"],"umph":[1736082723.4686],"ok":[true],"chunk":[32],"ex":[8],"e.ind":[0],"code":["\nreg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)\nstargazer(reg1, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:04"],"user":["default_user"],"umph":[1736082724.8161],"ok":[true],"chunk":[33],"ex":[8],"e.ind":[0],"code":["regii = lm(ln_avwage ~ ctreat1, data = dat)\n\nregiii = lm(ln_avwage ~ NMW, data = dat)\n\nstargazer(regi, regii, regiii, reg1, type = \"text\")\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:06"],"user":["default_user"],"umph":[1736082726.0497],"ok":[true],"chunk":[34],"ex":[8],"e.ind":[0],"code":["reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)\nstargazer(reg1, reg2, type =\"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:07"],"user":["default_user"],"umph":[1736082727.0152],"ok":[true],"chunk":[35],"ex":[8],"e.ind":[0],"code":["reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\n\nstargazer(reg2, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:07"],"user":["default_user"],"umph":[1736082727.3297],"ok":[true],"chunk":[36],"ex":[8],"e.ind":[0],"code":["dat = dat %>%\n  mutate(\"factor_year\" = factor(year))\n\nhead(dat$year)\nhead(dat$factor_year)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:11"],"user":["default_user"],"umph":[1736082731.8671],"ok":[true],"chunk":[37],"ex":[8],"e.ind":[0],"code":["dat$factor_year = relevel(dat$factor_year, ref = \"2000\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:18"],"user":["default_user"],"umph":[1736082738.4099],"ok":[true],"chunk":[38],"ex":[8],"e.ind":[0],"code":["reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\nreg2.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)\nreg2.2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor_year| 0 | 0 | regno, data = dat)\nreg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno, data = dat)\n\n\nstargazer(reg2, reg2.1, reg2.2, reg2.3, type= \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:19"],"user":["default_user"],"umph":[1736082739.1307],"ok":[true],"chunk":[39],"ex":[8],"e.ind":[0],"code":["library(broom)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:12:24"],"user":["default_user"],"umph":[1736082744.1488],"ok":[true],"chunk":[40],"ex":[8],"e.ind":[0],"code":["table_reg2.3 = tidy(reg2.3)\n\n#Tabelle ausgeben\ntable_reg2.3"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:19:57"],"user":["default_user"],"umph":[1736083197.758],"ok":[true],"chunk":[12],"ex":[5],"e.ind":[0],"code":["  dat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:19:57"],"user":["default_user"],"umph":[1736083197.9304],"ok":[true],"chunk":[13],"ex":[5],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"Treatment\"=mean(ln_avwage, na.rm = TRUE)) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:19:58"],"user":["default_user"],"umph":[1736083198.0031],"ok":[true],"chunk":[14],"ex":[5],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"Control\"=mean(ln_avwage, na.rm = TRUE))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:19:58"],"user":["default_user"],"umph":[1736083198.2659],"ok":[true],"chunk":[15],"ex":[5],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:20:01"],"user":["default_user"],"umph":[1736083201.4213],"ok":[true],"chunk":[16],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = Treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = Control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:22:04"],"user":["default_user"],"umph":[1736083324.1796],"ok":[true],"chunk":[22],"ex":[7],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:22:04"],"user":["default_user"],"umph":[1736083324.3126],"ok":[true],"chunk":[23],"ex":[7],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:22:06"],"user":["default_user"],"umph":[1736083326.5566],"ok":[false],"chunk":[24],"ex":[7],"e.ind":[1],"code":["# Enter your code here."],"message":["\nYou have not yet made an assignment to dat_no_pp."]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:22:10"],"user":["default_user"],"umph":[1736083330.3248],"ok":[false],"chunk":[24],"ex":[7],"e.ind":[1],"code":["# Enter your code here."],"message":["\nYou have not yet made an assignment to dat_no_pp."]}
+,
+{"type":["hint"],"time":["2025-01-05 14:22:10"],"user":["default_user"],"umph":[1736083330.3335],"ok":[true],"chunk":[24],"ex":[7],"e.ind":[1]}
+,
+{"type":["check_chunk"],"time":["2025-01-05 14:22:31"],"user":["default_user"],"umph":[1736083351.3654],"ok":[true],"chunk":[24],"ex":[7],"e.ind":[0],"code":["dat_no_pp = dat %>%\n  filter(pp == 0)\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\nboxplot(log(dat_no_pp$net_pcm),log(dat_pp$net_pcm))\nboxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))\nboxplot((dat_no_pp$manuf),(dat_pp$manuf))\nboxplot(log(dat_no_pp$turnemp),log(dat_pp$turnemp))\n"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:50:29"],"user":["default_user"],"umph":[1736085029.077],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:51:50"],"user":["default_user"],"umph":[1736085110.9258],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:52:40"],"user":["default_user"],"umph":[1736085160.6946],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:52:58"],"user":["default_user"],"umph":[1736085178.4169],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:53:18"],"user":["default_user"],"umph":[1736085198.0528],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 14:54:11"],"user":["default_user"],"umph":[1736085251.0447],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:28:00"],"user":["default_user"],"umph":[1736087280.0094],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:28:57"],"user":["default_user"],"umph":[1736087337.2696],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:33:11"],"user":["default_user"],"umph":[1736087591.2633],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:34:12"],"user":["default_user"],"umph":[1736087652.8371],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:35:45"],"user":["default_user"],"umph":[1736087745.4866],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:37:18"],"user":["default_user"],"umph":[1736087838.5152],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-05 15:37:57"],"user":["default_user"],"umph":[1736087877.5222],"ok":[true]}
+,

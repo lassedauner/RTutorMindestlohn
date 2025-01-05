@@ -1,7 +1,5 @@
 ## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
 
-- Einführung .
-
 
 #< ignore
 ```{r "setup"}
@@ -10,7 +8,7 @@ library(RTutor)
 setwd("C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn")
 ps.name = "Mindestlohn"; sol.file = paste0(ps.name,"_sol.Rmd")
 # character vector of all packages you load in the problem set
-libs = c("ggplot2","haven","stargazer","sandwich", "ggdag", "lfe") 
+libs = c("ggplot2","haven","stargazer","sandwich", "ggdag", "lfe", "broom") 
 create.ps(sol.file=sol.file, ps.name=ps.name,libs=libs, rps.has.sol=TRUE, addons="quiz")
 # Show the problem set in the webbrowser
 show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
@@ -19,7 +17,14 @@ show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 
 ## Exercise Inhaltsübersicht
 
+Herzlich Willkommen zu diesem interaktiven RTutor Problem Set.
+Im Rahmen meiner Bachelorarbeit gehen wir den Zusammenhängen von Mindestlöhnen und der Unternehmensprofitabilität auf den Grund.
+Die Basis bildet der Artikel [Minimum Wages and Firm Profitability](https://www.aeaweb.org/articles?id=10.1257/app.3.1.129) von Mirko Draca, Stephen Machin und John Van Reenen, erschienen im Januar 2011 im American Economic Journal: Applied Economics. 
 
+Durch die Verknüpfung von inhaltlichen Hintergründen, fachlicher Analyse von Ergebnissen, persönlichen Einschätzungen und technischer Arbeit mit der Statistiksoftware R sollen Sie durch dieses Problem Set von einem fundierten Wissenszuwachs profitieren. 
+Es ist das Ziel, dass Sie sich nach der geführten Erarbeitung des Themas kritisch und differenziert mit politischen Mindestlohnforderungen auseinandersetzen können und dazu in der Lage sind, Ihre Meinungsbildung ökonomisch zu begründen.   
+
+### Inhalt
 
 1. Einführung in den Mindestlohn
 
@@ -27,18 +32,16 @@ show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
 
 3. Difference in Differences
 
-3.1 Wahl der Gruppen
+  3.1 Wahl der Gruppen
 
-3.2 Händische DiD Berechnung
+  3.2 Händische DiD Berechnung
 
-3.3 DiD-Schätzung mittels Regression
+  3.3 DiD-Schätzung mittels Regression
 
-3.4 Imaginäre Mindestlohneinführung
+  3.4 Imaginäre Mindestlohneinführung
 
 4. Einordnung des Artikels
 
-**Ideen**
-Diagramm Variablenbeeinflussung
 
 
 ## Exercise 1 -- Einführung in den Mindestlohn
@@ -52,15 +55,16 @@ Diagramm Variablenbeeinflussung
   - Messung Unternehmensgewinne
   - Messung Mindestlohn
 
-**"Jetzt 12€ Mindestlohn wählen."**
-Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
-Hinter diesem leicht verständlichen Versprechen steckt die komplexe Frage, wie die Lohnerhöhungen getragen werden.
+### **"Jetzt 12€ Mindestlohn wählen."**
+
+Ein zentrales Wahlkampfthema der SPD zur Bundestagswahl 2021. Es war nicht das erste Mal und wird auch nicht das letzte Mal gewesen sein, dass die Versprechung zur Verbesserung des Lohns ein zentrales Instrument der Arbeitsmarktpolitik ist, um eine große Wählerschaft zu mobilisieren.
+Hinter diesem leicht verständlichen Versprechen steckt allerdings die komplexe Frage, wie die Lohnerhöhungen getragen werden.
 
 Häufig wird in der Forschung die Frage der Auswirkungen auf die Beschäftigung betrachtet. Dabei treten Kontroversen auf und es herrscht keine Einigkeit in den Schlussfolgerungen.
 
-Daher wählen wir mit unserer Analyse nach Draca et. al (2008) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist in der Forschung bisher weitestgehend unbeachtet geblieben.
-Diese Analyse führen wir für Unternehmensdaten aus dem Vereinigten Königreich (UK) durch, da hier die gesetzlichen Rahmenbedingungen eine große Breite an bereitgestellten Daten ermöglichen.
+Daher wählen wir mit unserer Analyse nach Draca et. al (2011) einen anderen Ansatz. Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. Eine solche Betrachtungsweise ist nach den Autoren in der Forschung bisher weitestgehend unbeachtet geblieben.
 
+Die Basis der Analyse bilden Unternehmensdaten aus dem Vereinigten Königreich (UK).
 
 #< quiz "1"
 question: Wie können Unternehmen die Lohnsteigerung kompensieren?
@@ -76,19 +80,21 @@ failure: Eine plausible Antwort, allerdings werden hierfür keine Belege gefunde
 
 **Hintergrund der Einführung**
 Quellen: FES 09/2007
-Wie in Deutschland, wurden und werden Löhne im Vereinigten Königreich teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, sank dieser Anteil bis 2000 um 50 Prozentpunkte.
-Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitspolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
+Wie in Deutschland, wurden und werden Löhne im Vereinigten Königreich teilweise durch Tarifverhandlungen festgelegt. Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, so sank dieser Anteil bis 2000 um 50 Prozentpunkte.
+Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitsmarktpolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt.
 
 #< quiz "1.1"
-question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999 (in Pfund)?
+question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn in Großbritannien zur Einführung 1999?
 sc:
-    - 3.6*
-    - 5.7 
-    - 7.8 
+    - 3.60£*
+    - 5.70£ 
+    - 7.80£
 
 success: Korrekt. Der Artikel befasst sich mit der Einführung des Mindestlohns in Höhe von 3.60 Pfund.
 failure: Diese Schätzung ist zu hoch.
 #>
+
+*Hinweis*: Wir verwenden einheitlich den Punkt als Dezimaltrennzeichen, da sich unsere Daten und die Software ebenfalls auf diese Methode stützen.
 
 
 Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns im Vereinigten Königreich war. Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. 
@@ -97,9 +103,9 @@ Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich w
 #< quiz "1.2"
 question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn im UK im Jahr 2024 (in Pfund)?
 sc:
-    - 9.11
-    - 11.22*
-    - 14.44
+    - 9.11£
+    - 11.22£*
+    - 14.44£
     
 
 success: Korrekt. Für Personen über 21 gilt dieser Mindestlohn von April 2024 an.
@@ -570,8 +576,7 @@ sc:
     - Um einen deutlicheren Unterschied zwischen den beiden Perioden zu erhalten.
     - ???
 
-success: Richtige Antwort. Bei der Difference in Differences Schätzung ist es hilfreich einen größeren Zeitraum zu betrachten. 
-Die reine Veränderung des Ergebnisses, worauf Antwort B abzielt, sollte kein Grund bei statistischen Analysen sein.
+success: Richtige Antwort. Bei der Difference in Differences Schätzung ist es hilfreich einen größeren Zeitraum zu betrachten. Die reine Veränderung des Ergebnisses, worauf Antwort B abzielt, sollte kein Grund bei statistischen Analysen sein.
 failure: Das ist nicht korrekt. 
 #>
 
@@ -586,7 +591,7 @@ sc:
     - Aufgrund einer höheren Teilzeitquote bei Frauen, filtern wir hier nach Geschlecht und legen den Fokus auf die Männer.
     - Da kleinere Firmen von manchen Teilen der Berichterstattung befreit sind, sind ihre Daten unvollständig. Daher werden sie nicht weiter berücksichtigt.* 
 
-success: Richtige Antwort. Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 13)): Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. 
+success: Richtige Antwort. Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 13)). Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. 
 failure: Diese Antwort ist leider falsch. 
 #>
 
@@ -595,12 +600,13 @@ Werfen wir einen Blick auf die aussortierten Daten und überprüfen anhand der B
 #< quiz "3.2.3"
 question: Anhand welcher kennzahlen können wir die oben erwähnten kleinen Unternehmen erkennen? 
 sc:
-    - 
-    - 
-    -  
+    - a
+    - b*
+    - c 
 
-success: Richtige Antwort. Diese Vorauswahl wird von Seiten der Autoren getroffen (S. 135, (Verw. 13)): Untersuchungen wurden ebenfalls für den gesamten Datensatz durchgeführt, die grundlegenden Ergebnisse ähneln sich dabei. 
+success: Richtig.
 failure: Diese Antwort ist leider falsch.
+#>
 
 ```{r}
 dat_no_pp = dat %>%
@@ -636,6 +642,7 @@ Die Formel hierfür lautet
 Der erste Teil beschreibt die Veränderung in der Treatmentgruppe durch das Treatment. Um andere Einflussfaktoren wie saisonale Effekte herauszurechnen, wird im zweiten Teil die Veränderung in der Kontrollgruppe berechnet, welche im Idealfall nicht vom Treatment betroffen ist.
 
 **Aufgabe**: Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. Lassen Sie sich dafür die oben erstellte Tabelle anzeigen und überprüfen Sie Ihre Eingabe mittels "check".
+
 ```{r}
 #< task
 
@@ -978,7 +985,6 @@ dat$factor_year = relevel(dat$factor_year, ref = "2000")
 
 
 
-
 Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit *year* und einmal mit *factor_year* ergänzen.
 ```{r}
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
@@ -990,9 +996,43 @@ reg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno
 stargazer(reg2, reg2.1, reg2.2, reg2.3, type= "text")
 ```
 Wir sehen, dass sich die Ergebnisse durch eine Faktorisierung verändern.
-Auch durch die Veränderung der Referenzkategorie entstehen Unterschiede, wenn auch im überschaubaren Rahmen. 
+Ebenfalls durch die Veränderung der Referenzkategorie entstehen Unterschiede, wenn auch im überschaubaren Rahmen. 
 
 Dabei gilt dennoch zu erwähnen, dass die Autoren des Artikels bei der Wahl der Referenzkategorie wohl einer anderen Idee der Wahl gefolgt sind und das Jahr 1997 als Referenz gewählt haben. 
+
+
+Da durch die Darstellung der Faktorvariablen eine längere Ausgabe entsteht, kann es beim Hinzufügen mehrerer Faktorvariablen aus Gründen der Übersichtlichkeit und Vergleichbarkeit sinnvoll sein, unsere Ausgabe auf das Relevanteste reduzieren.
+
+Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu *stargazer* kennen.
+
+Laden Sie hierfür zunächst das Paket *broom*
+```{r}
+#< fill_in
+library(___)
+#>
+library(broom)
+```
+Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren.
+Geben Sie anschließend die Tabelle aus.
+```{r}
+#< fill_in
+table_reg2.3 = tidy(reg2.3)
+
+#Tabelle ausgeben
+
+#>
+table_reg2.3 = tidy(reg2.3)
+
+#Tabelle ausgeben
+table_reg2.3
+```
+Nun haben wir die relevanten Werte der Regression in der Tabelle gespeichert und können darauf wie auf jeden anderen Data Frame zurückgreifen.
+
+(https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+
+
+
+-----------
 
 **Table 2, Panel A**
 ```{r}
