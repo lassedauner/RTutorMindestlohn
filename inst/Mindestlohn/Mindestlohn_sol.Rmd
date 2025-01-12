@@ -414,40 +414,124 @@ Dabei werden die Daten in zwei zeitliche Perioden und zwei Gruppen eingeteilt.
 (Callaway, B., & Sant’Anna, P. H. (2021). Difference-in-differences with multiple time periods. Journal of econometrics, 225(2), 200-230., SEITE 2)
 Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Vergangenheit eine wichtige Grundlage. So können beispielsweise die Einflüsse von Schocks und fixer Effekte abgefedert werden und so die Auswirkungen einzelner Maßnahmen besser beurteilbar machen. (Quelle???) (Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.)
 
-**Sind die Voraussetzungen gegeben? (Quiz)**
-- Parallele Trends
-
 
 **Parallele Trends**
-Eine relevante Voraussetzung für das Anwenden der DiD-Methode wird die Parallel-Trends-Assumption (PTA) gehandelt. Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
+Als relevante Voraussetzung für das Anwenden der DiD-Methode wird die Parallel-Trends-Assumption (PTA) gehandelt. Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
 Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. (Quelle???)
 
-**Code**
+
+Lesen Sie hierfür zunächst den Datensatz *main_fame* ein und speichern ihn unter *dat*.
 ```{r}
-  dat = read_dta('main_fame.dta')
+#< fill_in
+___ = read_dta('main_fame.dta')
+#>
+dat = read_dta('main_fame.dta')
 ```
 
+Um die Daten jeden Jahres zusammenzufassen, kann die Funktion *group_by* genutzt werden. 
+Fügen Sie die passende Variable in *group_by* ein und geben Sie für jedes Jahr den durchschnittlichen logarithmierten Durchschnittslohn aus.
+
+
+#< info "group_by"
+Die group_by Funktion aus dem dplyr Paket fasst die Daten anhand einer zu bestimmenden Variablen zusammen und ordnet die Ergebnisse aufsteigend an. 
+Um die Gruppierung in einem Output sichtbar zu machen, kann die Pipe um den *summarise* Befehl erweitert werden, in dem dann die Werte jeder Einheit zusammengefasst werden können.
+(https://dplyr.tidyverse.org/reference/group_by.html)
+#>
+
 ```{r}
+#< fill_in
+dat_trend_treat = dat %>% 
+  filter(ctreat1 == 1) %>%
+  group_by(___)%>%
+  summarise("treatment"=___(ln_avwage, na.rm = TRUE)) 
+#>
 dat_trend_treat = dat %>% 
   filter(ctreat1 == 1) %>%
   group_by(year)%>%
-  summarise("Treatment"=mean(ln_avwage, na.rm = TRUE)) 
+  summarise("treatment"=mean(ln_avwage, na.rm = TRUE)) 
 ```
+
 ```{r}
 dat_trend_control = dat %>%
   filter(ctreat1 == 0) %>%
   group_by(year) %>%
-  summarise("Control"=mean(ln_avwage, na.rm = TRUE))
+  summarise("control"=mean(ln_avwage, na.rm = TRUE))
 ```
+
+Um die beiden erstellten Datensätze miteinander zu verbinden, nutzen wir den *left_join*.
+
+Führen Sie den Code mittels *check* aus und sehen sich den Datensatz an.
 ```{r}
+#< task
 dat_trend = left_join(dat_trend_treat, dat_trend_control)
+
+dat_trend
+#>
 ```
+
+
+Jetzt können wir die Daten visualisieren, indem wir uns in einem Liniendiagramm die Trends beider Gruppen ausgeben lassen.
+
+Die Basis dafür bildet der oben erstellte Datensatz *dat_trend*.
+Fügen Sie die Trendlinien der beiden Gruppen hinzu. Die X-Achse soll dabei bei beiden Gruppen das jeweilige Jahr angeben.  
+```{r}
+#< fill_in
+ggplot(dat_trend)+
+  geom_line(aes(x = year, y = treatment))+
+  geom_line(aes(x = year, y = control))
+#>
+```
+
+Wir können schon etwas ablesen, die Graphik kann allerdings noch ansehnlicher gestaltet werden um Unterschiede deutlicher zu machen. 
+Dafür können wir die Linien kolorieren und sowohl die Lininenstärke, als auch den Linientyp verändern.
+
+Färben Sie die Linie der Treatmentgruppe in blau und die der Kontrollgruppe in rot.
+*Hinweis*: Der Farbenname muss in Anführungszeichen angegeben werden.
+```{r}
+#< fill_in
+ggplot(dat_trend)+
+   geom_line(aes(x = year, y = treatment), colour= ___, linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = ___, linetype = 1, linewidth = 0.8)
+#>
+ggplot(dat_trend)+
+   geom_line(aes(x = year, y = treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = "red", linetype = 1, linewidth = 0.8)
+```
+
+Um klarzumachen, in welcher Periode wir uns befinden, kann der Zeitpunkt der Einführung des nationalen Mindestlohns markiert werden.
+Fügen Sie hierfür das letzte Jahr ein, in dem der Mindestlohn nicht galt.
+*Erinnerung:* Das Jahr gibt das Ende des letzten Geschäftsjahres an.
+```{r}
+#< fill_in
+ggplot(dat_trend)+
+   geom_line(aes(x = year, y = treatment), colour= ___, linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = ___, linetype = 1, linewidth = 0.8)+
+   geom_vline(xintercept = ___)
+#>
+ggplot(dat_trend)+
+   geom_line(aes(x = year, y = treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = "red", linetype = 1, linewidth = 0.8)+
+   geom_vline(xintercept = 1999)
+  
+```
+
+Zum Abschluss geben wir dem Graphen einen Titel, sowie eine passende Achsenbeschriftung.
 ```{r}
 ggplot(dat_trend)+
-   geom_line(aes(x = year, y = Treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
-   geom_line(aes(x = year, y = Control), colour = "red", linetype = 1, linewidth = 0.8)+
-   geom_vline(xintercept = 1999)
+   geom_line(aes(x = year, y = treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = "red", linetype = 1, linewidth = 0.8)+
+   geom_vline(xintercept = 1999)+
+  xlab("Jahr")+
+  ylab("logarithmierter Durchschnittslohn")+
+  ggtitle("Entwicklung des logarithmierten Durchschnittslohns in Kontroll- und Treatmentgruppe")
 ```
+
+#< award "Graphikkünstler"
+Sie haben erfolgreich ein Liniendiagramm mit ggplot2 entwickelt.
+#>
+
+
+
 #< quiz "3"
 question: Erkennen Sie einen parallelen Trend?
 sc:
@@ -543,6 +627,11 @@ dat_seq = read_dta('seq98.dta')
 #>
 ```
 Nun haben wir im ersten Schritt die Gruppen und Perioden definiert. Als nächstes werden wir die Daten aktiv den jeweiligen Gruppen zuordnen und zusammenfassen.
+
+
+
+
+
 
 ## Exercise 3.2 -- händische DiD-Berechnung
 
