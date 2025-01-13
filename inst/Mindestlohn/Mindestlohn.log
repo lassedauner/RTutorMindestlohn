@@ -518,3 +518,15 @@
 ,
 {"type":["init_ps"],"time":["2025-01-05 15:37:57"],"user":["default_user"],"umph":[1736087877.5222],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2025-01-13 19:15:31"],"user":["default_user"],"umph":[1736792131.2609],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-13 19:16:38"],"user":["default_user"],"umph":[1736792198.2484],"ok":[true],"chunk":[12],"ex":[6],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-13 19:17:07"],"user":["default_user"],"umph":[1736792227.7465],"ok":[true],"chunk":[13],"ex":[6],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"treatment\"=mean(ln_avwage, na.rm = TRUE)) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-13 19:17:12"],"user":["default_user"],"umph":[1736792232.5748],"ok":[true],"chunk":[14],"ex":[6],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"control\"=mean(ln_avwage, na.rm = TRUE))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-13 19:17:25"],"user":["default_user"],"umph":[1736792245.8276],"ok":[true],"chunk":[15],"ex":[6],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)\n\ndat_trend"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-13 19:17:52"],"user":["default_user"],"umph":[1736792272.9075],"ok":[true],"chunk":[16],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n  geom_line(aes(x = year, y = treatment))+\n  geom_line(aes(x = year, y = control))"],"message":[""]}
+,
