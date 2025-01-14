@@ -987,14 +987,22 @@ failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeord
 
 Nun fügen wir die **Clusterrobusten Standardfehler** ein und schauen, was sich dadurch verändert.
 
-Führen Sie hierzu die Regression durch und vergleichen die Regression ohne Clustering (reg1) mit der Regression mit Clustering.
+Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (reg1) mit der Regression mit Clustering. 
 
+#< info "felm"
+Im Vergleich zu einem einfachen Regressionsmodell mit *lm*, kann durch die *felm* Funktion eine spezifiziertere Regression durchgeführt werden.
+Der Grundaufbau des formulas sieht wie folgt aus:
+felm(y ~ abhängige Variablen | ausgeschlossene Variablen | Spezifikation einer Instrumentalviariablen | Clusterspezifikation)
+(https://www.rdocumentation.org/packages/lfe/versions/2.9-0/topics/felm)
+#>
+
+Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
 ```{r}
 #< fill_in
-reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
-stargazer(___, ___, type ="text")
+reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | ___ | ___ | ___, data=dat)
+stargazer(reg1, reg2, type ="text")
 #>
-reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW|0|0|regno, data=dat)
+reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)
 stargazer(reg1, reg2, type ="text")
 ```
 
