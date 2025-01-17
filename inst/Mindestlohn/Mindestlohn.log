@@ -530,3 +530,39 @@
 ,
 {"type":["check_chunk"],"time":["2025-01-13 19:17:52"],"user":["default_user"],"umph":[1736792272.9075],"ok":[true],"chunk":[16],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n  geom_line(aes(x = year, y = treatment))+\n  geom_line(aes(x = year, y = control))"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2025-01-17 17:15:05"],"user":["default_user"],"umph":[1737130505.0039],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:01:28"],"user":["default_user"],"umph":[1737133288.5038],"ok":[false],"chunk":[1],"ex":[3],"e.ind":[0],"code":["#Datensatz einlesen\ndat_main = read_dta(main_fame.dta)"],"message":["evaluation error in \n  dat_main = read_dta(main_fame.dta)\n  Error:  Objekt 'main_fame.dta' nicht gefunden\n"]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:01:48"],"user":["default_user"],"umph":[1737133308.7502],"ok":[false],"chunk":[1],"ex":[3],"e.ind":[1],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":["\nYou have not yet made an assignment to dat."]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:01:53"],"user":["default_user"],"umph":[1737133313.4212],"ok":[false],"chunk":[1],"ex":[3],"e.ind":[1],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":["\nYou have not yet made an assignment to dat."]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:02:14"],"user":["default_user"],"umph":[1737133334.5635],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["#Datensatz einlesen\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-01-17 18:02:36"],"user":["default_user"],"umph":[1737133356.6352],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:03:10"],"user":["default_user"],"umph":[1737133390.4785],"ok":[false],"chunk":[1],"ex":[3],"e.ind":[1],"code":["#Datensatz einlesen\ndat_main = read_dta('main_fame.dta')"],"message":["\nYou have not yet made an assignment to dat."]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:03:21"],"user":["default_user"],"umph":[1737133401.4633],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["#Datensatz einlesen\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:05:16"],"user":["default_user"],"umph":[1737133516.5693],"ok":[true],"chunk":[2],"ex":[3],"e.ind":[0],"code":["head(dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:06:45"],"user":["default_user"],"umph":[1737133605.0159],"ok":[true],"chunk":[3],"ex":[3],"e.ind":[0],"code":["dat %>% \n  group_by(month) %>%\n  summarize(length(month))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:05"],"user":["default_user"],"umph":[1737134645.272],"ok":[true],"chunk":[12],"ex":[6],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:05"],"user":["default_user"],"umph":[1737134645.4713],"ok":[true],"chunk":[13],"ex":[6],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"treatment\"=mean(ln_avwage, na.rm = TRUE)) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:05"],"user":["default_user"],"umph":[1737134645.5848],"ok":[true],"chunk":[14],"ex":[6],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"control\"=mean(ln_avwage, na.rm = TRUE))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:05"],"user":["default_user"],"umph":[1737134645.854],"ok":[true],"chunk":[15],"ex":[6],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)\n\ndat_trend"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:05"],"user":["default_user"],"umph":[1737134645.9772],"ok":[true],"chunk":[16],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n  geom_line(aes(x = year, y = treatment))+\n  geom_line(aes(x = year, y = control))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:06"],"user":["default_user"],"umph":[1737134646.2528],"ok":[true],"chunk":[17],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:06"],"user":["default_user"],"umph":[1737134646.4686],"ok":[true],"chunk":[18],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)\n  "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-17 18:24:18"],"user":["default_user"],"umph":[1737134658.5917],"ok":[true],"chunk":[19],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)+\n  xlab(\"Jahr\")+\n  ylab(\"logarithmierter Durchschnittslohn\")+\n  ggtitle(\"Entwicklung des logarithmierten Durchschnittslohns in Kontroll- und Treatmentgruppe\")"],"message":[""]}
+,
