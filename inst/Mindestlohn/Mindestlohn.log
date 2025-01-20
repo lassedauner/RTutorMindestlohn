@@ -566,3 +566,33 @@
 ,
 {"type":["check_chunk"],"time":["2025-01-17 18:24:18"],"user":["default_user"],"umph":[1737134658.5917],"ok":[true],"chunk":[19],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)+\n  xlab(\"Jahr\")+\n  ylab(\"logarithmierter Durchschnittslohn\")+\n  ggtitle(\"Entwicklung des logarithmierten Durchschnittslohns in Kontroll- und Treatmentgruppe\")"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2025-01-20 20:38:56"],"user":["default_user"],"umph":[1737401936.5655],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:40:28"],"user":["default_user"],"umph":[1737402028.9729],"ok":[true],"chunk":[12],"ex":[6],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:41:10"],"user":["default_user"],"umph":[1737402070.486],"ok":[true],"chunk":[13],"ex":[6],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"treatment\"=mean(ln_avwage, na.rm = TRUE)) \n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:41:20"],"user":["default_user"],"umph":[1737402080.3103],"ok":[true],"chunk":[14],"ex":[6],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"control\"=mean(ln_avwage, na.rm = TRUE))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:41:28"],"user":["default_user"],"umph":[1737402088.0606],"ok":[true],"chunk":[15],"ex":[6],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)\n\ndat_trend"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:41:52"],"user":["default_user"],"umph":[1737402112.2369],"ok":[true],"chunk":[16],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n  geom_line(aes(x = year, y = treatment))+\n  geom_line(aes(x = year, y = control))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:42:32"],"user":["default_user"],"umph":[1737402152.0485],"ok":[false],"chunk":[17],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= blue, linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = red, linetype = 1, linewidth = 0.8)\n"],"message":["evaluation error in \n  ggplot(dat_trend) + geom_line(aes(x = year, y = treatment), colour = blue, linetype = 1, linewidth = 0.8) + geom_line(aes(x = year, y = control), colour = red, linetype = 1, linewidth = 0.8)\n  Error:  Objekt 'blue' nicht gefunden\n"]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:42:41"],"user":["default_user"],"umph":[1737402161.1421],"ok":[false],"chunk":[17],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= blue, linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = red, linetype = 1, linewidth = 0.8)\n"],"message":["evaluation error in \n  ggplot(dat_trend) + geom_line(aes(x = year, y = treatment), colour = blue, linetype = 1, linewidth = 0.8) + geom_line(aes(x = year, y = control), colour = red, linetype = 1, linewidth = 0.8)\n  Error:  Objekt 'blue' nicht gefunden\n"]}
+,
+{"type":["hint"],"time":["2025-01-20 20:42:41"],"user":["default_user"],"umph":[1737402161.1972],"ok":[true],"chunk":[17],"ex":[6],"e.ind":[0]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:42:57"],"user":["default_user"],"umph":[1737402177.0381],"ok":[true],"chunk":[17],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:43:16"],"user":["default_user"],"umph":[1737402196.6676],"ok":[true],"chunk":[18],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-20 20:43:23"],"user":["default_user"],"umph":[1737402203.8762],"ok":[true],"chunk":[19],"ex":[6],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)+\n  xlab(\"Jahr\")+\n  ylab(\"logarithmierter Durchschnittslohn\")+\n  ggtitle(\"Entwicklung des logarithmierten Durchschnittslohns in Kontroll- und Treatmentgruppe\")"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-01-20 20:49:38"],"user":["default_user"],"umph":[1737402578.8083],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-20 20:51:00"],"user":["default_user"],"umph":[1737402660.0767],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-01-20 20:52:14"],"user":["default_user"],"umph":[1737402734.6243],"ok":[true]}
+,

@@ -147,7 +147,7 @@ answer.quiz("2.1")
 ```
 
 
-**Aufgabe**: Lesen Sie den Datensatz 'main_fame.dta' mit der Funktion 'read_dta' ein und speichern Sie den Datensatz unter 'dat_main'. Führen Sie den Code aus, indem Sie "check" drücken.
+**Aufgabe**: Lesen Sie den Datensatz *main_fame.dta* mit der Funktion *read_dta* ein und speichern Sie den Datensatz unter *dat*. Führen Sie den Code aus, indem Sie "check" drücken.
 ```{r "3_1"}
 #Datensatz einlesen
 
@@ -196,7 +196,7 @@ Gruppieren Sie hierfür den Datensatz *dat* nach dem Berichtsmonat *month*. Gebe
 ```{r "3_3"}
 dat %>% 
   group_by(___) %>%
-  summarize(___(month))
+  summarize("Einträge" = ___(month))
 
 ```
 
@@ -205,7 +205,7 @@ Quiz: Alle unsere Daten weisen auf ein Ende des Geschäftsjahres im März hin. K
 
 (1) Anders als in Deutschland, endet das Geschäftsjahr im UK bei allen Unternehmen im März.
 (2) Im Frühjahr gibt es im UK wenig Bewegung auf dem Arbeitsmarkt. Dadurch vermeiden wir unbekannte externe Effekte.
-(3) Die Mindestlohneinführung findet nicht mitten im Geschäftsjahr statt
+(3) Die Mindestlohneinführung findet bei diesen Unternehmen nicht mitten im Geschäftsjahr statt.
 
 ```{r eval=FALSE}
 # Run line to answer the quiz above
@@ -396,7 +396,12 @@ Gerade mit Hinblick auf Lohnentwicklungen stellte die Methode bereits in der Ver
 
 
 Bei der Difference in Difference (DiD) Methode werden die Daten anhand von zwei Kriterien unterteilt.
-Zum einen wird entschieden widmen wir uns der Frage, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
+Zum einen wird entschieden, ob es sich um eine Pre-Treatment oder eine Post-Treatment Gruppe handelt.
+
+```{r eval=FALSE}
+# Run for additional info in the Viewer pane
+info("Treatmentgruppen")
+```
 
 Zur Erinnerung: Der gesetzliche Mindestlohn wurde am 01. April 1999 eingeführt.
 
@@ -420,35 +425,35 @@ Die Kontrollgruppe umfasst Unternehmensdaten mit einem Durchschnittslohn zwische
 
 -----------
 **Parallele Trends**
-Als relevante Voraussetzung für das Anwenden der DiD-Methode wird die Parallel-Trends-Assumption (PTA) gehandelt. Diese besagt, dass ohne die Einführung eines Treatments, in unserem Fall der Mindestlohn, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel liefen. 
+Als relevante Voraussetzung für das Anwenden der DiD-Methode wird die Parallel-Trends-Assumption (PTA) gehandelt. Diese besagt, dass ohne die Einführung eines Treatments, die Linien der Kontroll- und Treatmentgruppe weitestgehend parallel weiterliefen. 
 Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. (Quelle???)
 
 
-Lesen Sie hierfür zunächst den Datensatz *main_fame* ein und speichern ihn unter *dat*.
+**Aufgabe**: Lesen Sie hierfür zunächst den Datensatz *main_fame* ein und speichern ihn unter *dat*.
 ```{r "6_1"}
 ___ = read_dta('main_fame.dta')
 
 ```
 
 Um die Daten jeden Jahres zusammenzufassen, kann die Funktion *group_by* genutzt werden. 
-Fügen Sie die passende Variable in *group_by* ein und geben Sie für jedes Jahr den durchschnittlichen logarithmierten Durchschnittslohn aus.
-
 
 ```{r eval=FALSE}
 # Run for additional info in the Viewer pane
 info("group_by")
 ```
 
+**Aufgabe**: Fügen Sie die passende Variable in *group_by* ein und geben Sie für jedes Jahr den durchschnittlichen logarithmierten Durchschnittslohn aus.
 ```{r "6_2"}
 dat_trend_treat = dat %>% 
   filter(ctreat1 == 1) %>%
   group_by(___)%>%
   summarise("treatment"=___(ln_avwage, na.rm = TRUE)) 
+
 ```
 
 
 Analog dazu erstellen wir auch noch einen Datensatz der Kontrollgruppe. 
-Führen Sie dazu den Code mittels *check* aus.
+**Aufgabe**: Führen Sie dazu den Code mittels *check* aus.
 ```{r "6_3"}
 dat_trend_control = dat %>%
   filter(ctreat1 == 0) %>%
@@ -458,7 +463,7 @@ dat_trend_control = dat %>%
 
 Um die beiden erstellten Datensätze miteinander zu verbinden, nutzen wir den *left_join*.
 
-Führen Sie den Code mittels *check* aus und sehen sich den Datensatz an.
+**Aufgabe**: Führen Sie den Code mittels *check* aus und sehen sich den Datensatz an.
 ```{r "6_4"}
 dat_trend = left_join(dat_trend_treat, dat_trend_control)
 
@@ -466,10 +471,10 @@ dat_trend
 ```
 
 
-Jetzt können wir die Daten visualisieren, indem wir uns in einem Liniendiagramm die Trends beider Gruppen ausgeben lassen.
+Jetzt können wir die Daten **visualisieren**, indem wir uns in einem Liniendiagramm die Trends beider Gruppen ausgeben lassen.
 
 Die Basis dafür bildet der oben erstellte Datensatz *dat_trend*.
-Fügen Sie die Trendlinien der beiden Gruppen hinzu, indem Sie den Code um die fehlende Variable auf der Y-Achse ergänzen.  
+**Aufgabe**: Fügen Sie die Trendlinien der beiden Gruppen hinzu, indem Sie den Code um die fehlende Variable auf der Y-Achse ergänzen.  
 ```{r "6_5"}
 ggplot(dat_trend)+
   geom_line(aes(x = year, y = treatment))+
@@ -480,8 +485,8 @@ ggplot(dat_trend)+
 Wir können schon etwas ablesen, die Graphik kann allerdings noch ansehnlicher gestaltet werden um Unterschiede deutlicher zu machen. 
 Dafür können wir die Linien kolorieren und sowohl die Lininenstärke, als auch den Linientyp verändern.
 
-Färben Sie die Linie der Treatmentgruppe in blau und die der Kontrollgruppe in rot.
-*Hinweis*: Der Farbenname muss in Anführungszeichen angegeben werden.
+**Aufgabe**: Färben Sie die Linie der Treatmentgruppe in blau und die der Kontrollgruppe in rot.
+*Hinweis*: Der englische Farbenname muss in Anführungszeichen angegeben werden.
 ```{r "6_6"}
 ggplot(dat_trend)+
    geom_line(aes(x = year, y = treatment), colour= ___, linetype = 1, linewidth = 0.8)+
@@ -490,19 +495,26 @@ ggplot(dat_trend)+
 ```
 
 Um klarzumachen, in welcher Periode wir uns befinden, kann der Zeitpunkt der Einführung des nationalen Mindestlohns markiert werden.
-Fügen Sie hierfür das letzte Jahr ein, in dem der Mindestlohn nicht galt.
+**Aufgabe**: Fügen Sie hierfür das letzte Jahr ein, in dem der Mindestlohn nicht galt.
 *Erinnerung:* Das Jahr gibt das Ende des letzten Geschäftsjahres an.
 ```{r "6_7"}
 ggplot(dat_trend)+
-   geom_line(aes(x = year, y = treatment), colour= ___, linetype = 1, linewidth = 0.8)+
-   geom_line(aes(x = year, y = control), colour = ___, linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = "red", linetype = 1, linewidth = 0.8)+
    geom_vline(xintercept = ___)
 
 ```
 
 Zum Abschluss geben wir dem Graphen einen Titel, sowie eine passende Achsenbeschriftung.
+**Aufgabe**: Führen Sie den Code mittels *check* aus.
 ```{r "6_8"}
-# Enter your code here.
+ggplot(dat_trend)+
+   geom_line(aes(x = year, y = treatment), colour= "blue", linetype = 1, linewidth = 0.8)+
+   geom_line(aes(x = year, y = control), colour = "red", linetype = 1, linewidth = 0.8)+
+   geom_vline(xintercept = 1999)+
+  xlab("Jahr")+
+  ylab("logarithmierter Durchschnittslohn")+
+  ggtitle("Entwicklung des logarithmierten Durchschnittslohns in Kontroll- und Treatmentgruppe")
 ```
 
 
@@ -527,19 +539,19 @@ Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, 
 
 -----------
 
-Nachdem wir um die Komplexität der allgemeinen Voraussetzungen für eine DiD-Schätzung wissen.
+Nachdem wir um die Komplexität der allgemeinen Voraussetzungen für eine DiD-Schätzung wissen, können wir uns weiter der Relevanz der Gruppenwahl widmen.
 In der erstellten Graphik haben wir die Treatment- und Kontrollgruppen zunächst als gegeben angenommen, ohne die Entstehung zu hinterfragen.
 
-Dieser Frage der Entstehung gehen wir nun nach.
+Der Frage der Entstehung gehen wir nun nach.
 
-Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3.60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns an die Wahl der Treatmentgruppe nähern.
+Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3.60 Pfund pro Stunde. Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns der Wahl der Treatmentgruppe nähern.
 
 
-Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei "avwage". Hierüber wird sich auch im Artikel genähert. Dabei werden alle Unternehmen mit einem avwage kleiner gleich 12,000£ in die Treatmentgruppe einsortiert. 
+Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei *avwage*, worüber sich auch im Artikel genähert wird. Dabei werden alle Unternehmen mit einem durchschnittlichen Lohn kleiner gleich 12,000£ in die Treatmentgruppe einsortiert. 
 Um zu verstehen, warum sich für diesen Wert als Obergrenze entschieden wird ist es hilfreich, den Wert in Zusammenhang mit dem Stundenlohn zu bringen.
 Dazu soll zunächst der durchschnittliche Lohn aller Unternehmen aus der Treatmentgruppe in der Pre-Policy Periode ermittelt werden.
 
-**Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. (Hinweis: Avwage wird im Datensatz in 1000 Pfund angegeben)
+**Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. (Hinweis: *Avwage* wird im Datensatz in 1000 Pfund angegeben)
 ```{r "6_9"}
 mean_treat = dat %>%
   filter(avwage <= ___) %>%
@@ -749,19 +761,14 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 
 ## Exercise 3.3 -- DiD-Schätzung mittels Regression
 
-**Theorie**
-- Cluster-Robuste Standardfehler
-  - Geclustert nach Regno (unternehmen)
-- Genestete Daten
-
 **DAG**
 
 Zu Beginn widmen wir uns der Veränderung im Durchschnittslohn durch die Einführung des Mindestlohns.
 Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
-Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
 (https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
 (https://r-causal.github.io/ggdag/)
 
+**Aufgabe**: Führen Sie hierfür den Code mittels *check* aus und sehen Sie sich den Graphen an.
 ```{r "8_1"}
 dag <- dagify(
   ln_avwage ~ ctreat1 + treat1_NMW + NMW, 
@@ -773,7 +780,7 @@ ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label
   theme_dag_blank()
 ```
 
-Hier sieht man, wie die Variablen mit denen wir bisher gearbeitet haben zusammenhängen.
+Hier sieht man wie die Variablen, mit denen wir bisher gearbeitet haben, zusammenhängen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r "8_2"}
@@ -789,7 +796,7 @@ Dazu sollen die einzelnen Variablen, die "ln_avwage" beeinflussen, beobachtet we
 info("stargazer")
 ```
 
-Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
+**Aufgabe**: Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
 ```{r "8_3"}
 regi = lm(ln_avwage ~ treat1_NMW, data = dat)
 
@@ -812,7 +819,7 @@ answer.quiz("3.3.1")
 Wir müssen in unserer Regression also sowohl die Interaktionsvariable als auch die die abhängige Variable beeinflussenden Dummys berücksichtigen.
 
 
-$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$
+**$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$**
 
 Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. Stellen Sie das Ergebnis wieder in "stargazer" dar.
 

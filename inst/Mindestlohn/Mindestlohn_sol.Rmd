@@ -870,19 +870,14 @@ Um diese Veränderung genauer bewerten zu können und tiefergehende Analysen zu 
 
 ## Exercise 3.3 -- DiD-Schätzung mittels Regression
 
-**Theorie**
-- Cluster-Robuste Standardfehler
-  - Geclustert nach Regno (unternehmen)
-- Genestete Daten
-
 **DAG**
 
 Zu Beginn widmen wir uns der Veränderung im Durchschnittslohn durch die Einführung des Mindestlohns.
 Um uns einen ersten Überblick über die Zusammenhänge der Variablen in unserer DiD-Schätzung zu verschaffen, sind die Directed Acyclic Graphs (DAGs) von Vorteil.
-Führen Sie hierfür den Code mittels check aus und sehen Sie sich den Graphen an.
 (https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)
 (https://r-causal.github.io/ggdag/)
 
+**Aufgabe**: Führen Sie hierfür den Code mittels *check* aus und sehen Sie sich den Graphen an.
 ```{r}
 #< task
 dag <- dagify(
@@ -896,7 +891,7 @@ ggdag(dag, node_size = 18, text = FALSE, edge_type = "link", use_labels = "label
 #>
 ```
 
-Hier sieht man, wie die Variablen mit denen wir bisher gearbeitet haben zusammenhängen.
+Hier sieht man wie die Variablen, mit denen wir bisher gearbeitet haben, zusammenhängen.
 
 **Aufgabe**: Lesen Sie einen Auszug des bekannten Datensatzes dat_main ein, indem Sie den Code mit "check" ausführen.
 ```{r}
@@ -914,7 +909,7 @@ Die Stargazer Funktion ermöglicht uns einen schön formatierten Output mit der 
 (https://www.rdocumentation.org/packages/stargazer/versions/5.2.3/topics/stargazer)
 #>
 
-Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
+**Aufgabe**: Führen Sie die Regression aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
 ```{r}
 #< fill_in
 regi = lm(ln_avwage ~ treat1_NMW, data = dat)
@@ -942,8 +937,8 @@ Wir müssen in unserer Regression also sowohl die Interaktionsvariable als auch 
 
 $ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$
 
-Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. Stellen Sie das Ergebnis wieder in "stargazer" dar.
-
+*Aufgabe*: Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. 
+Stellen Sie das Ergebnis wieder in *stargazer* dar.
 ```{r}
 #< fill_in
 reg1 = lm(ln_avwage ~ ___ + ___ + ___, data = dat)
@@ -958,7 +953,7 @@ Der Wert der Interaktionsvariablen hat sich im Vergleich zur unvollständigen Re
 
 Um diese starke Veränderung besser zu verstehen, können wir die gemeinsame Betrachtung der erklärenden Variablen mit der einzelnen Betrachtung vergleichen.
 
-Führen Sie dazu den Code aus und sehen sich die Ausgabe an.
+**Aufgabe**: Führen Sie dazu den Code aus und sehen sich die Ausgabe an.
 ```{r}
 #< task
 regii = lm(ln_avwage ~ ctreat1, data = dat)
@@ -987,8 +982,8 @@ failure: Das ist nicht richtig. Achten Sie auf die p-Werte und die dazugehörige
 Die Werte der Variablen sind im obigen Fall also hoch signifikant gekennzeichnet. 
 Allerdings können die p-Werte fehlerhaft sein, da es sich bei den Daten teilweise um genestete Daten handelt. 
 Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
-In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
-Um Fehler bezüglich genesteter Daten zu verhindern, führen wir Clusterrobuste Standardfehler ein.
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (*ln_avwage*) über mehrere Jahre. Diese haben ein Unternehmen (*regno*) als übergeordnete Einheit.
+Um Fehler bezüglich genesteter Daten zu verhindern, führen wir **Clusterrobuste Standardfehler** ein.
 
 #< quiz "3.3.3"
 question: Nach welcher Variablen soll geclustert werden?
@@ -1000,9 +995,9 @@ success: Korrekt, hierbei handelt es sich um die übergeordnete Einheit, nach de
 failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeordneten Einheit geclustert werden.
 #>
 
-Nun fügen wir die **Clusterrobusten Standardfehler** ein und schauen, was sich dadurch verändert.
+Nun fügen wir die Clusterrobusten Standardfehler in unsere Regression ein und schauen, was sich dadurch verändert.
 
-Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (reg1) mit der Regression mit Clustering. 
+Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (*reg1*) mit der Regression mit Clustering. 
 
 #< info "felm"
 Im Vergleich zu einem einfachen Regressionsmodell mit *lm*, kann durch die *felm* Funktion eine spezifiziertere Regression durchgeführt werden.
@@ -1011,7 +1006,7 @@ felm(y ~ abhängige Variablen | ausgeschlossene Variablen | Spezifikation einer 
 (https://www.rdocumentation.org/packages/lfe/versions/2.9-0/topics/felm)
 #>
 
-Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
+**Aufgabe**: Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
 ```{r}
 #< fill_in
 reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | ___ | ___ | ___, data=dat)
@@ -1025,7 +1020,7 @@ stargazer(reg1, reg2, type ="text")
 An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für *ctreat1* und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
 
-Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit **clusterrobusten Standardfehlern** auf sich hat:
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
 (Angrist, 231ff) / 
 (Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
 Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
@@ -1036,8 +1031,6 @@ Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfe
 **Ergebnisanalyse**
 
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit *Constant* beschrieben wird.
-- Wie wirken die unterschiedlichen Variablen?
-- Werte zuordnen
 
 #< quiz "3.3.4"
 question: In welcher Einheit wird der DiD-Wert beschrieben?
