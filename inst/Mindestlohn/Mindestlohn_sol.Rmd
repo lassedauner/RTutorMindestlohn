@@ -1050,8 +1050,13 @@ failure: Das ist leider falsch. Es werden zwei log-Variablen miteinander verglic
 Wir haben in Erfahrung gebracht, dass es einen Effekt durch die Einführung des gesetzlichen Mindestlohns gibt. 
 Um herauszufinden, wie die Unternehmen auf diese Veränderung reagieren, sehen wir uns spiegelbildlich zur obigen Schätzung die Veränderung auf die Gewinnmarge *net_pcm* an.
 
-
+**Aufgabe**: Führen Sie den untenstehenden Code aus und lassen sich das Ergebnis mittels *stargazer* ausgeben
 ```{r}
+#< fill_in
+reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
+
+stargazer(___, type = "text")
+#>
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 
 stargazer(reg2, type = "text")
@@ -1105,14 +1110,21 @@ success: Richtige Antwort. R wählt automatisch den kleinsten Wert bei der Fakto
 failure: Das ist so nicht korrekt, überlegen Sie nochmal auf welche Jahre wir bei unserer DiD-Schätzung einen besonderen Fokus gelegt haben.
 #>
 
-Eine besser geeignete Referenzkategorie können wir selbst festlegen:
+Eine besser geeignete Referenzkategorie können wir selbst festlegen.
+
+**Aufgabe**: Wählen Sie das Jahr 2000 als Referenzwert für unsere Faktorisierung.
 ```{r}
-dat$factor_year = relevel(dat$factor_year, ref = "2000")
+#< fill_in
+dat$factor_year = relevel(dat$factor_year, ref = "___")
+#>
+#>dat$factor_year = relevel(dat$factor_year, ref = "2000")
 ```
 
 
 
 Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit *year* und einmal mit *factor_year* ergänzen.
+
+**Aufgabe**: Geben Sie den Vergleich der unterschiedlichen Regressionen aus, indem Sie den Code mittels *check* ausführen.
 ```{r}
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 reg2.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)
