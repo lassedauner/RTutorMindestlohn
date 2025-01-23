@@ -1134,25 +1134,25 @@ reg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno
 
 stargazer(reg2, reg2.1, reg2.2, reg2.3, type= "text")
 ```
+
 Wir sehen, dass sich die Ergebnisse durch eine Faktorisierung verändern.
 Ebenfalls durch die Veränderung der Referenzkategorie entstehen Unterschiede, wenn auch im überschaubaren Rahmen. 
 
 Dabei gilt dennoch zu erwähnen, dass die Autoren des Artikels bei der Wahl der Referenzkategorie wohl einer anderen Idee der Wahl gefolgt sind und das Jahr 1997 als Referenz gewählt haben. 
 
-
 Da durch die Darstellung der Faktorvariablen eine längere Ausgabe entsteht, kann es beim Hinzufügen mehrerer Faktorvariablen aus Gründen der Übersichtlichkeit und Vergleichbarkeit sinnvoll sein, unsere Ausgabe auf das Relevanteste reduzieren.
 
 Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu *stargazer* kennen.
 
-Laden Sie hierfür zunächst das Paket *broom*
+**Aufgabe**: Laden Sie hierfür zunächst das Paket *broom*
 ```{r}
 #< fill_in
 library(___)
 #>
 library(broom)
 ```
-Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren.
-Geben Sie anschließend die Tabelle aus.
+
+**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie anschließend die Tabelle aus.
 ```{r}
 #< fill_in
 table_reg2.3 = tidy(reg2.3)
@@ -1165,9 +1165,13 @@ table_reg2.3 = tidy(reg2.3)
 #Tabelle ausgeben
 table_reg2.3
 ```
+
 Nun haben wir die relevanten Werte der Regression in der Tabelle gespeichert und können darauf wie auf jeden anderen Data Frame zurückgreifen.
 
-(https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+#< award "tidy broomer"
+Glückwunsch, Sie haben die Regressionsausgaben erfolgreich in einer Tabelle gespeichert.
+Um mehr über das broom Paket zu erfahren, geht es [hier](https://cran.r-project.org/web/packages/broom/vignettes/broom.html) entlang.
+#>
 
 
 
