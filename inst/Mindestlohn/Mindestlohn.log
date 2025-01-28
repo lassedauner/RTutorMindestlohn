@@ -596,3 +596,35 @@
 ,
 {"type":["init_ps"],"time":["2025-01-20 20:52:14"],"user":["default_user"],"umph":[1737402734.6243],"ok":[true]}
 ,
+{"type":["init_ps"],"time":["2025-01-28 21:50:29"],"user":["default_user"],"umph":[1738097429.6328],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:00"],"user":["default_user"],"umph":[1738097460.2286],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 18, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:01"],"user":["default_user"],"umph":[1738097461.8061],"ok":[true],"chunk":[32],"ex":[8],"e.ind":[0],"code":["dat_raw = read_dta('main_fame.dta')\ndat = filter(dat_raw, pp == 1) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:03"],"user":["default_user"],"umph":[1738097463.8258],"ok":[true],"chunk":[33],"ex":[8],"e.ind":[0],"code":["regi = lm(ln_avwage ~ treat1_NMW, data = dat)\n\nstargazer(regi, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:06"],"user":["default_user"],"umph":[1738097466.564],"ok":[true],"chunk":[34],"ex":[8],"e.ind":[0],"code":["\nreg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)\nstargazer(reg1, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:10"],"user":["default_user"],"umph":[1738097470.5721],"ok":[true],"chunk":[35],"ex":[8],"e.ind":[0],"code":["regii = lm(ln_avwage ~ ctreat1, data = dat)\n\nregiii = lm(ln_avwage ~ NMW, data = dat)\n\nstargazer(regi, regii, regiii, reg1, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:14"],"user":["default_user"],"umph":[1738097474.5056],"ok":[true],"chunk":[36],"ex":[8],"e.ind":[0],"code":["reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)\nstargazer(reg1, reg2, type =\"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:17"],"user":["default_user"],"umph":[1738097477.554],"ok":[true],"chunk":[37],"ex":[8],"e.ind":[0],"code":["reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\n\nstargazer(reg2, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:18"],"user":["default_user"],"umph":[1738097478.3811],"ok":[true],"chunk":[38],"ex":[8],"e.ind":[0],"code":["dat = dat %>%\n  mutate(\"factor_year\" = factor(year))\n\nhead(dat$year)\nhead(dat$factor_year)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:18"],"user":["default_user"],"umph":[1738097478.5303],"ok":[true],"chunk":[39],"ex":[8],"e.ind":[0],"code":["dat$factor_year = relevel(dat$factor_year, ref = \"2000\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:24"],"user":["default_user"],"umph":[1738097484.7126],"ok":[true],"chunk":[40],"ex":[8],"e.ind":[0],"code":["reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\nreg2.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)\nreg2.2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor_year| 0 | 0 | regno, data = dat)\nreg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno, data = dat)\n\n\nstargazer(reg2, reg2.1, reg2.2, reg2.3, type= \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:34"],"user":["default_user"],"umph":[1738097494.1685],"ok":[true],"chunk":[41],"ex":[8],"e.ind":[0],"code":["library(broom)\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:52"],"user":["default_user"],"umph":[1738097512.2414],"ok":[true],"chunk":[42],"ex":[8],"e.ind":[0],"code":["table_reg2.3 = tidy(reg2.3)\n\n#Tabelle ausgeben\ntable_reg2.3"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:51:53"],"user":["default_user"],"umph":[1738097513.0416],"ok":[true],"chunk":[43],"ex":[8],"e.ind":[0],"code":["reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)\n\nreg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:52:08"],"user":["default_user"],"umph":[1738097528.8908],"ok":[true],"chunk":[44],"ex":[8],"e.ind":[0],"code":["tidy_reg1 = tidy(reg1)\ntidy_reg2 = tidy(reg2)\ntidy_reg3 = tidy(reg3)\ntidy_reg4 = tidy(reg4)\nstargazer(reg4, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-01-28 21:52:31"],"user":["default_user"],"umph":[1738097551.1974],"ok":[true],"chunk":[45],"ex":[8],"e.ind":[0],"code":["reg_table_net_pcm = data.frame(\"Variable\" = c(\"Constant\", \"ctreat1\", \"treat1_NMW\", \"NMW\"),\"reg2\" = round(tidy_reg2$estimate[1:4],3),\"reg2_p\"= round(tidy_reg2$p.value[1:4],3), \"reg4\" = round(tidy_reg4$estimate[1:4],3), \"reg4_p\"= round(tidy_reg4$p.value[1:4],3))\n\nreg_table_net_pcm\n                              "],"message":[""]}
+,

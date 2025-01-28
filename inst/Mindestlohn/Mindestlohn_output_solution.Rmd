@@ -916,10 +916,10 @@ Quiz: Wieso ist der Einfluss der Treatmentvariablen im Gegensatz zur händischen
 Wir müssen in unserer Regression also sowohl die Interaktionsvariable als auch die die abhängige Variable beeinflussenden Dummys berücksichtigen.
 
 
-**$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$**
+$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \epsilon$
 
-Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. Stellen Sie das Ergebnis wieder in "stargazer" dar.
-
+*Aufgabe*: Berechnen Sie auf Basis dieser Formel die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. 
+Stellen Sie das Ergebnis wieder in *stargazer* dar.
 ```{r "8_34"}
 # reg1 = lm(ln_avwage ~ ___ + ___ + ___, data = dat)
 # stargazer(reg1, type = "text")
@@ -933,7 +933,7 @@ Der Wert der Interaktionsvariablen hat sich im Vergleich zur unvollständigen Re
 
 Um diese starke Veränderung besser zu verstehen, können wir die gemeinsame Betrachtung der erklärenden Variablen mit der einzelnen Betrachtung vergleichen.
 
-Führen Sie dazu den Code aus und sehen sich die Ausgabe an.
+**Aufgabe**: Führen Sie dazu den Code aus und sehen sich die Ausgabe an.
 ```{r "8_35"}
 regii = lm(ln_avwage ~ ctreat1, data = dat)
 
@@ -958,8 +958,8 @@ Quiz: Wie beurteilen Sie die Signifikanz unseres DiD-Schätzers in der dargestel
 Die Werte der Variablen sind im obigen Fall also hoch signifikant gekennzeichnet. 
 Allerdings können die p-Werte fehlerhaft sein, da es sich bei den Daten teilweise um genestete Daten handelt. 
 Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen.
-In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (ln_avwage) über mehrere Jahre. Diese haben ein Unternehmen (regno) als übergeordnete Einheit.
-Um Fehler bezüglich genesteter Daten zu verhindern, führen wir Clusterrobuste Standardfehler ein.
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (*ln_avwage*) über mehrere Jahre. Diese haben ein Unternehmen (*regno*) als übergeordnete Einheit.
+Um Fehler bezüglich genesteter Daten zu verhindern, führen wir **Clusterrobuste Standardfehler** ein.
 
 
 Quiz: Nach welcher Variablen soll geclustert werden?
@@ -969,9 +969,9 @@ Quiz: Nach welcher Variablen soll geclustert werden?
 - regno [x]
 
 
-Nun fügen wir die **Clusterrobusten Standardfehler** ein und schauen, was sich dadurch verändert.
+Nun fügen wir die Clusterrobusten Standardfehler in unsere Regression ein und schauen, was sich dadurch verändert.
 
-Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (reg1) mit der Regression mit Clustering. 
+Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (*reg1*) mit der Regression mit Clustering. 
 
 
 ***
@@ -985,7 +985,7 @@ felm(y ~ abhängige Variablen | ausgeschlossene Variablen | Spezifikation einer 
 ***
 
 
-Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
+**Aufgabe**: Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
 ```{r "8_36"}
 # reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | ___ | ___ | ___, data=dat)
 # stargazer(reg1, reg2, type ="text")
@@ -998,7 +998,7 @@ stargazer(reg1, reg2, type ="text")
 An den Werten der Variablen ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert.
 Während man für *ctreat1* und die Interaktionsvariable eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung bei der Variablen NMW zu verzeichnen.
 
-Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit **clusterrobusten Standardfehlern** auf sich hat:
+Um diese Veränderungen zu verstehen sehen wir uns an, was es generell mit clusterrobusten Standardfehlern auf sich hat:
 (Angrist, 231ff) / 
 (Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
 Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfehler steigen (231)
@@ -1009,8 +1009,6 @@ Variiert der Regressor nur innerhalb einer Clustergruppe, so kann der Standardfe
 **Ergebnisanalyse**
 
 Die Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit *Constant* beschrieben wird.
-- Wie wirken die unterschiedlichen Variablen?
-- Werte zuordnen
 
 
 Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
@@ -1029,8 +1027,12 @@ Quiz: In welcher Einheit wird der DiD-Wert beschrieben?
 Wir haben in Erfahrung gebracht, dass es einen Effekt durch die Einführung des gesetzlichen Mindestlohns gibt. 
 Um herauszufinden, wie die Unternehmen auf diese Veränderung reagieren, sehen wir uns spiegelbildlich zur obigen Schätzung die Veränderung auf die Gewinnmarge *net_pcm* an.
 
-
+**Aufgabe**: Führen Sie den untenstehenden Code aus und lassen sich das Ergebnis mittels *stargazer* ausgeben
 ```{r "8_37"}
+# reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
+# 
+# stargazer(___, type = "text")
+
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 
 stargazer(reg2, type = "text")
@@ -1088,14 +1090,20 @@ Quiz: Wie bewerten Sie die gewählte Referenzkategorie? (Denken Sie dabei an die
 - Alle Jahre sind gleich relevant und die Grundüberlegungen treffen auf jedes Jahr zu. Daher kann das Jahr beliebig gewählt werden. [ ]
 
 
-Eine besser geeignete Referenzkategorie können wir selbst festlegen:
+Eine besser geeignete Referenzkategorie können wir selbst festlegen.
+
+**Aufgabe**: Wählen Sie das Jahr 2000 als Referenzwert für unsere Faktorisierung.
 ```{r "8_39"}
+# dat$factor_year = relevel(dat$factor_year, ref = "___")
+
 dat$factor_year = relevel(dat$factor_year, ref = "2000")
 ```
 
 
 
 Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit *year* und einmal mit *factor_year* ergänzen.
+
+**Aufgabe**: Geben Sie den Vergleich der unterschiedlichen Regressionen aus, indem Sie den Code mittels *check* ausführen.
 ```{r "8_40"}
 reg2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
 reg2.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)
@@ -1105,24 +1113,24 @@ reg2.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno
 
 stargazer(reg2, reg2.1, reg2.2, reg2.3, type= "text")
 ```
+
 Wir sehen, dass sich die Ergebnisse durch eine Faktorisierung verändern.
 Ebenfalls durch die Veränderung der Referenzkategorie entstehen Unterschiede, wenn auch im überschaubaren Rahmen. 
 
 Dabei gilt dennoch zu erwähnen, dass die Autoren des Artikels bei der Wahl der Referenzkategorie wohl einer anderen Idee der Wahl gefolgt sind und das Jahr 1997 als Referenz gewählt haben. 
 
-
 Da durch die Darstellung der Faktorvariablen eine längere Ausgabe entsteht, kann es beim Hinzufügen mehrerer Faktorvariablen aus Gründen der Übersichtlichkeit und Vergleichbarkeit sinnvoll sein, unsere Ausgabe auf das Relevanteste reduzieren.
 
 Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu *stargazer* kennen.
 
-Laden Sie hierfür zunächst das Paket *broom*
+**Aufgabe**: Laden Sie hierfür zunächst das Paket *broom*
 ```{r "8_41"}
 # library(___)
 
 library(broom)
 ```
-Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren.
-Geben Sie anschließend die Tabelle aus.
+
+**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie anschließend die Tabelle aus.
 ```{r "8_42"}
 # table_reg2.3 = tidy(reg2.3)
 # 
@@ -1134,34 +1142,64 @@ table_reg2.3 = tidy(reg2.3)
 #Tabelle ausgeben
 table_reg2.3
 ```
+
 Nun haben wir die relevanten Werte der Regression in der Tabelle gespeichert und können darauf wie auf jeden anderen Data Frame zurückgreifen.
 
-(https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+
+***
+
+### Award: tidy broomer
+Glückwunsch, Sie haben die Regressionsausgaben erfolgreich in einer Tabelle gespeichert.
+Um mehr über das broom Paket zu erfahren, geht es [hier](https://cran.r-project.org/web/packages/broom/vignettes/broom.html) entlang.
+
+***
+
 
 
 
 -----------
 
-**Table 2, Panel A**
+In der vorherigen Regression haben wir festgestellt, dass es sowohl eine Veränderung in den Löhnen, als auch in den Unternehmensgewinnen gibt. 
+
+Jetzt geht es darum zu überprüfen, ob die Veränderung der Unternehmensgewinne wirklich auf die Einführung des Mindestlohns zurückgeht und ob weitere Faktoren die Gewinnmarge eines Unternehmens beeinflussen können.
+Dabei prüfen wir auf unternehmens- und branchen- und ortsspezifische Größen.
+
+**Aufgabe:** Führen Sie die Regressionen mittels *check* aus.
 ```{r "8_43"}
 reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
-stargazer(reg3, type = "text")
-```
-
-```{r "8_44"}
 reg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+```
 
+
+```{r "8_44"}
+tidy_reg1 = tidy(reg1)
+tidy_reg2 = tidy(reg2)
+tidy_reg3 = tidy(reg3)
+tidy_reg4 = tidy(reg4)
 stargazer(reg4, type = "text")
 ```
+
+Das waren sehr viele Regressionen, da kann es manchmal kompliziert sein den Überblick zu behalten.
+Um die wichtigsten Ergebnisse knapp zusammenfassen zu können, gibt es die Möglichkeit einzelne Werte aus den jeweiligen Regressionen auszuwählen und sie dann in einer Tabelle gegenüberzustellen.
+Dabei sehen wir uns die Veränderung des Kernergebnisses an.
+
+**Aufgabe**: Erzeugen Sie die gegenüberstellende Tabelle mittels *check* und lassen sie sie ausgeben.
+```{r "8_45"}
+reg_table_net_pcm = data.frame("Variable" = c("Constant", "ctreat1", "treat1_NMW", "NMW"),"reg2" = round(tidy_reg2$estimate[1:4],3),"reg2_p"= round(tidy_reg2$p.value[1:4],3), "reg4" = round(tidy_reg4$estimate[1:4],3), "reg4_p"= round(tidy_reg4$p.value[1:4],3))
+
+reg_table_net_pcm
+                              
+```
+
 
 **Table 2, Panel B**
 
 **Kontinuierliche Messung**
 
-Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
 
 Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
 
@@ -1180,7 +1218,7 @@ In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchsch
 | Werte               | 0 oder 1                | logarithmierter Durchschnittslohn im Jahr 1999 |
 
 
-```{r "8_45"}
+```{r "8_46"}
 reg5 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
@@ -1210,7 +1248,7 @@ Hierfür wird die Mindestlohneinführung imaginär um drei Jahre vorverlegt, auf
 Dabei können wir auf Vorarbeit im Datensatz zurückgreifen. Ähnlich wie bei der vorangegangenen Schätzung zur realen Mindestlohneinführung wird der Datensatz anhand eines Dummys gefiltert.
 
 Lesen Sie den Datensatz ein und teilen ihn nach den Dummywerten von ff auf.
-```{r "9_46"}
+```{r "9_47"}
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
@@ -1218,7 +1256,7 @@ dat_ff0 = filter(dat, ff == 0)
 Um zu verstehen, warum manche Einträge von Firmen ausgelassen werden, hilft ein Vergleich der oben erstellten Variablen.
 
 Gruppieren Sie dazu die Datensätze nach den Jahren und geben sie die Anzahl der Einträge pro Jahr aus. Hinweis: Die Funktion length(*Variable*) gibt die Anzahl der Einträge wieder.
-```{r "9_47"}
+```{r "9_48"}
 dat_ff1 %>%
   group_by(year)%>%
   summarise(length(year))
@@ -1231,7 +1269,7 @@ Es fällt auf, dass sich im untersuchten Datensatz nur Einträge befinden, die s
 
 Allerdings werden auch Daten aus den Jahren 1994 - 1999 herausgefiltert. Sehen wir uns an, wie das mit dem von den Autoren gefundene Unterbeispiel (pp) zusammenhängt.
 
-```{r "9_48"}
+```{r "9_49"}
 dat_ff0 %>%
   group_by(pp)%>%
   summarise(length(pp))
@@ -1243,7 +1281,7 @@ dat_ff1 %>%
 Der Anteil an pp==0 ist im unberücksichtigten Datensatz deutlich höher als im am Ende betrachteten Datensatz dat_ff1. Allerdings werden nun auch Unternehmen berücksichtigt, die bei den Analysen zur reellen Mindestlohneinführung nicht berücksichtigt wurden.
 Der Grund dafür könnte sein, dass sich die Zahlen in den Unternehmen verändert haben.???
 
-```{r "9_49"}
+```{r "9_50"}
 dat_ff0 = filter(dat_ff0, year==1996)
 dat_ff1 = filter(dat_ff1, year==1996)
 boxplot(dat_ff0$ln_avwage,dat_ff1$ln_avwage)
@@ -1256,11 +1294,11 @@ Wie in den vorherigen Analysen sind nicht alle Ursachen für die Aussortierung e
 Weiter werden wir die Analysen mit dem von den Autoren gegebenen Unterbeispiel durchführen.
 
 Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unterschied, dass der Datensatz nun nach ff gefiltert wird.
-```{r "9_50"}
+```{r "9_51"}
 dat = filter(dat, ff == 1)
 ```
 **Diskret**
-```{r "9_51"}
+```{r "9_52"}
 reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
@@ -1272,7 +1310,7 @@ stargazer(reg7, reg8, type = "text")
 
 
 **Kontinuierlich**
-```{r "9_52"}
+```{r "9_53"}
 reg9 = felm(ln_avwage ~ c_avwage96 + avwage96_placebo + placebo + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
@@ -1287,13 +1325,13 @@ stargazer(reg9, reg10, type = "text")
 - Treatmenteffekt net_pcm
 
 Intervalle erstellen
-```{r "9_53"}
+```{r "9_54"}
 pcw96 = dat_main %>%
   filter(year == 1996)%>%
   filter(avwage >= 3)
 percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
 ```
-```{r "9_54"}
+```{r "9_55"}
 dat_fig3 = dat %>%
   mutate("threshold" = round(exp(c_avwage99)*1000,-2)) %>%
   filter(threshold <= 16000) %>%
@@ -1306,7 +1344,7 @@ dat_fig3 = dat %>%
 Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
 Ergebnisse je 100 in Liste speichern
 
-```{r "9_55"}
+```{r "9_56"}
 #Neuen Datensatz erstellen
 dati = read_dta('main_fame.dta')
 dati = filter(dati, pp==1)
@@ -1316,7 +1354,7 @@ dati = filter(dati, pp==1)
 
 
 
-```{r "9_56"}
+```{r "9_57"}
 library(ggplot2)
 ggplot(dat_fig3, aes(x = threshold))+
   geom_line(aes(y = avwage99_NMW))
@@ -1336,7 +1374,9 @@ ggplot(dat_fig3, aes(x = threshold))+
 - Strukturen in Unternehmen
 - Ist der Mindestlohn zu befürworten? (sozial, ökonomisch)
 
-
+Probleme:
+  Undurchsichtigkeit bei den Beispielsfirmen (951 von 4112)
+  Wahl der Treatmentgruppe ist eine Näherung
 
 ## Exercise Anregungen
 

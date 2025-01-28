@@ -1117,7 +1117,7 @@ Eine besser geeignete Referenzkategorie können wir selbst festlegen.
 #< fill_in
 dat$factor_year = relevel(dat$factor_year, ref = "___")
 #>
-#>dat$factor_year = relevel(dat$factor_year, ref = "2000")
+dat$factor_year = relevel(dat$factor_year, ref = "2000")
 ```
 
 
@@ -1173,30 +1173,53 @@ Glückwunsch, Sie haben die Regressionsausgaben erfolgreich in einer Tabelle ges
 Um mehr über das broom Paket zu erfahren, geht es [hier](https://cran.r-project.org/web/packages/broom/vignettes/broom.html) entlang.
 #>
 
-
+**Hinweis:** Wir nutzen das Tool, um einen besseren Überblick über die Veränderung durch Variablen zu erhalten. Es dient als Hilfsmittel und nicht als genereller Mechanismus, um Regressionsergebnisse zu analysieren. 
 
 -----------
 
-**Table 2, Panel A**
+In der vorherigen Regression haben wir festgestellt, dass es sowohl eine Veränderung in den Löhnen, als auch in den Unternehmensgewinnen gibt. 
+
+Jetzt geht es darum zu überprüfen, ob die Veränderung der Unternehmensgewinne wirklich auf die Einführung des Mindestlohns zurückgeht und ob weitere Faktoren die Gewinnmarge eines Unternehmens beeinflussen können.
+Dabei prüfen wir auf unternehmens- und branchen- und ortsspezifische Größen.
+
+**Aufgabe:** Führen Sie die Regressionen mittels *check* aus.
 ```{r}
+#< task
 reg3 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
-stargazer(reg3, type = "text")
-```
-
-```{r}
 reg4 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+#>
+```
 
+
+```{r}
+tidy_reg1 = tidy(reg1)
+tidy_reg2 = tidy(reg2)
+tidy_reg3 = tidy(reg3)
+tidy_reg4 = tidy(reg4)
 stargazer(reg4, type = "text")
 ```
+
+Das waren sehr viele Regressionen, da kann es manchmal kompliziert sein den Überblick zu behalten.
+Um die wichtigsten Ergebnisse knapp zusammenfassen zu können, gibt es die Möglichkeit einzelne Werte aus den jeweiligen Regressionen auszuwählen und sie dann in einer Tabelle gegenüberzustellen.
+Dabei sehen wir uns die Veränderung des Kernergebnisses an.
+
+**Aufgabe**: Erzeugen Sie die gegenüberstellende Tabelle mittels *check* und lassen sie sie ausgeben.
+```{r}
+reg_table_net_pcm = data.frame("Variable" = c("Constant", "ctreat1", "treat1_NMW", "NMW"),"reg2" = round(tidy_reg2$estimate[1:4],3),"reg2_p"= round(tidy_reg2$p.value[1:4],3), "reg4" = round(tidy_reg4$estimate[1:4],3), "reg4_p"= round(tidy_reg4$p.value[1:4],3))
+
+reg_table_net_pcm
+                              
+```
+
 
 **Table 2, Panel B**
 
 **Kontinuierliche Messung**
 
-Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treeatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
 
 Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
 
@@ -1207,7 +1230,7 @@ In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchsch
 **Diskrete Daten vs. Kontinuierliche Daten**
 
 | Merkmal             |     Diskrete Daten      |     Kontinuierliche Daten     |
-|---------------------|-----------------------  |-------------------------------|
+|---------------------|--------------------------|-------------------------------|
 | Generell            |                         |                               |
 | Vorteil             |                         |                               |   
 | DiD-Schätzung       | Verwendung von Dummys   | Verwendung konkreter Werte    |
@@ -1215,12 +1238,16 @@ In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchsch
 | Werte               | 0 oder 1                | logarithmierter Durchschnittslohn im Jahr 1999 |
 
 
+**Aufgabe:**Ersetzen wir nun aus der vorherigen Regression die Dummyvariable ctreat1 durch die Variable mit kontinuierlichen Werten, *c_avwage99*. Um mit den relevantesten Daten arbeiten zu können, erstellen wir dazu wie gewohnt tidy Datensätze.
 ```{r}
 reg5 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
 
 reg6 = felm(net_pcm ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
                 factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+
+tidy_reg5 = tidy(reg5)
+tidy_reg6 = tidy(reg6)
 
 stargazer(reg5, reg6, type = "text")
 ```
@@ -1240,20 +1267,27 @@ WIESO BRAUCHT MAN DAS?
 - Table 3
 - Figure 3
 
-Um zu überprüfen, ob die Mindestlohneinführung der Grund für die Ergebnisse der DiD-Schätzung ist, kann ein **Placebo Experiment** eingeführt werden.(142ff.)
+Um weiter zu überprüfen, ob die Mindestlohneinführung der Grund für die Ergebnisse der DiD-Schätzung ist, kann ein **Placebo Experiment** eingeführt werden.(142ff.)
 Hierfür wird die Mindestlohneinführung imaginär um drei Jahre vorverlegt, auf den 01. April 1996.
-Dabei können wir auf Vorarbeit im Datensatz zurückgreifen. Ähnlich wie bei der vorangegangenen Schätzung zur realen Mindestlohneinführung wird der Datensatz anhand eines Dummys gefiltert.
+Dabei können wir auf die Vorarbeit im Datensatz zurückgreifen. Ähnlich wie bei der vorangegangenen Schätzung zur realen Mindestlohneinführung wird der Datensatz anhand eines Dummys gefiltert.
 
-Lesen Sie den Datensatz ein und teilen ihn nach den Dummywerten von ff auf.
+**Aufgabe:** Lesen Sie den Datensatz ein und teilen ihn nach den Dummywerten von ff auf.
 ```{r}
+#< fill_in
+dat = read_dta('main_fame.dta')
+dat_ff1 = filter(dat, ff == ___)
+dat_ff0 = filter(dat, ff == ___)
+#>
 dat = read_dta('main_fame.dta')
 dat_ff1 = filter(dat, ff == 1)
 dat_ff0 = filter(dat, ff == 0)
 ```
+
 Um zu verstehen, warum manche Einträge von Firmen ausgelassen werden, hilft ein Vergleich der oben erstellten Variablen.
 
-Gruppieren Sie dazu die Datensätze nach den Jahren und geben sie die Anzahl der Einträge pro Jahr aus. Hinweis: Die Funktion length(*Variable*) gibt die Anzahl der Einträge wieder.
+**Aufgabe:** Gruppieren Sie dazu die Datensätze nach den Jahren und geben sie die Anzahl der Einträge pro Jahr aus. Hinweis: Die Funktion length(*Variable*) gibt die Anzahl der Einträge wieder.
 ```{r}
+#< task
 dat_ff1 %>%
   group_by(year)%>%
   summarise(length(year))
@@ -1261,12 +1295,16 @@ dat_ff1 %>%
 dat_ff0 %>%
   group_by(year)%>%
   summarise(length(year))
+#>
 ```
-Es fällt auf, dass sich im untersuchten Datensatz nur Einträge befinden, die sich auf den Zeitraum **vor** der reellen Mindestlohneinführung beziehen.
+
+Es fällt auf, dass sich im untersuchten Datensatz **dat_ff1** nur Einträge befinden, die sich auf den Zeitraum **vor** der reellen Mindestlohneinführung beziehen.
 
 Allerdings werden auch Daten aus den Jahren 1994 - 1999 herausgefiltert. Sehen wir uns an, wie das mit dem von den Autoren gefundene Unterbeispiel (pp) zusammenhängt.
 
+**Aufgabe:** Führen Sie den Code mittels *check* aus.
 ```{r}
+#< task
 dat_ff0 %>%
   group_by(pp)%>%
   summarise(length(pp))
@@ -1274,7 +1312,9 @@ dat_ff0 %>%
 dat_ff1 %>%
   group_by(pp)%>%
   summarise(length(pp))
+#>
 ```
+
 Der Anteil an pp==0 ist im unberücksichtigten Datensatz deutlich höher als im am Ende betrachteten Datensatz dat_ff1. Allerdings werden nun auch Unternehmen berücksichtigt, die bei den Analysen zur reellen Mindestlohneinführung nicht berücksichtigt wurden.
 Der Grund dafür könnte sein, dass sich die Zahlen in den Unternehmen verändert haben.???
 
@@ -1287,13 +1327,18 @@ mean(dat_ff1$avwage)
 max(dat_ff1$avwage)
 ```
 
-Wie in den vorherigen Analysen sind nicht alle Ursachen für die Aussortierung einiger Daten erkennbar. 
+Wie in den vorherigen Analysen sind die Ursachen für die Aussortierung einiger Daten leider nicht erkennbar und auch eigene statistische Analysen konnten die Auswahl nicht vollumfänglich erklären. 
 Weiter werden wir die Analysen mit dem von den Autoren gegebenen Unterbeispiel durchführen.
 
-Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unterschied, dass der Datensatz nun nach ff gefiltert wird.
+Dafür können wir dieselbe Regression wie im Kapitel 3.3 verwenden mit dem Unterschied, dass der Datensatz nun nach *ff* gefiltert wird.
+**Aufgabe:** Filtern Sie den Datensatz *dat* nach Daten, die im Unterbeispiel angewandt werden.
 ```{r}
+#< fill_in
+dat = filter(dat, ff == ___)
+#>
 dat = filter(dat, ff == 1)
 ```
+
 **Diskret**
 ```{r}
 reg7 = felm(ln_avwage ~ ptreat + ptreat_placebo + placebo + grad2 + unionmem + ptwk + female + 
@@ -1318,6 +1363,8 @@ stargazer(reg9, reg10, type = "text")
 ```
 ----------------
 
+Die Regressionen bilden die Grundlage zur Beantwortung der Frage
+
 **Vergleich Fig 3**
 - Treatmenteffekt net_pcm
 
@@ -1338,7 +1385,7 @@ dat_fig3 = dat %>%
   summarise(length(threshold), mean(avwage99_NMW))
 ```
 
-Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschioben und es werden immer mehr Einträge berücksichtigt.
+Regression in 100er Schritten durchführen und wiederholen. Die grenze wird nach oben verschoben und es werden immer mehr Einträge berücksichtigt.
 Ergebnisse je 100 in Liste speichern
 
 ```{r}
@@ -1351,25 +1398,25 @@ dati = filter(dati, pp==1)
 ```{r}
 
 # Schleife initiieren
-#i = 10000
-#while(i<=16000){
-#dati = mutate(dati, "treat1" = NULL)
-#dati$ctreat1 = NULL
-#dati$avwage = dati$avwage * 1000
+i = 10000
+while(i<=16000){
+dati = mutate(dati, "treat1" = NULL)
+dati$ctreat1 = NULL
+dati$avwage = dati$avwage * 1000
 
-#dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
-#dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
-#dati = mutate(dati, treat1)
+dati$treat1 = ifelse(dati$year == 1999 | dati$avwage <= i, 1, 0)
+dati$ctreat1 = ifelse(dati$treat1 == 1, 1, 0)
+dati = mutate(dati, treat1)
 
 
-#dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
+dati$paste("treat1", i, "_NMW") = dati$ctreat1*dati$NMW
   
 # Regression innerhalb der Schleife
-#reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
-#                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
+reg = felm(net_pcm ~ ctreat1 + paste("treat1", i, "_NMW") + grad2 + unionmem + ptwk + female + 
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dati)
 
-#i + 100
-#}
+i + 100
+}
 ```
 
 
@@ -1394,7 +1441,9 @@ ggplot(dat_fig3, aes(x = threshold))+
 - Strukturen in Unternehmen
 - Ist der Mindestlohn zu befürworten? (sozial, ökonomisch)
 
-
+Probleme:
+  Undurchsichtigkeit bei den Beispielsfirmen (951 von 4112)
+  Wahl der Treatmentgruppe ist eine Näherung
 
 ## Exercise Anregungen
 
