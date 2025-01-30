@@ -22,7 +22,7 @@ Im Rahmen meiner Bachelorarbeit gehen wir den Zusammenhängen von Mindestlöhnen
 Die Basis bildet der Artikel [Minimum Wages and Firm Profitability](https://www.aeaweb.org/articles?id=10.1257/app.3.1.129) von Mirko Draca, Stephen Machin und John Van Reenen, erschienen im Januar 2011 im American Economic Journal: Applied Economics. 
 
 Durch die Verknüpfung von inhaltlichen Hintergründen, fachlicher Analyse von Ergebnissen, persönlichen Einschätzungen und technischer Arbeit mit der Statistiksoftware R sollen Sie durch dieses Problem Set von einem fundierten Wissenszuwachs profitieren. 
-Es ist das Ziel, dass Sie sich nach der geführten Erarbeitung des Themas kritisch und differenziert mit politischen Mindestlohnforderungen auseinandersetzen können und dazu in der Lage sind, Ihre Meinungsbildung ökonomisch zu begründen.   
+Es ist das Ziel, dass Sie sich nach der geführten Erarbeitung des Themas kritisch und differenziert mit politischen Mindestlohnforderungen auseinandersetzen können und dazu in der Lage sind, Ihre Meinungsbildung ökonomisch zu begründen.  
 
 ### Inhalt
 
@@ -1444,6 +1444,16 @@ ggplot(dat_fig3, aes(x = threshold))+
 Probleme:
   Undurchsichtigkeit bei den Beispielsfirmen (951 von 4112)
   Wahl der Treatmentgruppe ist eine Näherung
+  
+Komponenten: 
+- Bewertung des Artikels
+Die wissenschaftliche Arbeit von Draca et al. macht sich die besondere Eigenschaft des quasi-experimentellen Experiments zu eigen und wählt dazu passenderweise die Methodik der Difference-in-Differences Schätzung.
+Dabei zeigen die Autoren gut auf, dass die Einführung von Mindeslöhnen zu einer Veränderung der Unternehmensgewinne führt. 
+Durch die Wahl von plausiblen Kontrollvariablen aus unterschiedlichen Bereichen der Unternehmenswelt wirkt die Argumentation fundiert.
+Der zunächst nicht evidenten Einteilung in Kontroll- und Treatmentgruppe wird sich genähert und anhand von Lohnstrukturen werden die Daten logisch nachvollziehbar eingeteilt.
+Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee der Selektion ist nicht erkennbar.
+Eine weitere Komponente, die im Rahmen der Analyse vermisst wird, ist eine finanzielle Rahmenbedingung als Kontrollvariable.
+- Rückbezug zur Einleitung
 
 ## Exercise Anregungen
 
