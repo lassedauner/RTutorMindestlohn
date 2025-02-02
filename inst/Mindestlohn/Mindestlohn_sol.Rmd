@@ -1453,6 +1453,10 @@ Durch die Wahl von plausiblen Kontrollvariablen aus unterschiedlichen Bereichen 
 Der zunächst nicht evidenten Einteilung in Kontroll- und Treatmentgruppe wird sich genähert und anhand von Lohnstrukturen werden die Daten logisch nachvollziehbar eingeteilt.
 Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee der Selektion ist nicht erkennbar.
 Eine weitere Komponente, die im Rahmen der Analyse vermisst wird, ist eine finanzielle Rahmenbedingung als Kontrollvariable.
+Der Output des Unternehmens bleibt weitestgehend unberücksichtigt, da im Datensatz keine Daten zu Produkten wie Preise oder Qualität vorhanden sind. Diese Problematik ist auch den Autoren bewusst und sie weisen auf diese Einschränkung in der Bewertung hin.
+
+- Weitere Forschung
+Höherer Rückgang in der Marge bei Unternehmen mit großer Marktmacht entdeckt
 - Rückbezug zur Einleitung
 
 ## Exercise Anregungen
