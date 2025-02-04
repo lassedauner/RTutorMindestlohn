@@ -628,3 +628,69 @@
 ,
 {"type":["check_chunk"],"time":["2025-01-28 21:52:31"],"user":["default_user"],"umph":[1738097551.1974],"ok":[true],"chunk":[45],"ex":[8],"e.ind":[0],"code":["reg_table_net_pcm = data.frame(\"Variable\" = c(\"Constant\", \"ctreat1\", \"treat1_NMW\", \"NMW\"),\"reg2\" = round(tidy_reg2$estimate[1:4],3),\"reg2_p\"= round(tidy_reg2$p.value[1:4],3), \"reg4\" = round(tidy_reg4$estimate[1:4],3), \"reg4_p\"= round(tidy_reg4$p.value[1:4],3))\n\nreg_table_net_pcm\n                              "],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2025-02-04 19:42:48"],"user":["default_user"],"umph":[1738694568.4687],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 19:43:11"],"user":["default_user"],"umph":[1738694591.6076],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 18, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 19:43:15"],"user":["default_user"],"umph":[1738694595.7707],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 18, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:46:21"],"user":["default_user"],"umph":[1738694781.9076],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:48:18"],"user":["default_user"],"umph":[1738694898.4827],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:49:18"],"user":["default_user"],"umph":[1738694958.3623],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:55:13"],"user":["default_user"],"umph":[1738695313.4054],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:57:27"],"user":["default_user"],"umph":[1738695447.6875],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 19:59:35"],"user":["default_user"],"umph":[1738695575.3159],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:00:53"],"user":["default_user"],"umph":[1738695653.9241],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:01:42"],"user":["default_user"],"umph":[1738695702.1635],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:04:17"],"user":["default_user"],"umph":[1738695857.8242],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:05:49"],"user":["default_user"],"umph":[1738695949.176],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:06:35"],"user":["default_user"],"umph":[1738695995.5944],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 20:08:42"],"user":["default_user"],"umph":[1738696122.4676],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:14:25"],"user":["default_user"],"umph":[1738707265.1963],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:14:50"],"user":["default_user"],"umph":[1738707290.3115],"ok":[true],"chunk":[50],"ex":[10],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\ndat_no_pp = dat %>%\n  filter(pp == 0)\n\ndat_pp = dat %>%\n  filter(pp == 1)\n\nboxplot(log(dat_no_pp$emp),log(dat_pp$emp))\nboxplot(log(dat_no_pp$net_pcm),log(dat_pp$net_pcm))\nboxplot(log(dat_no_pp$avwage),log(dat_pp$avwage))\nboxplot((dat_no_pp$manuf),(dat_pp$manuf))\nboxplot(log(dat_no_pp$turnemp),log(dat_pp$turnemp))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:15:21"],"user":["default_user"],"umph":[1738707321.5726],"ok":[true],"chunk":[51],"ex":[10],"e.ind":[0],"code":["reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)\n\nreg4 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)\n\nstargazer(reg2, reg4, type =\"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:15:53"],"user":["default_user"],"umph":[1738707353.691],"ok":[true],"chunk":[51],"ex":[10],"e.ind":[0],"code":["reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)\n\nreg4 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)\n\nstargazer(reg2, reg4, type =\"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:16:24"],"user":["default_user"],"umph":[1738707384.9141],"ok":[true],"chunk":[52],"ex":[10],"e.ind":[0],"code":["reg3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\n\nreg5 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)\n\nstargazer(reg3, reg5, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:19:31"],"user":["default_user"],"umph":[1738707571.7278],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:19:48"],"user":["default_user"],"umph":[1738707588.3437],"ok":[true],"chunk":[2],"ex":[3],"e.ind":[0],"code":["head(dat)"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:31:49"],"user":["default_user"],"umph":[1738708309.1086],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:32:02"],"user":["default_user"],"umph":[1738708322.0814],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 22, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:32:37"],"user":["default_user"],"umph":[1738708357.0728],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:32:47"],"user":["default_user"],"umph":[1738708367.0183],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 15, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:35:37"],"user":["default_user"],"umph":[1738708537.908],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:35:49"],"user":["default_user"],"umph":[1738708549.0143],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 6, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:38:01"],"user":["default_user"],"umph":[1738708681.618],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:38:33"],"user":["default_user"],"umph":[1738708713.9678],"ok":[true],"chunk":[31],"ex":[8],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 6, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:53:49"],"user":["default_user"],"umph":[1738709629.8374],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-04 23:55:17"],"user":["default_user"],"umph":[1738709717.5802],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-04 23:55:33"],"user":["default_user"],"umph":[1738709733.9933],"ok":[false],"chunk":[48],"ex":[8],"e.ind":[1],"code":["# Enter your code here."],"message":["\nYou have not yet entered all correct commands."]}
+,
