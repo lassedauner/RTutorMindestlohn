@@ -1,4 +1,4 @@
-## Mindestlohn und Firmenprofitabilität: Eine interaktive Analyse
+## Mindestlöhne und Unternehmensgewinne - Eine interaktive Analyse mit R
 
 
 #< ignore
@@ -23,8 +23,8 @@ Die Basis bildet der Artikel [Minimum Wages and Firm Profitability](https://www.
 
 Kommen Sie mit auf eine Reise ins Vereinigte Königreich und seine Arbeitswelt. 
 
-Durch die Verknüpfung von inhaltlichen Hintergründen, fachlicher Analyse von Ergebnissen, persönlichen Einschätzungen und technischer Arbeit mit der Statistiksoftware R sollen Sie durch dieses Problem Set von einem fundierten Wissenszuwachs profitieren. 
-Es ist das Ziel, dass Sie sich nach der geführten Erarbeitung des Themas kritisch und differenziert mit politischen Mindestlohnforderungen auseinandersetzen können und dazu in der Lage sind, Ihre Meinungsbildung ökonomisch zu begründen.
+Durch die Verknüpfung von inhaltlichen Hintergründen, fachlicher Analyse von Ergebnissen, persönlichen Einschätzungen und technischer Arbeit mit der Statistiksoftware R sollen Sie durch dieses Problem Set von einem fundierten Wissenszuwachs profitieren. \
+Es ist das Ziel, dass Sie sich nach der geführten Erarbeitung des Themas kritisch und differenziert mit politischen Mindestlohnforderungen auseinandersetzen können und dazu in der Lage sind, Ihre Meinungsbildung ökonomisch zu begründen. \
 Zudem wird Ihnen die Möglichkeit geboten, sich kritisch mit Fachliteratur auseinanderzusetzen und Analysen einzuordnen.
 
 
@@ -36,26 +36,19 @@ Zudem wird Ihnen die Möglichkeit geboten, sich kritisch mit Fachliteratur ausei
 
 3. Difference in Differences
 
-  3.1 Wahl der Gruppen
+    3.1 Wahl der Gruppen
 
-  3.2 Händische DiD Berechnung
+    3.2 Händische DiD Berechnung
 
-  3.3 DiD-Schätzung mittels Regression
+    3.3 DiD-Schätzung mittels Regression
+    
+    3.4 Weiterführende Analysen
 
 4. Einordnung des Artikels
 
 
 
 ## Exercise 1 Einführung in den Mindestlohn
-
-- Relevanz der Forschungsfrage
-- Hintergrund der Mindestlohneinführung
-- sic
-- Vergleich zu anderen Staaten
-- Wie werden Unternehmensgewinne definiert?
-- Theoretisch mathematischer Hintergrund / Ausgangspunkt
-  - Messung Unternehmensgewinne
-  - Messung Mindestlohn
 
 **"Jetzt 12€ Mindestlohn wählen."**
 
@@ -66,6 +59,7 @@ Häufig wird in der Forschung die Frage der Auswirkungen auf die Beschäftigung 
 Daher wählen wir mit unserer Analyse nach Draca et. al (2011) einen anderen Ansatz. \
 Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. \
 Eine solche Betrachtungsweise ist nach den Autoren in der Forschung bisher weitestgehend unbeachtet geblieben (vgl. Draca et. al (2011), S. 129f.)
+
 
 Die Basis der Analyse bilden Unternehmensdaten aus dem Vereinigten Königreich (UK).
 
@@ -80,6 +74,7 @@ success: Auf dieser Vermutung beruht unsere Untersuchung.
 failure: Eine plausible Antwort, allerdings werden hierfür keine Belege gefunden (vgl. Draca et al. (2011), S.130)
 #>
 
+<br>
 
 **Hintergrund der Einführung**
 
@@ -87,7 +82,8 @@ Wie in Deutschland, wurden und werden Löhne im Vereinigten Königreich teilweis
 Die Notwendigkeit der Einführung eines nationalen Mindestlohns wurde in Großbritannien durch den sinkenden Einfluss von Gewerkschaften gesehen. \
 Haben im Jahr 1970 noch 80% der Arbeitnehmer von Tarifverträgen profitiert, so sank dieser Anteil bis 2000 um 50 Prozentpunkte.
 Mit einem Machtwechsel im britischen Unterhaus, hin zur sozialdemokratischen Labour-Partei, kommt es zur Veränderung in der Arbeitsmarktpolitik. Zum 1. April 1999 wird der nationale Mindestlohn eingeführt. \
-(Quelle: [William Brown. - London : Friedrich-Ebert-Stiftung, Büro London, 2007](https://library.fes.de/pdf-files/bueros/london/04855-20071107.pdf))
+
+*(vgl. Brown (2007), S.2f.)*
 
 #< quiz "1.1"
 question: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn im Vereinigten Königreich zur Einführung 1999?
@@ -147,12 +143,11 @@ Gehen wir nun wie oben bereits erläutert von einer Lohnveränderung
 $ΔW = W - M$ aus.
 
 Im Falle eines negativen $ΔW$ können wir auf Basis dieser Gleichung von einer Verringerung der Gewinnmarge ausgehen. \
-Diese Grundlage wird später für unsere Difference-in-Difference Analyse und der einhergehenden Wahl der Gruppen relevant.
+Diese Grundlage wird später für unsere Difference-in-Difference Analyse und der einhergehenden Wahl der Gruppen relevant. \
+*(vgl. Draca et al. (2011), S.131f.)*
 
-*(Draca et al., S.131f)*
 
-
-## Exercise 2 -- Datenüberblick
+## Exercise 2 Datenüberblick
 
 
 #< quiz "2.1"
@@ -167,7 +162,7 @@ failure: Die Antwort ist leider falsch.
 #>
 
 
-**Aufgabe**: Lesen Sie den Datensatz *main_fame.dta* mit der Funktion *read_dta* ein und speichern Sie den Datensatz unter *dat*. Führen Sie den Code aus, indem Sie *check* drücken.
+**Aufgabe**: Lesen Sie den Datensatz `main_fame.dta` mit der Funktion `read_dta` ein und speichern Sie den Datensatz unter `dat`. Führen Sie den Code aus, indem Sie ``check`` drücken.
 ```{r}
 #< task
 
@@ -175,8 +170,11 @@ failure: Die Antwort ist leider falsch.
 dat = read_dta('main_fame.dta')
 ```
 
-Um einen ersten Überblick über den Datensatz zu bekommen, geben sie die ersten Zeilen des Datensatzes mittels der Funktion head aus.
+**Aufgabe:** Um einen ersten Überblick über den Datensatz zu bekommen, geben sie die ersten Zeilen des Datensatzes `dat` mittels der Funktion `head` aus.
 ```{r}
+#< task
+
+#>
 head(dat)
 ```
 
@@ -206,7 +204,7 @@ Dabei handelt es sich um Bezirke in England (1-17), Wales(18) und Schottland(19,
 
 Werfen wir einen Blick auf die Variable *month*. Wir wollen sehen, wann die Unternehmen ihren Jahresbericht abgeben und damit ihr Geschäftsjahr beenden.
 
-**Aufgabe:** Gruppieren Sie hierfür den Datensatz *dat* nach dem Berichtsmonat *month*. Geben Sie anschließend die Anzahl der Einträge mittels der Funktion *length* an.
+**Aufgabe:** Gruppieren Sie hierfür den Datensatz `dat` nach dem Berichtsmonat `month`. Geben Sie anschließend die Anzahl der Einträge mittels der Funktion `length()` an.
 ```{r}
 #< fill_in
 dat %>% 
@@ -284,7 +282,7 @@ Diese besagt, dass ohne die Einführung eines Treatments, die Linien der Kontrol
 Annähernd kann das überprüft werden, indem man sich die Trendlinien der beiden Gruppen vor Einführung des Treatments ansieht. \
 *(vgl. Angrist et al. (2009), S. 171f.)*
 
-**Aufgabe**: Lesen Sie hierfür zunächst den Datensatz *main_fame* ein und speichern ihn unter *dat*.
+**Aufgabe**: Lesen Sie hierfür zunächst den Datensatz `main_fame` ein und speichern ihn unter `dat`.
 ```{r}
 #< fill_in
 ___ = read_dta('main_fame.dta')
@@ -292,15 +290,15 @@ ___ = read_dta('main_fame.dta')
 dat = read_dta('main_fame.dta')
 ```
 
-Um die Daten jeden Jahres zusammenzufassen, kann die Funktion *group_by* genutzt werden. 
+Um die Daten jeden Jahres zusammenzufassen, kann die Funktion `group_by` genutzt werden. 
 
 #< info "group_by"
 Die group_by Funktion aus dem dplyr Paket fasst die Daten anhand einer zu bestimmenden Variablen zusammen und ordnet die Ergebnisse aufsteigend an. \
-Um die Gruppierung in einem Output sichtbar zu machen, kann die Pipe um den *summarise* Befehl erweitert werden, in dem dann die Werte jeder Einheit zusammengefasst werden können. \
+Um die Gruppierung in einem Output sichtbar zu machen, kann die Pipe um den `summarise` Befehl erweitert werden, in dem dann die Werte jeder Einheit zusammengefasst werden können. \
 (https://dplyr.tidyverse.org/reference/group_by.html)
 #>
 
-**Aufgabe**: Fügen Sie die passende Variable in *group_by* ein und geben Sie für jedes Jahr den durchschnittlichen logarithmierten Durchschnittslohn aus.
+**Aufgabe**: Fügen Sie die passende Variable in `group_by` ein und geben Sie für jedes Jahr den durchschnittlichen logarithmierten Durchschnittslohn aus.
 ```{r}
 #< fill_in
 dat_trend_treat = dat %>% 
@@ -328,7 +326,7 @@ dat_trend_control = dat %>%
 
 ```
 
-Um die beiden erstellten Datensätze miteinander zu verbinden, nutzen wir den *left_join*.
+Um die beiden erstellten Datensätze miteinander zu verbinden, nutzen wir den `left_join`.
 
 **Aufgabe**: Führen Sie den Code mittels *check* aus und sehen sich den Datensatz an.
 ```{r}
@@ -342,7 +340,7 @@ dat_trend
 
 Jetzt können wir die Daten **visualisieren**, indem wir uns in einem Liniendiagramm die Trends beider Gruppen ausgeben lassen.
 
-Die Basis dafür bildet der oben erstellte Datensatz *dat_trend*.
+Die Basis dafür bildet der oben erstellte Datensatz `dat_trend`.
 
 **Aufgabe**: Fügen Sie die Trendlinien der beiden Gruppen hinzu, indem Sie den Code um die fehlende Variable auf der Y-Achse ergänzen.  
 ```{r}
@@ -426,8 +424,7 @@ Aufgrund des kurzen Betrachtungszeitraums des Trends sollte diese Einschätzung 
 Die Betrachtung eines größeren Zeitraums könnte hier eine genauere Betrachtung zulassen. \
 Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, eine Erwähnung wird innerhalb des Artikels vergeblich gesucht.
 
-
------------
+### Treatmentwahl
 
 Nachdem wir um die Komplexität der allgemeinen Voraussetzungen für eine DiD-Schätzung wissen, können wir uns weiter der Relevanz der Gruppenwahl widmen. \
 In der erstellten Graphik haben wir die Treatment- und Kontrollgruppen zunächst als gegeben angenommen, ohne die Entstehung zu hinterfragen. \
@@ -438,26 +435,25 @@ Als Einstieg sehen wir uns dafür die Veränderung der Löhne über die Jahre an
 Um die Veränderung der Löhne von Geschäftsjahr zu Geschäftsjahr herauszufinden, muss der Datensatz nach Jahren aufgeteilt werden. \
 Das gelingt, indem für jedes Jahr ein eigener Datensatz erstellt wird. Dafür muss der bereits eingelesene Datensatz dat_main zunächst gefiltert werden.
 
-**Aufgabe**: Wählen Sie die passende Variable für das leere Feld und überprüfen Sie Ihre Eingabe durch "check".
+**Aufgabe**: Wählen Sie die passende Variable für das leere Feld und überprüfen Sie Ihre Eingabe durch *check*.
 ```{r}
 #< fill_in
-pcw95 = dat_main %>%
+pcw95 = dat %>%
   filter(___ == 1995) %>%
   filter(avwage >= 3)
 #>
 #
-pcw95 = dat_main %>%
+pcw95 = dat %>%
   filter(year == 1995)%>%
   filter(avwage >= 3)
 ```
 
 
-Nun befinden sich in *pcw95* alle Daten aus *dat_main*, die aus dem Jahr 1995 stammen. \
-Neben der Unterscheidung in den Jahren sollen zudem die Unterschiede der Ausgangslöhne herausgestelltt werden. \
+Nun befinden sich in `pcw95` alle Daten aus `dat_main`, die aus dem Jahr 1995 stammen. \
+Neben der Unterscheidung in den Jahren sollen zudem die Unterschiede der Ausgangslöhne herausgestellt werden. \
 Dazu werden die Löhne in Perzentile aufgeteilt.
 
-**Aufgabe**: Erstellen Sie einen Vektor *percent95*, der die logarithmierten Durchschnittslöhne in 100 Perzentile aufteilt. Nutzen Sie dafür die Funktion *quantile(dat,seq())*. Setzen Sie den fehlenden Wert in *seq()* ein, um einen Vektor der Länge 100 zu erhalten.
-
+**Aufgabe**: Erstellen Sie einen Vektor `percent95`, der die logarithmierten Durchschnittslöhne in 100 Perzentile aufteilt. Nutzen Sie dafür die Funktion `quantile(dat,seq())`. Setzen Sie den fehlenden Wert in `seq()` ein, um einen Vektor der Länge 100 zu erhalten.
 ```{r}
 #< fill_in
 percent95 = quantile(pcw95$ln_avwage, seq(0, 1, ___))
@@ -471,37 +467,37 @@ Diese Aufteilung muss nun für jedes Jahr des Datensatzes wiederholt werden.
 ```{r}
 #< task
 
-pcw96 = dat_main %>%
+pcw96 = dat %>%
   filter(year == 1996)%>%
   filter(avwage >= 3)
 percent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))
 
-pcw97 = dat_main %>%
+pcw97 = dat %>%
   filter(year == 1997)%>%
   filter(avwage >= 3)
 percent97 = quantile(pcw97$ln_avwage, seq(0, 1, 0.01))
 
-pcw98 = dat_main %>%
+pcw98 = dat %>%
   filter(year == 1998)%>%
   filter(avwage >= 3)
 percent98 = quantile(pcw98$ln_avwage, seq(0, 1, 0.01))
 
-pcw99 = dat_main %>%
+pcw99 = dat %>%
   filter(year == 1999)%>%
   filter(avwage >= 3)
 percent99 = quantile(pcw99$ln_avwage, seq(0, 1, 0.01))
 
-pcw00 = dat_main %>%
+pcw00 = dat %>%
   filter(year == 2000)%>%
   filter(avwage >= 3)
 percent00 = quantile(pcw00$ln_avwage, seq(0, 1, 0.01))
 
-pcw01 = dat_main %>%
+pcw01 = dat %>%
   filter(year == 2001)%>%
   filter(avwage >= 3)
 percent01 = quantile(pcw01$ln_avwage, seq(0, 1, 0.01))
 
-pcw02 = dat_main %>%
+pcw02 = dat %>%
   filter(year == 2002)%>%
   filter(avwage >= 3)
 percent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))
@@ -525,7 +521,7 @@ diffperc = data.frame(sort(percent95))
 
 Der Datensatz diffperc kann jetzt um die Differenzen innerhalb der Perzentile erweitert werden.
 
-**Aufgabe**: Führen Sie den Code mit "check" aus.
+**Aufgabe**: Führen Sie den Code mit *check* aus.
 ```{r}
 #< task
 diffperc = diffperc %>%
@@ -543,7 +539,7 @@ diffperc = diffperc %>%
 
 
 Für die Betrachtungsweise der Auswirkungen durch die Einführung des Mindestlohns sind zwei Differenzen von besonderer Bedeutung. \
-Daher sollen die Änderung des Lohns im Jahr **vor** der Einführung (*diff99*) mit der Änderung im Jahr **nach** der Einführung (*diff00*) in einem Liniendiagramm gegenübergestellt werden.
+Daher sollen die Änderung des Lohns im Jahr **vor** der Einführung (`diff99`) mit der Änderung im Jahr **nach** der Einführung (`diff00`) in einem Liniendiagramm gegenübergestellt werden.
 
 ```{r}
 #< task
@@ -559,8 +555,7 @@ ggplot(diffperc)+
 #>
 ```
 
-Es wir deutlich, dass vorallem in den unteren 13 Perzentilen von der Mindestlohneinführung profitiert wird und die Unterschiede in der Lohnerhöhung am Größten sind.
-------
+Es wird deutlich, dass vorallem in den unteren 13 Perzentilen von der Mindestlohneinführung profitiert wird und die Unterschiede in der Lohnerhöhung am Größten sind.
 
 Die graphische Veranschaulichung möchten wir auch technisch nachvollziehen. \
 Erinnern wir uns hierfür zunächst an den theoretischen Zusammenhang von Gewinnmargen und Lohnerhöhungen:
@@ -578,14 +573,14 @@ failure: Für diesen Fall würde das gewählte Modell nicht zutreffen.
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3.60 Pfund pro Stunde. \
 Wir sollten also in unsere Treatmentgruppe jene Mitarbeiter einschließen, die vor der Mindestlohneinführung einen Lohn unter 3.60£ erhielten. \
 Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns der Wahl der Treatmentgruppe nähern. \
-Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei *avwage*, worüber sich auch im Artikel genähert wird. 
+Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei `avwage`, worüber sich auch im Artikel genähert wird. 
 
 Dabei werden alle Unternehmen mit einem durchschnittlichen Lohn kleiner gleich **12,000£** in die Treatmentgruppe einsortiert. \
 Um zu verstehen, warum sich für diesen Wert als Obergrenze entschieden wird ist es hilfreich, den Wert in Zusammenhang mit dem Stundenlohn zu bringen.
 
 Dazu soll zunächst der durchschnittliche Lohn aller Unternehmen aus der Treatmentgruppe in der Pre-Policy Periode im Jahr **1999** ermittelt werden.
 
-**Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. (Hinweis: *avwage* wird im Datensatz in 1000 Pfund angegeben)
+**Aufgabe**: Setzen Sie die passenden Werte in die Lücken ein. *Hinweis*: `avwage` wird im Datensatz in 1000 Pfund angegeben
 ```{r}
 #< fill_in
 mean_treat = dat %>%
@@ -620,8 +615,8 @@ annual_hours = 0.75*1731 + 0.25*1719
 
 Nun haben wir den genäherten Wert, wollen ihn allerdings auf eine Vollzeitbeschäftigung anwenden. 
 
-**Aufgabe:**Ermitteln Sie den Anteil an Teilzeitarbeitern (*ptwk*) in unserem Datensatz *dat*. \
-(Hinweis: Da es immer sein kann, dass Daten nicht vollständig sind, fügen wir *na.rm = TRUE* hinzu, um fehlende Einträge bei der Berechnung zu ignorieren.)
+**Aufgabe:**Ermitteln Sie den Anteil an Teilzeitarbeitern (`ptwk`) in unserem Datensatz `dat`. \
+(*Hinweis*: Da es immer sein kann, dass Daten nicht vollständig sind, fügen wir `na.rm = TRUE` hinzu, um fehlende Einträge bei der Berechnung zu ignorieren.)
 ```{r}
 #< fill_in
 ptwk_share = mean(___, na.rm = TRUE)
@@ -681,7 +676,7 @@ dat = read_dta('main_fame.dta')
 ```
 
  
-Erstellen Sie auf Basis des Datensatzes *dat* eine Tabelle, die alle relevanten Daten für eine händische Berechnung enthält.
+Erstellen Sie auf Basis des Datensatzes `dat` eine Tabelle, die alle relevanten Daten für eine händische Berechnung enthält.
 
 **Aufgabe:** Führen Sie den folgenden Code aus, indem Sie den Datensatz nach den für die DiD-Schätzung relevanten Variablen gruppieren.
 ```{r}
@@ -728,7 +723,7 @@ Wie die Autoren die Auswahl des Unterbeispiels treffen wird nicht leider vollumf
 
 ------
 
-Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle *dat_table_DiD* vorhanden sind, können die Differenzen nun händisch berechnet werden.
+Nachdem die relevanten Daten des DiD zusammengefasst in der Tabelle `dat_table_DiD` vorhanden sind, können die Differenzen nun händisch berechnet werden.
 
 Die Formel hierfür lautet 
 $$(y.post.treat - y.pre.treat) - (y.post.control - y.pre.control)$$
@@ -738,7 +733,7 @@ Der erste Teil beschreibt die Veränderung in der Treatmentgruppe durch das Trea
 
 Werfen Sie zunächst einen Blick auf die erzeugte Tabelle und überlegen Sie, welcher Gruppe die jeweiligen Werte angehören. 
 
-**Aufgabe:**Lassen Sie sich die oben erstellte Tabelle *dat_table_DiD* anzeigen und überprüfen Sie Ihre Eingabe mittels *check*.
+**Aufgabe:**Lassen Sie sich die oben erstellte Tabelle `dat_table_DiD` anzeigen und überprüfen Sie Ihre Eingabe mittels *check*.
 ```{r}
 #< task
 
@@ -753,22 +748,22 @@ sc:
     - NMW
 
 success: Richtige Antwort. Ist ctreat1 = 1, so handelt es sich um die Treatmentgruppe, andernfalls ist es die Kontrollgruppe.
-failure: Falsch. *NMW* bezieht sich auf den Zeitpunkt. 
+failure: Falsch. `NMW` bezieht sich auf den Zeitpunkt. 
 #>
 
 #< quiz "3.2.4"
-question: Von welcher Gruppe ist die Rede, wenn NMW = 1 ?
+question: Von welcher Gruppe ist die Rede, wenn `NMW = 1` ?
 sc:
     - Pre-Treatment
     - Post-Treatment*
     
 success: Korrekt. In diesem Fall befinden wir uns im Jahr 2000 oder später.
-failure: Das ist nicht richtig. In diesem Fall wäre NMW = 0.
+failure: Das ist nicht richtig. In diesem Fall wäre `NMW = 0`.
 
 #>
 
 
-**Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus *dat_table_DiD* zu.
+**Aufgabe**: Weisen Sie den für die DiD Schätzung relevanten Variablen die passenden Tabelleneinträge aus `dat_table_DiD` zu.
 ```{r}
 #< fill_in
 y1.post.treat = dat_table_DiD$mean_ln_avwage[___]
@@ -784,7 +779,7 @@ y1.pre.control = dat_table_DiD$mean_ln_avwage[1]
 
 ```
 
-Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Nettorendite eines Unternehmens je Geschäftsjahr (*net_pcm*) berechnet. \
+Neben des logarithmierten Durchschnittslohns wird auch der DiD-Schätzer der Nettorendite eines Unternehmens je Geschäftsjahr (`net_pcm`) berechnet. \
 Das geschieht analog zur obigen Schätzung.
 
 **Aufgabe**: Werfen Sie erneut einen Blick auf die erstellte Tabelle und geben Sie nun die Zeilen ein, in denen der passende Wert steht.
@@ -803,7 +798,7 @@ y2.pre.control = dat_table_DiD$mean_net_pcm[1]
 
 Die Werte sind nun gespeichert und die DiDs können berechnet werden.
 
-**Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels "Check" aus.
+**Aufgabe**: Fügen Sie dem Code das Anzeigen der Ergebnisse hinzu und führen Sie den Code mittels *check* aus.
 ```{r}
 #< fill_in
 DiD_ln_avwage = (y1.post.treat - y1.pre.treat) - (y1.post.control - y1.pre.control)
@@ -864,6 +859,7 @@ ggdag(dag, node_size = 6, text = FALSE, edge_type = "link", use_labels = "label"
 ```
 
 Hier sieht man wie die Variablen, mit denen wir bisher gearbeitet haben, zusammenhängen.
+
 #< quiz "3.3.0"
 question: Wählen Sie den/die Confounder aus unserem DAG aus?
 sc:
@@ -872,7 +868,7 @@ sc:
     - NMW & ctreat1*
     - NMW & treat1_NMW & ctreat1
 
-success: Korrekt. Die Variablen beeinflussen sowohl die abhängige Variable *ln_avwage*, als auch die erklärende Variable *treat1_NMW*
+success: Korrekt. Die Variablen beeinflussen sowohl die abhängige Variable `ln_avwage`, als auch die erklärende Variable `treat1_NMW`
 failure: Das ist leider falsch. Schauen Sie, von welcher Variablen zwei Pfeile ausgehen.
 #>
 
@@ -888,7 +884,7 @@ Dabei kann jedem Schätzer $\hat\beta_i$ eine beschreibende Eigenschaft zugewies
 
 \
 
-**Aufgabe:** Aus dieser Darstellung soll nun eine quantitative Analyse ermöglicht werden. Lesen Sie dafür einen Auszug des bekannten Datensatzes *main_fame* ein, indem Sie den Code mit *check* ausführen.
+**Aufgabe:** Aus dieser Darstellung soll nun eine quantitative Analyse ermöglicht werden. Lesen Sie dafür einen Auszug des bekannten Datensatzes `main_fame` ein, indem Sie den Code mit *check* ausführen.
 ```{r}
 #< task
 dat_raw = read_dta('main_fame.dta')
@@ -897,7 +893,7 @@ dat = filter(dat_raw, pp == 1)
 ```
 
 Zu Beginn unserer Analyse wollen wir mehrere Regressionen auf Basis der oben im DAG dargestellten Variablen laufen lassen. \
-Dazu sollen die einzelnen Variablen, die *ln_avwage* beeinflussen, beobachtet werden.
+Dazu sollen die einzelnen Variablen, die `ln_avwage` beeinflussen, beobachtet werden.
 
 #< info "stargazer"
 Die Stargazer Funktion ermöglicht uns einen schön formatierten Output mit der Möglichkeit, mehrere Regressionen parallel darzustellen.
@@ -905,7 +901,7 @@ Die Stargazer Funktion ermöglicht uns einen schön formatierten Output mit der 
 (https://www.rdocumentation.org/packages/stargazer/versions/5.2.3/topics/stargazer)
 #>
 
-**Aufgabe**: Führen Sie die Regression mit unserem DiD-Schätzer aus und stellen Sie das Ergebnis mittels der stargazer-Funktion dar.
+**Aufgabe**: Führen Sie die Regression mit unserem DiD-Schätzer aus und stellen Sie das Ergebnis mittels der `stargazer`Funktion dar.
 ```{r}
 #< fill_in
 regi = lm(ln_avwage ~ treat1_NMW, data = dat)
@@ -923,7 +919,7 @@ sc:
     - Die Regression ist genauer als die händische Berechnung.
     - Die Regression ist unvollständig.*
 
-success: Korrekt. Da *treat1_NMW* von zwei Confoundern beeinflusst wird, wird der Effekt von *treat1_NMW* in der Regression verschätzt.
+success: Korrekt. Da `treat1_NMW` von zwei Confoundern beeinflusst wird, wird der Effekt von `treat1_NMW` in der Regression verschätzt.
 failure: Das ist in diesem Fall nicht der Grund für die Unterschiede. Stichwort Confounder, sehen Sie sich den DAG an.
 #>
 
@@ -935,7 +931,7 @@ $$ln(avwage) = \beta_0 + \beta_1 ctreat + \beta_2 treat1*NMW + \beta_3 NMW + \ep
 
 
 *Aufgabe*: Berechnen Sie auf Basis dieser Gleichung die Einflüsse der Variablen und das damit zusammenhängende DiD-Ergebnis. 
-Stellen Sie das Ergebnis wieder in *stargazer* dar.
+Stellen Sie das Ergebnis wieder in `stargazer` dar.
 ```{r}
 #< fill_in
 reg1 = lm(ln_avwage ~ ___ + ___ + ___, data = dat)
@@ -979,7 +975,7 @@ Allerdings können die p-Werte fehlerhaft sein, da es sich bei den Daten teilwei
 Genestete Daten liegen vor, wenn mehrere Daten zu einer übergeordneten Einheit zählen. \
 *(vgl. Aarts et al. (2014), S. 491)*
 
-In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (*ln_avwage*) über mehrere Jahre. Diese haben ein Unternehmen (*regno*) als übergeordnete Einheit. \
+In unserem Fall haben wir Daten zum logarithmierten Durchschnittslohn (`ln_avwage`) über mehrere Jahre. Diese haben ein Unternehmen (`regno`) als übergeordnete Einheit. \
 Um Fehler bezüglich genesteter Daten zu verhindern, führen wir **Clusterrobuste Standardfehler** ein.
 
 #< quiz "3.3.4"
@@ -993,16 +989,16 @@ failure: Das ist so nicht richtig. Bei genesteten Daten muss nach der übergeord
 #>
 
 Nun fügen wir die Clusterrobusten Standardfehler in unsere Regression ein und schauen, was sich dadurch verändert.\
-Führen Sie hierzu die Regression mithilfe der *felm* Funktion durch und vergleichen die Regression ohne Clustering (*reg1*) mit der Regression mit Clustering. 
+Führen Sie hierzu die Regression mithilfe der `felm` Funktion durch und vergleichen die Regression ohne Clustering (`reg1`) mit der Regression mit Clustering. 
 
 #< info "felm"
-Im Vergleich zu einem einfachen Regressionsmodell mit *lm*, kann durch die *felm* Funktion eine spezifiziertere Regression durchgeführt werden.\
+Im Vergleich zu einem einfachen Regressionsmodell mit `lm`, kann durch die `felm` Funktion eine spezifiziertere Regression durchgeführt werden.\
 Der Grundaufbau des formulas sieht wie folgt aus: \
 **felm(y ~ abhängige Variablen | ausgeschlossene Variablen | Spezifikation einer Instrumentalviariablen | Clusterspezifikation)** \
 (https://www.rdocumentation.org/packages/lfe/versions/2.9-0/topics/felm)
 #>
 
-**Aufgabe**: Tragen Sie die Clusterspezifikation nach der Variablen *regno* an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
+**Aufgabe**: Tragen Sie die Clusterspezifikation nach der Variablen `regno` an die passende Stelle ein und setzen die ungenutzten Spezifikationen gleich 0.
 ```{r}
 #< fill_in
 reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | ___ | ___ | ___, data=dat)
@@ -1014,7 +1010,7 @@ stargazer(reg1, reg2, type ="text")
 
 
 An den Werten der Schätzer ist keine Veränderung zu erkennen. Allerdings haben sich die Werte der Standardfehler verändert. \
-Während man für die Schätzer von *ctreat1* und der Interaktionsvariablen *treat1_NMW* eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung beim Schätzer der Variablen *NMW* zu verzeichnen.
+Während man für die Schätzer von `ctreat1` und der Interaktionsvariablen `treat1_NMW` eine Erhöhung des p-Wertes vorfindet, ist eine Verringerung beim Schätzer der Variablen `NMW` zu verzeichnen.
 
 Durch die Verwendung von clusterrobusten Standardfehlern wird eine Korrelation der Fehlerterme innerhalb einer Gruppe hergestellt. \
 Wenn eine beschreibende Variable innerhalb der Gruppe nicht so stark variiert, kann es sein, dass der Standardfehler in einer Regression ohne clusterrobuste Standardfehler höher ausfällt als er eigentlich ist. \
@@ -1029,10 +1025,10 @@ stargazer(reg2, type = "text")
 #>
 ```
 
-Die Schätzer der Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit *Constant* beschrieben wird.
+Die Schätzer der Variablen beschreiben die Veränderungen im Vergleich zum Pre-Policy Jahr, welche mit `Constant` beschrieben wird.
 
 #< quiz "3.3.5"
-question: Wie beschreiben Sie den Wert des Schätzers der DiD-Variablen *treat1_NMW*?
+question: Wie beschreiben Sie den Wert des Schätzers der DiD-Variablen `treat1_NMW`?
 sc:
     - Der Anstieg des Lohns in der Treatmentgruppe ist um ca. 0.11 Pfund höher als in der Kontrollgruppe.
     - Der Anstieg des Lohns in der Treatmentgruppe ist um ca. 11 Prozent höher als in der Kontrollgruppe.
@@ -1044,9 +1040,9 @@ failure: Das ist leider falsch. Achten Sie darauf, wie die abhängige Variable d
 
 
 Wir haben in Erfahrung gebracht, dass es einen Effekt durch die Einführung des gesetzlichen Mindestlohns gibt. \
-Um herauszufinden, wie die Unternehmen auf diese Veränderung reagieren, sehen wir uns spiegelbildlich zur obigen Schätzung die Veränderung auf die Gewinnmarge *net_pcm* an.
+Um herauszufinden, wie die Unternehmen auf diese Veränderung reagieren, sehen wir uns spiegelbildlich zur obigen Schätzung die Veränderung auf die Gewinnmarge `net_pcm` an.
 
-**Aufgabe**: Führen Sie den untenstehenden bekannten Code mit einer angepassten abhängigen Variablen aus und lassen Sie sich das Ergebnis mittels *stargazer* ausgeben.
+**Aufgabe**: Führen Sie den untenstehenden bekannten Code mit einer angepassten abhängigen Variablen aus und lassen Sie sich das Ergebnis mittels `stargazer` ausgeben.
 ```{r}
 #< fill_in
 reg3 = felm(___ ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
@@ -1062,14 +1058,14 @@ Wir erkennen, dass die Schätzer signifikante Werte aufweisen und sehen somit, d
 Auch hier dürfen Sie den Schätzer unserer DiD-Vairablen wieder interpretieren.
 
 #< quiz "3.3.6"
-question: Was passiert mit der Gewinnmarge, wenn man die Schätzung *reg3* als Basis wählt?
+question: Was passiert mit der Gewinnmarge, wenn man die Schätzung `reg3` als Basis wählt?
 sc:
     - Durch die Mindestlohneinführung ist die Gewinnmarge in Unternehmen der Kontrollgruppe um 2.7 Prozent stärker gesunken.
     - Durch die Mindestlohneinführung ist die Gewinnmarge in Unternehmen der Treatmentgruppe um 2.7 Prozentpunkte stärker gesunken.*
     - Durch die Mindestlohneinführung ist die Gewinnmarge in Unternehmen der Kontrollgruppe um 2.7 Prozentpunkte stärker gesunken.
 
 success: Richtige Antwort. 
-failure: Leider flasch. Wieso sollte die Marge geringer sein, wenn die Gruppe - vereinfacht dargestellt - doch gar nicht vom Treatment betroffen ist?
+failure: Leider falsch. Wieso sollte die Marge geringer sein, wenn die Gruppe - vereinfacht dargestellt - doch gar nicht vom Treatment betroffen ist?
 #>
 
 #< award "Earl of DiD"
@@ -1098,7 +1094,7 @@ So soll die Referenzgruppe
 In R können wir entweder die Variablen innerhalb der Regression faktorisieren, oder bereits im Datensatz.
 #>
 
-**Aufgabe:** Die Variable *year* möchten wir in unserem Datensatz faktorisieren und erstellen hierfür eine neue Variable *factor_year*. Vergleichen Sie weiter die Werte der neuen mit der bereits existierenden Variablen, indem Sie sich mittels *head()* die ersten Einträge anzeigen lassen.
+**Aufgabe:** Die Variable `year` möchten wir in unserem Datensatz faktorisieren und erstellen hierfür eine neue Variable `factor_year`. Vergleichen Sie weiter die Werte der neuen mit der bereits existierenden Variablen, indem Sie sich mittels `head()` die ersten Einträge anzeigen lassen.
 ```{r}
 #< fill_in
 dat = dat %>%
@@ -1137,7 +1133,7 @@ dat$factor_year = relevel(dat$factor_year, ref = "___")
 dat$factor_year = relevel(dat$factor_year, ref = "2000")
 ```
 
-Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit *year* und einmal mit *factor_year* ergänzen. \
+Sehen wir uns nun an, was diese Faktorisierung für die Regression bedeutet, indem wir die Regression einmal mit `year` und einmal mit `factor_year` ergänzen. \
 **Aufgabe**: Geben Sie den Vergleich der unterschiedlichen Regressionen aus, indem Sie den Code mittels *check* ausführen.
 ```{r}
 #< task
@@ -1158,9 +1154,9 @@ Dabei gilt dennoch zu erwähnen, dass die Autoren des Artikels bei der Wahl der 
 
 Da durch die Darstellung der Faktorvariablen eine längere Ausgabe entsteht, kann es beim Hinzufügen mehrerer Faktorvariablen aus Gründen der Übersichtlichkeit und Vergleichbarkeit sinnvoll sein, unsere Ausgabe auf das Relevanteste reduzieren.
 
-Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu *stargazer* kennen.
+Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu `stargazer` kennen.
 
-**Aufgabe:** Laden Sie zunächst das Paket *broom*.
+**Aufgabe:** Laden Sie zunächst das Paket `broom`.
 ```{r}
 #< fill_in
 library(___)
@@ -1168,7 +1164,7 @@ library(___)
 library(broom)
 ```
 
-**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die *felm*-Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie dabei anschließend die Tabelle aus.
+**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die `felm`Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie dabei anschließend die Tabelle aus.
 ```{r}
 #< fill_in
 table_reg3.3 = tidy(reg3.3)
@@ -1243,19 +1239,8 @@ reg_table_ln_avwage
 ```
 
 Der positive Effekt der Mindestlohneinführung auf die Löhne der Treatmentgruppe ist weiterhin erkennbar, hat sich etwas verringert und ist weiterhin signifikant. \
-Zudem wirkt die Wahl der erklärenden Variablen sinnvoll, da sie einen signifikanten Einfluss auf den Lohn haben. (vgl. Anhang 2.1)
+Zudem wirkt die Wahl der erklärenden Variablen sinnvoll, da sie einen signifikanten Einfluss auf den Lohn haben. *(vgl. Anhang 2.1)*
 
-
-#< quiz "3.3.8"
-question: Eine Variable, die den Lohn negativ beeinflusst, ist der Anteil der Gewerkschaftsmitglieder *unionmem*. Woran könnte das liegen?
-sc:
-    - Das Jahr 1997 ist sinnvoll gewählt, da es den Startpunkt unserer Analyse markiert. 
-    - Es gibt andere Jahre, die auf Basis unserer Analyse einen wichtigeren Punkt markieren*
-    - Gewerkschaften schließen höhere Löhne ab. 
-
-success: Richtige Antwort. R wählt automatisch den kleinsten Wert bei der Faktorisierung, ohne Berücksichtigung der Relevanz.
-failure: Das ist so nicht korrekt, überlegen Sie nochmal auf welche Jahre wir bei unserer DiD-Schätzung einen besonderen Fokus gelegt haben.
-#>
 
 Sehen wir uns das Ganze auch noch für die Veränderung in der Gewinnmarge an. \
 **Aufgabe:** Führen Sie den Code mittels *check* aus.
@@ -1267,100 +1252,56 @@ reg_table_net_pcm
 #>
 ```
 
-Auch hier können wir feststellen, dass 
+Auch hier können wir feststellen, dass unsere Schätzung weiter an Robustheit gewinnt und dadurch unsere These der Verringerung des Gewinnmarge durch die Mindestlohneinführung weiter aufrechterhalten werden kann.
 
+## Exercise 3.4 Weiterführende Analysen
 
-**Table 2, Panel B**
+Neben den von uns dargestellten Ergebnissen, gibt es im untersuchten Artikel weitere interessante Darstellungen, die unsere bisherige Analyse zu den Auswirkungen auf Unternehmen im Niedriglohnsektor untermauern und erweitern.
 
-**Kontinuierliche Messung**
+### Placebo-Experiment
 
-Bisher haben wir uns auf die Unterscheidung zwischen Treatment und keinem Treatment konzentriert. Dabei wurde deutlich, dass sowohl einen signifikante positive Änderung des Lohns, als auch eine negative signifikante Veränderung der Gewinnmarge vorhanden sind. Da diese sich diese Unterscheidung allerdings auf die vorangegangene eigene Definition der beiden Gruppen stützt, kann die Betrachtung durch eine weitere Methode hilfreich sein. Zudem wollen wir einen genaueren Effekt je nach Einkommen erhalten.
+Durch die Einführung eines Placebo-Experiments wird festgestellt, dass es vor der Mindestlohneinführung keine relevanten Zusammenhänge zwischen der Treatment- und Kontrollgruppe bestanden. \
+Teil dieses Experiments ist die Prüfung einer imaginären Mindestlohneinführung 3 Jahre vor der wahren Einführung. \
+Dabei wurde kein Trend erkennbar, der auf einen bereits bestehenden Zusammenhang der beiden Gruppen schließen würde. \
+*(vgl. Draca et al., S.142ff.)*
 
-Im Vergleich zur diskreten Messung wird bei der kontinuierlichen Messung kein Dummy für die Treatments verwendet, sondern ein bestimmter Wert.
+### Unterschied zwischen Industrien
 
+Die Autoren vergleichen die Wirkung der Mindestlohneinführung Wettbewerben mit hoher und niedriger Marktmacht. \
+Dabei kommen die Autoren zu dem Schluss, dass es Unterschiede im Umgang mit Mindestlohneinführungen gibt. \
+Während Unternehmen mit einer verhältnismäßig geringen Marktmacht die Erhöhung der Löhne hauptsächlich über die Verringerung der Gewinnmarge kompensieren, ist zu erkennen, dass marktmächtige Unternehmen die Erhöhung durch Preisanpassungen an Kunden weitergeben. \
+*(vgl. Draca et al., S.146f.)*
 
-Um diese kontinuierliche Analyse zu ermöglichen, wird anstatt der Treatmentvariablen *ctreat1* eine andere Variable gewählt.
-In unserem Fall ist das *c_avwage99* und beschreibt den logarithmierten Durchschnittslohn zum Jahr 1999 nach Unternehmen gruppiert.
+### Auswirkungen auf weitere Unternehmensfaktoren
 
-**Diskrete Daten vs. Kontinuierliche Daten**
-
-| Merkmal             |     Diskrete Daten      |     Kontinuierliche Daten     |
-|---------------------|--------------------------|-------------------------------|
-| Generell            |                         |                               |
-| Vorteil             |                         |                               |   
-| DiD-Schätzung       | Verwendung von Dummys   | Verwendung konkreter Werte    |
-| Treatmentvariable   | ctreat                  | c_avwage99                    |
-| Werte               | 0 oder 1                | logarithmierter Durchschnittslohn im Jahr 1999 |
-
-
-**Aufgabe:**Ersetzen wir nun aus der vorherigen Regression die Dummyvariable ctreat1 durch die Variable mit kontinuierlichen Werten, *c_avwage99*. Um mit den relevantesten Daten arbeiten zu können, erstellen wir dazu wie gewohnt tidy Datensätze.
-```{r}
-reg6 = felm(ln_avwage ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
-
-reg7 = felm(net_pcm ~ c_avwage99 + avwage99_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
-
-tidy_reg6 = tidy(reg6)
-tidy_reg7 = tidy(reg7)
-
-stargazer(reg5, reg6, type = "text")
-```
-WAS HAT SICH GEÄNDERT?
-WIE KANN DAS ERGEBNIS INTERPRETIERT WERDEN?
-WIESO BRAUCHT MAN DAS?
-  - Vergleich zur imaginären Einführung
-
-
-
-
+Wie zu Beginn erwähnt könnten neben des Gewinns auch noch weitere Faktoren von der Einführung des nationalen Mindestlohns betroffen sein. \
+Sowohl auf eine Veränderung am Arbeitsmarkt, als auch auf eine Veränderung in der Produktionskraft von nNternehmen werden keine signifikanten Einflüsse erkannt. \
+Derweil ist ein langfristiger Trend zu erkennen der die Vermutung zulässt, dass es zu weniger Markteintritten in den stark vom der Mindestlohneinführung betroffen Unternehmen kommt. \
+*(vgl. Draca et al., S.148f.)*
 
 
 ## Exercise 4  Einordnung des Artikels 
 
-- EU-weiter Mindestlohn (Möglichkeiten, Chancen, Probleme)
-- Unterschiede zu 1999 (Andere Rahmenbedingungen?, Brexit?)
-- unberücksichtigte Variablen
-- Auswirkung auf Beschäftigung
-- weitere Artikel (andere Auswirkungen untersucht)
-- Strukturen in Unternehmen
-- Ist der Mindestlohn zu befürworten? (sozial, ökonomisch)
-
-Probleme:
-  Undurchsichtigkeit bei den Beispielsfirmen (951 von 4112)
-  Wahl der Treatmentgruppe ist eine Näherung
   
-Komponenten: 
-- Bewertung des Artikels
+### Bewertung des Artikels
+
 Die wissenschaftliche Arbeit von Draca et al. macht sich die besondere Eigenschaft des quasi-experimentellen Experiments zu eigen und wählt dazu passenderweise die Methodik der Difference-in-Differences Schätzung. \
 Dabei zeigen die Autoren gut auf, dass die Einführung von Mindeslöhnen zu einer Veränderung der Unternehmensgewinne führt. \
 Hinzu kommt, dass für die häufig untersuchte Frage der Veränderung in der Beschäftigung kein relevanter Effekt erkannt wird. \
 Durch die Wahl von plausiblen Kontrollvariablen aus unterschiedlichen Bereichen der Unternehmenswelt wirkt die Argumentation fundiert. \
 Der zunächst nicht evidenten Einteilung in Kontroll- und Treatmentgruppe wird sich genähert und anhand von Lohnstrukturen werden die Daten logisch nachvollziehbar eingeteilt. \
 Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee der Selektion ist nicht erkennbar. \
+Da wir keine genauen Daten für jeden Arbeitnehmer haben, wird ist unsere Analyse vor allem auf den Niedriglohnsektor anwendbar, wobei mit einem Anteil von 87% auch ein relativ großer Teil der Arbeiter abgebildet wird. \
+Begleitend zeigt das eine Unternehmensstruktur auf, in der Lohnunterschiede vorallem zwischen Sektoren variieren und weniger innerhalb eines Unternehmens. \
 Eine weitere Komponente, die im Rahmen der Analyse vermisst wird, ist eine finanzielle Rahmenbedingung als Kontrollvariable. \
 Der Output des Unternehmens bleibt weitestgehend unberücksichtigt, da im Datensatz keine Daten zu Produkten wie Preise oder Qualität vorhanden sind. Diese Problematik ist auch den Autoren bewusst und sie weisen auf diese Einschränkung in der Bewertung hin. \
 
 - Weitere Forschung
 Höherer Rückgang in der Marge bei Unternehmen mit großer Marktmacht entdeckt
 - Rückbezug zur Einleitung
-
-Sehen Sie sich mittels *check* an, was Sie von Ihrer Reise durch das Vereinigten Königreich mitgenommen haben:
-```{r}
-awards(as.html=TRUE)
-```
+- Ist ein Mindestlohn zu befürworten
 
 
-###Quellen
-- OECD (2002), OECD Employment Outlook 2002, OECD Publishing, Paris, S.320
-- Angrist J.D., Pischke J.-S. Mostly Harmless Econometrics (PUP, 2008)(ISBN 069112034X)(O)(290s)_GL_
-- Cohen, J., Cohen, P., West, S.G., & Aiken, L.S. (2002). Applied Multiple Regression/Correlation Analysis for the Behavioral Sciences (3rd ed.). Routledge. https://doi.org/10.4324/9780203774441 (https://learning.oreilly.com/library/view/applied-multiple-regression-correlation/9780805822236/xhtml/15_Chapter_08.xhtml#h8_2 )
-- Callaway, B., & Sant’Anna, P. H. (2021). Difference-in-differences with multiple time periods. Journal of econometrics, 225(2), 200-230.
-- Aarts, Emmeke, et al. "A solution to dependency: using multilevel analysis to accommodate nested data." Nature neuroscience 17.4 (2014): 491-496.
-
-(Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.)
-
-https://markdown-syntax.de/Syntax-GFM/Tabellen/
 
 
 ## Exercise Anhang
@@ -1395,10 +1336,10 @@ Man erkennt einen Unterschied in den Beschäftigungszahlen der beiden Gruppen.
 Regressionsergebnisse zum logarithmierten Durchschnittslohn:
 ```{r}
 #< task
-reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)
+reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat_pp)
 
 reg4 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat_pp)
 
 stargazer(reg2, reg4, type ="text")
 #>
@@ -1408,40 +1349,67 @@ stargazer(reg2, reg4, type ="text")
 Regressionsergebnisse zur Gewinnmarge:
 ```{r}
 #< task
-reg3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)
+reg3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat_pp)
 
 reg5 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + 
-                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)
+                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat_pp)
 
 stargazer(reg3, reg5, type = "text")
 #>
 ```
 
+## Exercise Referenzen
 
-## Anhang 3
-Weitere Darstellungen zur Untermauerung der DiD-Schätzung:
+**Literatur**
+
+- Aarts, E., Verhage, M., Veenvliet, J. V., Dolan, C. V., & Van Der Sluis, S. (2014). A solution to dependency: using multilevel analysis to accommodate nested data. Nature neuroscience, 17(4), 491-496.
+
+- Abadie, A., Athey, S., Imbens, G. W., & Wooldridge, J. M. (2023). When should you adjust standard errors for clustering?. The Quarterly Journal of Economics, 138(1), 1-35.
+
+- Angrist, J. D., & Pischke, J. S. (2009). Mostly harmless econometrics: An empiricist's companion. Princeton university press.
+
+- Callaway, B., & Sant’Anna, P. H. (2021). Difference-in-differences with multiple time periods. Journal of econometrics, 225(2), 200-230.
+
+- Cohen, J., Cohen, P., West, S. G., & Aiken, L. S. (2013). Applied multiple regression/correlation analysis for the behavioral sciences. Routledge.; Abrufbar unter: https://doi.org/10.4324/9780203774441 
+
+- Draca, M., Machin, S., & Van Reenen, J. (2011). Minimum wages and firm profitability. American economic journal: applied economics, 3(1), 129-151.
+
+- Brown, William (2007), Friedrich-Ebert-Stiftung, Büro London, London; abrufbar unter: https://library.fes.de/pdf-files/bueros/london/04855-20071107.pdf
+
+- OECD (2002), OECD Employment Outlook 2002, OECD Publishing, Paris
+
+- https://webarchive.nationalarchives.gov.uk/ukgwa/20160105160709/http://www.ons.gov.uk/ons/guide-method/classifications/archived-standard-classifications/uk-standard-industrial-classification-1992--sic92-/uk-sic-2003.pdf (Letzter Aufruf: 05.02.2025)
+
+
+**R Pakete und Darstellungen**
+
+- https://dplyr.tidyverse.org/reference/group_by.html (Letzter Aufruf: 05.02.2025)
+
+- https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html (Letzter Aufruf: 05.02.2025)
+
+- https://r-causal.github.io/ggdag/ (Letzter Aufruf: 05.02.2025)
+
+- https://markdown-syntax.de/Syntax-GFM/Tabellen/ (Letzter Aufruf: 05.02.2025)
+
+- https://www.rdocumentation.org/packages/stargazer/versions/5.2.3/topics/stargazer (Letzter Aufruf: 05.02.2025)
+
+- https://www.rdocumentation.org/packages/lfe/versions/2.9-0/topics/felm (Letzter Aufruf: 05.02.2025)
+
+- https://cran.r-project.org/web/packages/broom/vignettes/broom.html (Letzter Aufruf: 05.02.2025)
 
 
 
+## Exercise Einreichen Ihrer Lösung
 
+Um Ihre Lösung abzugeben, gehen Sie wie folgt vor:
 
-## Exercise Anregungen
+1. Scrollen Sie nach oben und drücken auf das Balkensymbol <i class="fa fa-tasks fa-fw"></i> um zu sehen, wie viele Punkte Sie bisher erreicht haben. Um eine höhere Punktzahl zu erlangen, können Sie sich an den noch ungelösten Aufgaben versuchen.
 
-- "Aber was sind die Produktionskosten - des Arbeiters, d.h. die Kosten, um den Arbeiter selbst zu produzieren?" / "Wert der Arbeit" (Kapital, 497)
+2. Wenn Sie Ihre Lösung abgeben wollen, drücken Sie auf den Download <i class="fa  fa-download fa-fw"></i> ganz rechts.
 
+3. Im geöffneten Tab wählen Sie die Schaltfläche "Download Submission File". Ihr Browser sollte daraufhin eine Datei mit der Endung `.sub` herunterladen.
 
-
-## Exercise Submitting your solution
-
-To submit your solution please proceed as follows:
-
-1. Scroll to the top and click on the icon with the bars <i class="fa fa-tasks fa-fw"></i> to see how many points you got so far. If you want to have more points you can try to solve the missing tasks.
-
-2. If you want to submit click on the download button <i class="fa  fa-download fa-fw"></i> at the very right.
-
-3. In the opened tab click the button "Download Submission File". Your browser should then download a file with the extension `.sub`.
-
-4. Upload that downloaded file to your course management system like Moodle, as specified by your instructor.
+4. Laden Sie Ihre heruntergeladene Datei auf einer entsprechenden Lernplattform wie Moodle hoch, genaue Anweisungen erhalten Sie von Ihrem Dozenten.
 
 
 

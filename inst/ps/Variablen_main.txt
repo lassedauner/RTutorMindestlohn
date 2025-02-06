@@ -1,0 +1,49 @@
+orgvar | var | descr 
+
+regno | regno | Registrationsnummer des Unternehmens
+year | year | Jahr der Berichterstattung
+month | month | Monat der Berichterstattung
+turn | turn | Umsatz in 1000 GBP
+emp | emp | Beschäftigung
+renu | renu | ?
+netprofit | netprofit | Netto EBIT Gewinne
+cap | cap | Sachanlagen in 1000 GBP
+avwage | avwage | Durchschnittslohn
+net_pcm | net_pcm | Nettogewinn/Umsatz
+ln_avwage | ln_avwage | logarithmierter Durchschnittslohn
+uksic | uksic | 4-stelliger Industriecode 2003
+unionmem | unionmem | Anteil der Gewerkschaftsmitglieder im sic4
+female | female | Anteil der weiblichen Mitarbeiter im sic4
+ptwk | ptwk | Anteil der Teilzeitarbeitnehmer im sic4
+gorwwk | gorwk | Region
+lnemp | lnemp | logarithmierte Zahl der Arbeitnehmer
+manuf | manuf | Produzierendes Gewerbe
+whsle | whsle | Großhandel
+retail | retail | Einzelhandel
+hospitality | hospitality | Hotel und Gastronomie
+bizservice | bizservice | Dienstleistung
+capsale | capsale | Kapitalumschlag
+grad2 | grad2 | Akademikeranteil im sic2 in gorwk-Region
+sic2 | sic2 | 2-stelliger uksic
+Placebo | Placebo | Placebo-Periode
+ptreat | ptreat | Placebo-Treatmentgruppe
+ptreat_placebo | ptreat_placebo | Interaktionsterm ptreat*Placebo
+sic3 | sic3 | 3-stelliger uksic
+NMW | NMW | Post-Treatment Gruppe
+ctreat1 | ctreat1 | Treatmentgruppe
+treat1_NMW | treat1_NMW | Interaktionsterm ctreat1*NMW
+c_avwage99 | c_avwage99 | Durchschnittslohn im Jahr 1999
+avwage99_NMW | avwage99_NMW | Interaktionsterm c_avwage99*NMW
+c_avwage96 | c_avwage96 | Durchschnittslohn im Jahr 1996
+avwage96_placebo | avwage96_placebo | Interaktionsterm c_avwage96*NMW
+pp | pp | Beispielauswahl NMW
+ff | ff | Beispielauswahl Placebo
+wb_sales | wb_sales | renu/turn
+turnemp | turnemp | turn/employment
+lturnemp | lturnemp | ln(turn/employment)
+split | split | Quantil im sic3_ebit_pcm
+
+
+
+
+
