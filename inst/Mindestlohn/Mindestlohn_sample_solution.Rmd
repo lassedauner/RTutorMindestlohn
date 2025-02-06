@@ -50,7 +50,7 @@ Hinter diesem leicht verständlichen Versprechen steckt allerdings die komplexe 
 
 Häufig wird in der Forschung die Frage der Auswirkungen auf die Beschäftigung betrachtet. Dabei treten Kontroversen auf und es herrscht keine Einigkeit in den Schlussfolgerungen. \
 Daher wählen wir mit unserer Analyse nach Draca et. al (2011) einen anderen Ansatz. \
-Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerteten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. \
+Anstatt die Beschäftigung in den Vordergrund zu rücken, widmen wir uns der vorgelagerten Frage, wie die Lohnsteigerungen innerhalb von Unternehmen kompensiert werden. \
 Eine solche Betrachtungsweise ist nach den Autoren in der Forschung bisher weitestgehend unbeachtet geblieben (vgl. Draca et. al (2011), S. 129f.)
 
 
@@ -93,7 +93,7 @@ Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn im Vereinigten
 Weiter gilt zu erwähnen, dass der nationale Mindestlohn (NMW) nicht die erste Art des Mindestlohns im Vereinigten Königreich war. \
 Von 1909 bis zum Jahr 1993 an wurden gesetzliche Mindestlöhne durch *Wage Councils* innerhalb von Branchen bestimmt. \
 Das Novum des NMW liegt in der Reichweite über alle Branchen hinweg. Ähnlich wie die *Wage Councils*, gibt die unabhängige Niedriglohnkommission (LPC) eine Empfehlung zur Mindestlohnhöhe. \
-Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkomission angepasst.
+Von 1999 an wird die Lohnhöhe fortlaufend von der Niedriglohnkommission angepasst.
 
 
 Quiz: Auf welche Höhe schätzen Sie den gesetzlichen Mindestlohn im UK im Jahr 2024?
@@ -300,7 +300,7 @@ ggplot(dat_trend)+
   geom_line(aes(x = year, y = control))
 ```
 
-Wir können schon etwas ablesen, die Graphik kann allerdings noch ansehnlicher gestaltet werden um Unterschiede deutlicher zu machen.\
+Wir können schon etwas ablesen, die Graphik kann allerdings noch ansehnlicher gestaltet werden, um Unterschiede deutlicher zu machen.\
 Dafür können wir die Linien kolorieren und sowohl die Lininenstärke, als auch den Linientyp verändern.
 
 **Aufgabe**: Färben Sie die Linie der Treatmentgruppe in blau und die der Kontrollgruppe in rot. \
@@ -333,7 +333,7 @@ ggplot(dat_trend)+
    geom_vline(xintercept = 1999)+
   xlab("Jahr")+
   ylab("logarithmierter Durchschnittslohn")+
-  ggtitle("Entwicklung von ln_avwage in Kontroll- und Treatmentgruppe")
+  ggtitle("Entwicklung in Kontroll- und Treatmentgruppe")
 ```
 
 
@@ -356,7 +356,7 @@ Bezüglich der PTA gibt es seitens der Autoren keine weiterführenden Analysen, 
 
 Nachdem wir um die Komplexität der allgemeinen Voraussetzungen für eine DiD-Schätzung wissen, können wir uns weiter der Relevanz der Gruppenwahl widmen. \
 In der erstellten Graphik haben wir die Treatment- und Kontrollgruppen zunächst als gegeben angenommen, ohne die Entstehung zu hinterfragen. \
-Der Frage der Entstehung gehen wir nun nach.
+Der Frage der Entstehung der Gruppen gehen wir nun nach.
 
 
 Als Einstieg sehen wir uns dafür die Veränderung der Löhne über die Jahre an. \
@@ -467,7 +467,7 @@ ggplot(diffperc)+
   ylab("Änderung des logarithmierten Durchschnittslohns")
 ```
 
-Es wird deutlich, dass vorallem in den unteren 13 Perzentilen von der Mindestlohneinführung profitiert wird und die Unterschiede in der Lohnerhöhung am Größten sind.
+Es wird deutlich, dass vor allem in den unteren 13 Perzentilen von der Mindestlohneinführung profitiert wird und die Unterschiede in der Lohnerhöhung am größten sind.
 
 Die graphische Veranschaulichung möchten wir auch technisch nachvollziehen. \
 Erinnern wir uns hierfür zunächst an den theoretischen Zusammenhang von Gewinnmargen und Lohnerhöhungen:
@@ -477,13 +477,13 @@ Quiz: Wann kann ein negativer Einfluss auf die Gewinnmarge $Δ(\frac{Π}{S})$ en
 
 - Wenn der Mindestlohn höher als der bisherige Lohn ist, also $ΔW = W - M < 0$ [x]
 
-- Wenn der Mindestlohn niedrier als der bisherige Lohn ist, also $ΔW = W - M > 0$ [ ]
+- Wenn der Mindestlohn niedriger als der bisherige Lohn ist, also $ΔW = W - M > 0$ [ ]
 
 
 Im Mittelpunkt der Mindestlohneinführung steht der Wert von 3.60 Pfund pro Stunde. \
 Wir sollten also in unsere Treatmentgruppe jene Mitarbeiter einschließen, die vor der Mindestlohneinführung einen Lohn unter 3.60£ erhielten. \
 Da unser Datensatz allerdings keine Daten zu jedem Arbeitnehmer enthält, müssen wir uns der Wahl der Treatmentgruppe nähern. \
-Die Variable, die den Lohn innerhalb eines Unternehmens am Besten widerspiegelt ist hierbei `avwage`, worüber sich auch im Artikel genähert wird. 
+Die Variable, die den Lohn innerhalb eines Unternehmens am besten widerspiegelt ist hierbei `avwage`, worüber sich auch im Artikel genähert wird. 
 
 Dabei werden alle Unternehmen mit einem durchschnittlichen Lohn kleiner gleich **12,000£** in die Treatmentgruppe einsortiert. \
 Um zu verstehen, warum sich für diesen Wert als Obergrenze entschieden wird ist es hilfreich, den Wert in Zusammenhang mit dem Stundenlohn zu bringen.
@@ -500,7 +500,7 @@ mean_treat
 ```
 
 Dieser Wert gibt den durchschnittlichen Jahreslohn der Treatmentgruppe wieder.\
-Um nun auf den Stundenlohn zu kommen, müssen wir ermitteln, in welchem Bereich sich die Jahresarbeitszeit im Geschäftsjahr mit dem Ende in 1999 befindet.
+Um nun auf den Stundenlohn zu kommen, müssen wir ermitteln, in welchem Bereich sich die Jahresarbeitszeit im Geschäftsjahr mit dem Ende im Jahr 1999 befindet.
 
 Daten aus dem [OECD Employment Outlook 2002](https://doi.org/10.1787/empl_outlook-2002-en)
 zeigen, dass die durchschnittliche Jahresarbeitszeit 1998 bei **1731 Stunden** und 1999 bei **1719 Stunden** liegt. \
@@ -852,7 +852,7 @@ stargazer(reg3, type = "text")
 ```
 
 Wir erkennen, dass die Schätzer signifikante Werte aufweisen und sehen somit, dass unsere zu Beginn von Hand berechneten Werte auch statistisch belastbar sind.\
-Auch hier dürfen Sie den Schätzer unserer DiD-Vairablen wieder interpretieren.
+Auch hier dürfen Sie den Schätzer unserer DiD-Variablen wieder interpretieren.
 
 
 Quiz: Was passiert mit der Gewinnmarge, wenn man die Schätzung `reg3` als Basis wählt?
@@ -868,7 +868,7 @@ Quiz: Was passiert mit der Gewinnmarge, wenn man die Schätzung `reg3` als Basis
 -------------
 
 
-Als nächsten Schritt sehen wir uns weiter an ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren. \
+Als nächsten Schritt sehen wir uns weiter an, ob es zu Veränderungen kommt, wenn wir auf bestimmte Effekte der Unternehmenswelt kontrollieren. \
 Dafür können wir uns die Funktion der **Faktorvariablen** zunutze machen.
 
 Da wir bei nominalskalierten Daten keine Möglichkeit zur messbaren Unterscheidung finden, müssen wir Faktorvariablen nutzen, um diskrete Daten in die Regression miteinzubeziehen. \
@@ -939,7 +939,7 @@ Hierbei lernen Sie eine alternative Darstellung der Regressionsergebnisse zu `st
 library(broom)
 ```
 
-**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die `felm`Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie dabei anschließend die Tabelle aus.
+**Aufgabe**: Führen Sie den Code aus, um aus der Liste - die uns durch die `felm` Funktion erstellt wird - eine Tabelle der Regression zu kreieren. Geben Sie dabei anschließend die Tabelle aus.
 ```{r "7_13"}
 table_reg3.3 = tidy(reg3.3)
 
@@ -982,7 +982,7 @@ tidy_reg4 = tidy(reg4)
 tidy_reg5 = tidy(reg5)
 ```
 
-**Aufgabe**: Erzeugen Sie zunächst die gegenüberstellende Tabelle der Regression ohne und mit Kontrollvariablen mittels *check* und lassen Sie sie ausgeben. Runden Sie die Ergebniss dabei auf drei Nachkommastellen
+**Aufgabe**: Erzeugen Sie zunächst die gegenüberstellende Tabelle der Regression ohne und mit Kontrollvariablen mittels *check* und lassen Sie sie ausgeben. Runden Sie die Ergebnisse dabei auf drei Nachkommastellen.
 ```{r "7_16"}
 reg_table_ln_avwage = data.frame("Variable" = "treat1_NMW","Schätzer_reg2" = round(tidy_reg2$estimate[3],3),"se_reg2"= round(tidy_reg2$std.error[3],3), "Schätzer_reg4" = round(tidy_reg4$estimate[3],3), "se_reg4"= round(tidy_reg4$std.error[3],3))
 
@@ -1001,7 +1001,7 @@ reg_table_net_pcm = data.frame("Variable" = "treat1_NMW","Schätzer_reg3" = roun
 reg_table_net_pcm
 ```
 
-Auch hier können wir feststellen, dass unsere Schätzung weiter an Robustheit gewinnt und dadurch unsere These der Verringerung des Gewinnmarge durch die Mindestlohneinführung weiter aufrechterhalten werden kann.
+Auch hier können wir feststellen, dass unsere Schätzung weiter an Robustheit gewinnt und dadurch unsere These der Verringerung der Gewinnmarge durch die Mindestlohneinführung weiter aufrechterhalten werden kann.
 
 ## Exercise 3.4 Weiterführende Analysen
 
@@ -1024,7 +1024,7 @@ Während Unternehmen mit einer verhältnismäßig geringen Marktmacht die Erhöh
 ### Auswirkungen auf weitere Unternehmensfaktoren
 
 Wie zu Beginn erwähnt könnten neben des Gewinns auch noch weitere Faktoren von der Einführung des nationalen Mindestlohns betroffen sein. \
-Sowohl auf eine Veränderung am Arbeitsmarkt, als auch auf eine Veränderung in der Produktionskraft von nNternehmen werden keine signifikanten Einflüsse erkannt. \
+Sowohl auf eine Veränderung am Arbeitsmarkt, als auch auf eine Veränderung in der Produktionskraft von Unternehmen werden keine signifikanten Einflüsse erkannt. \
 Derweil ist ein langfristiger Trend zu erkennen der die Vermutung zulässt, dass es zu weniger Markteintritten in den stark vom der Mindestlohneinführung betroffen Unternehmen kommt. \
 *(vgl. Draca et al., S.148f.)*
 
@@ -1035,20 +1035,18 @@ Derweil ist ein langfristiger Trend zu erkennen der die Vermutung zulässt, dass
 ### Bewertung des Artikels
 
 Die wissenschaftliche Arbeit von Draca et al. macht sich die besondere Eigenschaft des quasi-experimentellen Experiments zu eigen und wählt dazu passenderweise die Methodik der Difference-in-Differences Schätzung. \
-Dabei zeigen die Autoren gut auf, dass die Einführung von Mindeslöhnen zu einer Veränderung der Unternehmensgewinne führt. \
+Dabei zeigen die Autoren gut auf, dass die Einführung von Mindestlöhnen zu einer Veränderung der Unternehmensgewinne führt. \
 Hinzu kommt, dass für die häufig untersuchte Frage der Veränderung in der Beschäftigung kein relevanter Effekt erkannt wird. \
 Durch die Wahl von plausiblen Kontrollvariablen aus unterschiedlichen Bereichen der Unternehmenswelt wirkt die Argumentation fundiert. \
 Der zunächst nicht evidenten Einteilung in Kontroll- und Treatmentgruppe wird sich genähert und anhand von Lohnstrukturen werden die Daten logisch nachvollziehbar eingeteilt. \
-Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee der Selektion ist nicht erkennbar. \
+Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee hinter der Selektion ist nicht erkennbar. \
 Da wir keine genauen Daten für jeden Arbeitnehmer haben, wird ist unsere Analyse vor allem auf den Niedriglohnsektor anwendbar, wobei mit einem Anteil von 87% auch ein relativ großer Teil der Arbeiter abgebildet wird. \
-Begleitend zeigt das eine Unternehmensstruktur auf, in der Lohnunterschiede vorallem zwischen Sektoren variieren und weniger innerhalb eines Unternehmens. \
+Begleitend zeigt das eine Unternehmensstruktur auf, in der Lohnunterschiede vor allem zwischen Sektoren variieren und weniger innerhalb eines Unternehmens. \
 Eine weitere Komponente, die im Rahmen der Analyse vermisst wird, ist eine finanzielle Rahmenbedingung als Kontrollvariable. \
 Der Output des Unternehmens bleibt weitestgehend unberücksichtigt, da im Datensatz keine Daten zu Produkten wie Preise oder Qualität vorhanden sind. Diese Problematik ist auch den Autoren bewusst und sie weisen auf diese Einschränkung in der Bewertung hin. \
 
-- Weitere Forschung
-Höherer Rückgang in der Marge bei Unternehmen mit großer Marktmacht entdeckt
-- Rückbezug zur Einleitung
-- Ist ein Mindestlohn zu befürworten
+
+Ein (höherer) Mindestlohn kann gewählt werden, wodurch sich das Einkommen für viele Arbeitnehmer signifikant erhöht. Damit einher geht eine Veränderung der Gewinnstruktur in Unternehmen, auf die je nach Branche unterschiedlich reagiert wird.
 
 
 

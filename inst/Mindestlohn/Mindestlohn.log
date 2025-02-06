@@ -822,3 +822,95 @@
 ,
 {"type":["check_chunk"],"time":["2025-02-06 00:13:48"],"user":["default_user"],"umph":[1738797228.7654],"ok":[true],"chunk":[18],"ex":[5],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2025-02-06 19:51:08"],"user":["default_user"],"umph":[1738867868.6323],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:33"],"user":["default_user"],"umph":[1738867893.5924],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:33"],"user":["default_user"],"umph":[1738867893.9909],"ok":[true],"chunk":[2],"ex":[3],"e.ind":[0],"code":["\nhead(dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:38"],"user":["default_user"],"umph":[1738867898.667],"ok":[true],"chunk":[3],"ex":[3],"e.ind":[0],"code":["dat %>% \n  group_by(month) %>%\n  summarize(length(month))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:55"],"user":["default_user"],"umph":[1738867915.192],"ok":[true],"chunk":[4],"ex":[5],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:56"],"user":["default_user"],"umph":[1738867916.1991],"ok":[true],"chunk":[5],"ex":[5],"e.ind":[0],"code":["dat_trend_treat = dat %>% \n  filter(ctreat1 == 1) %>%\n  group_by(year)%>%\n  summarise(\"treatment\"=mean(ln_avwage, na.rm = TRUE)) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:56"],"user":["default_user"],"umph":[1738867916.4536],"ok":[true],"chunk":[6],"ex":[5],"e.ind":[0],"code":["dat_trend_control = dat %>%\n  filter(ctreat1 == 0) %>%\n  group_by(year) %>%\n  summarise(\"control\"=mean(ln_avwage, na.rm = TRUE))\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:56"],"user":["default_user"],"umph":[1738867916.9484],"ok":[true],"chunk":[7],"ex":[5],"e.ind":[0],"code":["dat_trend = left_join(dat_trend_treat, dat_trend_control)\n\ndat_trend"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:57"],"user":["default_user"],"umph":[1738867917.2181],"ok":[true],"chunk":[8],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n  geom_line(aes(x = year, y = treatment))+\n  geom_line(aes(x = year, y = control))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:57"],"user":["default_user"],"umph":[1738867917.7412],"ok":[true],"chunk":[9],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:58"],"user":["default_user"],"umph":[1738867918.2196],"ok":[true],"chunk":[10],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)\n  "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:51:58"],"user":["default_user"],"umph":[1738867918.6944],"ok":[true],"chunk":[11],"ex":[5],"e.ind":[0],"code":["ggplot(dat_trend)+\n   geom_line(aes(x = year, y = treatment), colour= \"blue\", linetype = 1, linewidth = 0.8)+\n   geom_line(aes(x = year, y = control), colour = \"red\", linetype = 1, linewidth = 0.8)+\n   geom_vline(xintercept = 1999)+\n  xlab(\"Jahr\")+\n  ylab(\"logarithmierter Durchschnittslohn\")+\n  ggtitle(\"Entwicklung in Kontroll- und Treatmentgruppe\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:02"],"user":["default_user"],"umph":[1738867922.0479],"ok":[true],"chunk":[12],"ex":[5],"e.ind":[0],"code":["#\npcw95 = dat %>%\n  filter(year == 1995)%>%\n  filter(avwage >= 3)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:02"],"user":["default_user"],"umph":[1738867922.2229],"ok":[true],"chunk":[13],"ex":[5],"e.ind":[0],"code":["percent95 = quantile(pcw95$ln_avwage, seq(0, 1, 0.01))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:02"],"user":["default_user"],"umph":[1738867922.8111],"ok":[true],"chunk":[14],"ex":[5],"e.ind":[0],"code":["\npcw96 = dat %>%\n  filter(year == 1996)%>%\n  filter(avwage >= 3)\npercent96 = quantile(pcw96$ln_avwage, seq(0, 1, 0.01))\n\npcw97 = dat %>%\n  filter(year == 1997)%>%\n  filter(avwage >= 3)\npercent97 = quantile(pcw97$ln_avwage, seq(0, 1, 0.01))\n\npcw98 = dat %>%\n  filter(year == 1998)%>%\n  filter(avwage >= 3)\npercent98 = quantile(pcw98$ln_avwage, seq(0, 1, 0.01))\n\npcw99 = dat %>%\n  filter(year == 1999)%>%\n  filter(avwage >= 3)\npercent99 = quantile(pcw99$ln_avwage, seq(0, 1, 0.01))\n\npcw00 = dat %>%\n  filter(year == 2000)%>%\n  filter(avwage >= 3)\npercent00 = quantile(pcw00$ln_avwage, seq(0, 1, 0.01))\n\npcw01 = dat %>%\n  filter(year == 2001)%>%\n  filter(avwage >= 3)\npercent01 = quantile(pcw01$ln_avwage, seq(0, 1, 0.01))\n\npcw02 = dat %>%\n  filter(year == 2002)%>%\n  filter(avwage >= 3)\npercent02 = quantile(pcw02$ln_avwage, seq(0, 1, 0.01))\n\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:03"],"user":["default_user"],"umph":[1738867923.1242],"ok":[true],"chunk":[15],"ex":[5],"e.ind":[0],"code":["\ndiffperc = data.frame(sort(percent95))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:03"],"user":["default_user"],"umph":[1738867923.3262],"ok":[true],"chunk":[16],"ex":[5],"e.ind":[0],"code":["diffperc = diffperc %>%\n  mutate(\"percentile\" = c(0:100),\n         \"diff96\" = percent96-percent95,\n         \"diff97\" = percent97-percent96,\n         \"diff98\" = percent98-percent97,\n         \"diff99\" = percent99-percent98,\n         \"diff00\" = percent00-percent99,\n         \"diff01\" = percent01-percent00,\n         \"diff02\" = percent02-percent01)\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:03"],"user":["default_user"],"umph":[1738867923.5484],"ok":[true],"chunk":[17],"ex":[5],"e.ind":[0],"code":["\ndiffperc = filter(diffperc, percentile < 76 & percentile > 0)\nggplot(diffperc)+\n  geom_line(aes(x = percentile, y = diff99), colour = \"blue\", linetype = 2, linewidth = 0.8)+\n  geom_line(aes(x = percentile, y = diff00), colour = \"red\", linewidth = 0.8)+\n  geom_vline(xintercept = 13)+\n  geom_vline(xintercept = 50)+\n  xlab(\"Perzentile der Ausgangsdurchschnittslöhne\")+\n  ylab(\"Änderung des logarithmierten Durchschnittslohns\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:04"],"user":["default_user"],"umph":[1738867924.1571],"ok":[true],"chunk":[18],"ex":[5],"e.ind":[0],"code":["mean_treat = dat %>%\n  filter(avwage <= 12) %>%\n  filter(year == 1999) %>%\n  summarise(round(mean(avwage)*1000,2))\nmean_treat"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:04"],"user":["default_user"],"umph":[1738867924.3566],"ok":[true],"chunk":[19],"ex":[5],"e.ind":[0],"code":["annual_hours = 0.75*1731 + 0.25*1719"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:04"],"user":["default_user"],"umph":[1738867924.534],"ok":[true],"chunk":[20],"ex":[5],"e.ind":[0],"code":["ptwk_share = mean(dat$ptwk, na.rm = TRUE)\nptwk_share"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:04"],"user":["default_user"],"umph":[1738867924.6898],"ok":[true],"chunk":[21],"ex":[5],"e.ind":[0],"code":["annual_hours = annual_hours + ptwk_share * annual_hours\n\nannual_hours"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:14"],"user":["default_user"],"umph":[1738867934.3356],"ok":[true],"chunk":[22],"ex":[5],"e.ind":[0],"code":["treat_wage_hour = mean_treat / annual_hours\ntreat_wage_hour"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:41"],"user":["default_user"],"umph":[1738867961.6727],"ok":[true],"chunk":[23],"ex":[6],"e.ind":[0],"code":["dat = read_dta('main_fame.dta')\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:42"],"user":["default_user"],"umph":[1738867962.154],"ok":[true],"chunk":[24],"ex":[6],"e.ind":[0],"code":["dat_table_DiD = dat %>%\n  group_by(ctreat1, NMW)%>%\n  filter(pp == 1) %>%\n  summarise(mean_avwage = mean(avwage), mean_ln_avwage = mean(ln_avwage), mean_net_pcm = mean(net_pcm))"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:42"],"user":["default_user"],"umph":[1738867962.3224],"ok":[true],"chunk":[25],"ex":[6],"e.ind":[0],"code":["\ndat_table_DiD"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:42"],"user":["default_user"],"umph":[1738867962.4977],"ok":[true],"chunk":[26],"ex":[6],"e.ind":[0],"code":["y1.post.treat = dat_table_DiD$mean_ln_avwage[4]\ny1.post.control = dat_table_DiD$mean_ln_avwage[2]\ny1.pre.treat = dat_table_DiD$mean_ln_avwage[3]\ny1.pre.control = dat_table_DiD$mean_ln_avwage[1]\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:42"],"user":["default_user"],"umph":[1738867962.6794],"ok":[true],"chunk":[27],"ex":[6],"e.ind":[0],"code":["y2.post.treat = dat_table_DiD$mean_net_pcm[4]\ny2.post.control = dat_table_DiD$mean_net_pcm[2]\ny2.pre.treat = dat_table_DiD$mean_net_pcm[3]\ny2.pre.control = dat_table_DiD$mean_net_pcm[1]"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:52:49"],"user":["default_user"],"umph":[1738867969.5215],"ok":[true],"chunk":[28],"ex":[6],"e.ind":[0],"code":["DiD_ln_avwage = (y1.post.treat - y1.post.control) - (y1.pre.treat - y1.pre.control)\nDiD_net_pcm = (y2.post.treat - y2.post.control) - (y2.pre.treat - y2.pre.control)\n  \n#Ergebnisse anzeigen\nDiD_ln_avwage\nDiD_net_pcm"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:05"],"user":["default_user"],"umph":[1738867985.6444],"ok":[true],"chunk":[29],"ex":[7],"e.ind":[0],"code":["dag <- dagify(\n  ln_avwage ~ ctreat1 + treat1_NMW + NMW, \n  treat1_NMW ~ ctreat1 + NMW,\n  labels = c(ctreat1 = \"ctreat1\", treat1_NMW = \"treat1_NMW\", NMW = \"NMW\", ln_avwage = \"ln_avwage\")\n)\n\nggdag(dag, node_size = 6, text = FALSE, edge_type = \"link\", use_labels = \"label\")+\n  theme_dag_blank()"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:07"],"user":["default_user"],"umph":[1738867987.044],"ok":[true],"chunk":[30],"ex":[7],"e.ind":[0],"code":["dat_raw = read_dta('main_fame.dta')\ndat = filter(dat_raw, pp == 1) "],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:09"],"user":["default_user"],"umph":[1738867989.2311],"ok":[true],"chunk":[31],"ex":[7],"e.ind":[0],"code":["regi = lm(ln_avwage ~ treat1_NMW, data = dat)\n\nstargazer(regi, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:12"],"user":["default_user"],"umph":[1738867992.0671],"ok":[true],"chunk":[32],"ex":[7],"e.ind":[0],"code":["\nreg1 = lm(ln_avwage ~ ctreat1 + treat1_NMW + NMW, data = dat)\nstargazer(reg1, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:16"],"user":["default_user"],"umph":[1738867996.0813],"ok":[true],"chunk":[33],"ex":[7],"e.ind":[0],"code":["regii = lm(ln_avwage ~ ctreat1, data = dat)\n\nregiii = lm(ln_avwage ~ NMW, data = dat)\n\nstargazer(regi, regii, regiii, reg1, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:20"],"user":["default_user"],"umph":[1738868000.157],"ok":[true],"chunk":[34],"ex":[7],"e.ind":[0],"code":["reg2 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data=dat)\nstargazer(reg1, reg2, type =\"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:23"],"user":["default_user"],"umph":[1738868003.2085],"ok":[true],"chunk":[35],"ex":[7],"e.ind":[0],"code":["stargazer(reg2, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:25"],"user":["default_user"],"umph":[1738868005.9481],"ok":[true],"chunk":[36],"ex":[7],"e.ind":[0],"code":["reg3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\n\nstargazer(reg3, type = \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:26"],"user":["default_user"],"umph":[1738868006.7861],"ok":[true],"chunk":[37],"ex":[7],"e.ind":[0],"code":["dat = dat %>%\n  mutate(\"factor_year\" = factor(year))\n\nhead(dat$year)\nhead(dat$factor_year)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:26"],"user":["default_user"],"umph":[1738868006.9406],"ok":[true],"chunk":[38],"ex":[7],"e.ind":[0],"code":["dat$factor_year = relevel(dat$factor_year, ref = \"2000\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:33"],"user":["default_user"],"umph":[1738868013.4328],"ok":[true],"chunk":[39],"ex":[7],"e.ind":[0],"code":["reg3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW | 0 | 0 | regno, data = dat)\nreg3.1 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + year| 0 | 0 | regno, data = dat)\nreg3.2 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor_year| 0 | 0 | regno, data = dat)\nreg3.3 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + factor(year)| 0 | 0 | regno, data = dat)\n\n\nstargazer(reg3, reg3.1, reg3.2, reg3.3, type= \"text\")"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:35"],"user":["default_user"],"umph":[1738868015.7129],"ok":[true],"chunk":[40],"ex":[7],"e.ind":[0],"code":["library(broom)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:35"],"user":["default_user"],"umph":[1738868015.8898],"ok":[true],"chunk":[41],"ex":[7],"e.ind":[0],"code":["table_reg3.3 = tidy(reg3.3)\n\n#Tabelle ausgeben\ntable_reg3.3"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:36"],"user":["default_user"],"umph":[1738868016.7705],"ok":[true],"chunk":[42],"ex":[7],"e.ind":[0],"code":["reg4 = felm(ln_avwage ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)\n\nreg5 = felm(net_pcm ~ ctreat1 + treat1_NMW + NMW + grad2 + unionmem + ptwk + female + \n                factor(sic2) + factor(year) + factor(gorwk)| 0 | 0 | regno, data = dat)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:37"],"user":["default_user"],"umph":[1738868017.3541],"ok":[true],"chunk":[43],"ex":[7],"e.ind":[0],"code":["tidy_reg1 = tidy(reg1)\ntidy_reg2 = tidy(reg2)\ntidy_reg3 = tidy(reg3)\ntidy_reg4 = tidy(reg4)\ntidy_reg5 = tidy(reg5)"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:37"],"user":["default_user"],"umph":[1738868017.5444],"ok":[true],"chunk":[44],"ex":[7],"e.ind":[0],"code":["reg_table_ln_avwage = data.frame(\"Variable\" = \"treat1_NMW\",\"Schätzer_reg2\" = round(tidy_reg2$estimate[3],3),\"se_reg2\"= round(tidy_reg2$std.error[3],3), \"Schätzer_reg4\" = round(tidy_reg4$estimate[3],3), \"se_reg4\"= round(tidy_reg4$std.error[3],3))\n\nreg_table_ln_avwage"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2025-02-06 19:53:44"],"user":["default_user"],"umph":[1738868024.4804],"ok":[true],"chunk":[45],"ex":[7],"e.ind":[0],"code":["reg_table_net_pcm = data.frame(\"Variable\" = \"treat1_NMW\",\"Schätzer_reg3\" = round(tidy_reg3$estimate[3],3),\"se_reg3\"= round(tidy_reg3$std.error[3],3), \"Schätzer_reg5\" = round(tidy_reg5$estimate[3],3), \"se_reg5\"= round(tidy_reg5$std.error[3],3))\n\nreg_table_net_pcm"],"message":[""]}
+,
