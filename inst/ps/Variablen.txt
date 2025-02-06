@@ -5,7 +5,7 @@ year | year | Jahr der Berichterstattung
 month | month | Monat der Berichterstattung
 turn | turn | Umsatz in 1000 GBP
 emp | emp | Beschäftigung
-renu | renu | ?
+renu | renu | renu
 netprofit | netprofit | Netto EBIT Gewinne
 cap | cap | Sachanlagen in 1000 GBP
 avwage | avwage | Durchschnittslohn
