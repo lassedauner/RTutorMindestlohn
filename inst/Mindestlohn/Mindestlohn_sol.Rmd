@@ -12,6 +12,14 @@ libs = c("ggplot2","haven","stargazer","sandwich", "ggdag", "lfe", "broom")
 create.ps(sol.file=sol.file, ps.name=ps.name,libs=libs, rps.has.sol=TRUE, addons="quiz")
 # Show the problem set in the webbrowser
 show.ps(ps.name,sample.solution=FALSE,auto.save.code = TRUE)
+
+rps.dir = "C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn"
+
+# Folder in which app shall be created
+app.dir = "C:/Users/lasse/Documents/GitHub/RTutorMindestlohn/inst/Mindestlohn"
+rtutor.app.skel(ps.name="Mindestlohn", app.name="RTutorMindestlohn",
+                  app.dir=app.dir, rps.dir = rps.dir,
+                  rps.app = TRUE, libs=libs,overwrite=TRUE)
 ```
 #>
 

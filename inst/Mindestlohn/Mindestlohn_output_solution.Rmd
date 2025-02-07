@@ -1272,19 +1272,20 @@ Derweil ist ein langfristiger Trend zu erkennen der die Vermutung zulässt, dass
 
 ## Exercise 4  Einordnung des Artikels 
 
-  
-### Bewertung des Artikels
+
 
 Die wissenschaftliche Arbeit von Draca et al. macht sich die besondere Eigenschaft des quasi-experimentellen Experiments zu eigen und wählt dazu passenderweise die Methodik der Difference-in-Differences Schätzung. \
 Dabei zeigen die Autoren gut auf, dass die Einführung von Mindestlöhnen zu einer Veränderung der Unternehmensgewinne führt. \
-Hinzu kommt, dass für die häufig untersuchte Frage der Veränderung in der Beschäftigung kein relevanter Effekt erkannt wird. \
+Hinzu kommt, dass für die häufig untersuchte Frage der Veränderung in der Beschäftigung kein relevanter Effekt erkannt wird. 
+
 Durch die Wahl von plausiblen Kontrollvariablen aus unterschiedlichen Bereichen der Unternehmenswelt wirkt die Argumentation fundiert. \
 Der zunächst nicht evidenten Einteilung in Kontroll- und Treatmentgruppe wird sich genähert und anhand von Lohnstrukturen werden die Daten logisch nachvollziehbar eingeteilt. \
-Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee hinter der Selektion ist nicht erkennbar. \
-Da wir keine genauen Daten für jeden Arbeitnehmer haben, wird ist unsere Analyse vor allem auf den Niedriglohnsektor anwendbar, wobei mit einem Anteil von 87% auch ein relativ großer Teil der Arbeiter abgebildet wird. \
+Kritisch anzumerken ist die Wahl der Beispieldatensätze. Hier wird wenig transparent argumentiert und eine klare Struktur der Idee hinter der Selektion ist nicht erkennbar. 
+
+Da wir keine genauen Daten für jeden Arbeitnehmer haben, ist unsere Analyse vor allem auf den Niedriglohnsektor anwendbar, wobei mit einem Anteil von 87% auch ein relativ großer Teil der Arbeiter abgebildet wird. \
 Begleitend zeigt das eine Unternehmensstruktur auf, in der Lohnunterschiede vor allem zwischen Sektoren variieren und weniger innerhalb eines Unternehmens. \
 Eine weitere Komponente, die im Rahmen der Analyse vermisst wird, ist eine finanzielle Rahmenbedingung als Kontrollvariable. \
-Der Output des Unternehmens bleibt weitestgehend unberücksichtigt, da im Datensatz keine Daten zu Produkten wie Preise oder Qualität vorhanden sind. Diese Problematik ist auch den Autoren bewusst und sie weisen auf diese Einschränkung in der Bewertung hin. \
+Der Output des Unternehmens bleibt weitestgehend unberücksichtigt, da im Datensatz keine Daten zu Produkten wie Preise oder Qualität vorhanden sind. Diese Problematik ist auch den Autoren bewusst und sie weisen auf diese Einschränkung in der Bewertung hin. 
 
 
 Ein (höherer) Mindestlohn kann gewählt werden, wodurch sich das Einkommen für viele Arbeitnehmer signifikant erhöht. Damit einher geht eine Veränderung der Gewinnstruktur in Unternehmen, auf die je nach Branche unterschiedlich reagiert wird.

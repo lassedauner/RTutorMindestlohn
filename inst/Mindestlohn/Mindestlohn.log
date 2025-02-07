@@ -914,3 +914,19 @@
 ,
 {"type":["check_chunk"],"time":["2025-02-06 19:53:44"],"user":["default_user"],"umph":[1738868024.4804],"ok":[true],"chunk":[45],"ex":[7],"e.ind":[0],"code":["reg_table_net_pcm = data.frame(\"Variable\" = \"treat1_NMW\",\"Schätzer_reg3\" = round(tidy_reg3$estimate[3],3),\"se_reg3\"= round(tidy_reg3$std.error[3],3), \"Schätzer_reg5\" = round(tidy_reg5$estimate[3],3), \"se_reg5\"= round(tidy_reg5$std.error[3],3))\n\nreg_table_net_pcm"],"message":[""]}
 ,
+{"type":["init_ps"],"time":["2025-02-07 10:20:30"],"user":["default_user"],"umph":[1738920030.4351],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-07 11:29:22"],"user":["default_user"],"umph":[1738924162.9749],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-07 11:29:35"],"user":["default_user"],"umph":[1738924175.9229],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-07 11:30:18"],"user":["default_user"],"umph":[1738924218.8802],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2025-02-07 11:30:23"],"user":["default_user"],"umph":[1738924223.8122],"ok":[false],"chunk":[1],"ex":[3],"e.ind":[1],"code":[""],"message":["\nYou have not yet made an assignment to dat."]}
+,
+{"type":["check_chunk"],"time":["2025-02-07 11:30:26"],"user":["default_user"],"umph":[1738924226.2739],"ok":[true],"chunk":[1],"ex":[3],"e.ind":[0],"code":["\ndat = read_dta('main_fame.dta')"],"message":[""]}
+,
+{"type":["init_ps"],"time":["2025-02-07 11:33:01"],"user":["default_user"],"umph":[1738924381.0838],"ok":[true]}
+,
+{"type":["init_ps"],"time":["2025-02-07 11:34:22"],"user":["default_user"],"umph":[1738924462.9737],"ok":[true]}
+,
